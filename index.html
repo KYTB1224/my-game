@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Monster Battle</title>
+    <link rel="stylesheet" href="style.css"> <!-- これを追加 -->
+
+</head>
+
+<body>
+    <div id="startup-screen">
+        <img id="title-background" src="assets/title.png" alt="Title Background">
+        
+        <div id="title-button-container"> <!-- 🌟ボタンをまとめる -->
+            <button id="game-start-btn">Game Start</button>
+            <button id="gallery-btn">Gallery</button>
+            <button id="special-btn">Special</button>
+
+        </div>
+      </div>
+          
+    <div id="scan-screen">
+        <div id="camera-container">
+            <video id="qr-video"></video>
+        </div>
+
+<div id="monster-image-container" style="text-align: center; margin-top: 10px;">
+    <img id="monster-image" src="" alt="Monster Image" style="display:none; max-width: 270px; width: 100%; height: auto;">
+</div>
+
+
+        <div id="scan-result">Scanning...</div>
+
+    </div>
+
+
+    <div id="gallery-screen" class="screen-container" style="display:none;">
+        <h2 id="gallery-title" class="title">Monster List</h2>
+        <div id="gallery-container">
+          <!-- スロットはJSで生成 -->
+        </div>
+        <div id="gallery-buttons">
+          <button id="gallery-prev-btn" style="display:none;">Back</button>
+          <button id="gallery-next-btn">Next</button>
+          <button id="gallery-exit-btn">Exit</button>
+        </div>
+    </div>
+    
+    <!-- 拡大表示用モーダル（Gallery画面の外側で良い） -->
+    <div id="gallery-modal" style="display:none;">
+        <img id="modal-image" src="" alt="Monster">
+        <div id="modal-name"></div>
+    </div>
+
+
+    <div id="select-monster-screen" style="display:none; position:fixed; width:100vw; height:100vh; top:0; left:0; background-image:url('assets/scanback.png'); background-size:cover; text-align:center; padding-top:50px;">
+        <div style="color:#fff; font-size:16px; margin-bottom:20px;">
+            Please select the monster(s) you want to register.
+        </div>
+    
+        <div id="select-monster-container" style="display:flex; justify-content:center; gap:20px;">
+            <!-- モンスターの枠はJSで動的に表示 -->
+        </div>
+    
+        <div style="position:fixed; bottom:20px; width:100%; text-align:center;">
+            <button id="select-confirm-btn" disabled>Confirm</button>
+            <button id="select-back-btn">Back</button>
+        </div>
+    </div>
+    
+
+
+    <div id="battle-container" style="display:none; position:relative; width:100%; overflow:hidden;">
+        <img id="battle-background" src="assets/back/1.png" alt="Battle Background">
+        
+        <div id="monster-images-container">
+            <img id="player1-monster-image" src="" alt="Player 1 Monster">
+            <img id="player2-monster-image" src="" alt="Player 2 Monster">
+        </div>
+    
+        <div id="battle-log"></div>
+    
+        <div style="text-align:center; margin-top: 10px;">
+            <button id="add-to-collection-btn" style="display:none; font-size:12px; background-color:transparent; color:#66ccff; border:none; text-decoration:underline;">
+                Add to Collection
+            </button>
+        </div>
+
+
+        <div id="hp-display">
+            <div id="player-status-container">
+                <div class="player-status" id="player1-status">
+                    <strong>P1: ---</strong><br>
+                    HP: <span id="player1-hp">0/0 [0%]</span>
+                    <div class="hp-bar"><div class="hp-fill" id="player1-hp-fill"></div></div>
+                    AT: <span id="player1-at">0</span><br>
+                    DF: <span id="player1-df">0</span><br>
+                    S1: <span id="player1-skill1">-</span><br>
+                    S2: <span id="player1-skill2">-</span>
+                </div>
+    
+                <div class="player-status" id="player2-status">
+                    <strong>P2: ---</strong><br>
+                    HP: <span id="player2-hp">0/0 [0%]</span>
+                    <div class="hp-bar"><div class="hp-fill" id="player2-hp-fill"></div></div>
+                    AT: <span id="player2-at">0</span><br>
+                    DF: <span id="player2-df">0</span><br>
+                    S1: <span id="player2-skill1">-</span><br>
+                    S2: <span id="player2-skill2">-</span>
+                </div>
+            </div>
+        </div>
+
+<!-- Player1用 (左のモンスターが攻撃を受ける時用) -->
+<div id="attack-effect-p1"
+    style="display:none; position:fixed; top:55vh; left:25vh; transform:translate(-50%,-50%); width:200px; height:200px; z-index:5; pointer-events:none;">
+</div>
+
+<!-- Player2用 (右のモンスターが攻撃を受ける時用) -->
+<div id="attack-effect-p2"
+    style="display:none; position:fixed; top:55vh; left:75vh; transform:translate(-50%,-50%); width:200px; height:200px; z-index:5; pointer-events:none;">
+</div>
+
+<div id="skill-effect-p1"
+    style="display:none; position:fixed; top:55vh; left:25vh; transform:translate(-50%,-50%); width:200px; height:200px; z-index:5; pointer-events:none;">
+</div>
+
+<!-- Player2用 (右のモンスターがスキルを発動する時用) -->
+<div id="skill-effect-p2"
+    style="display:none; position:fixed; top:55vh; left:75vh; transform:translate(-50%,-50%); width:200px; height:200px; z-index:5; pointer-events:none;">
+</div>
+        
+</div>
+        
+    <!-- ボタン類 -->
+    <div id="button-container">
+        <button id="start-scan" style="display:none;">Scan QR Code</button>
+        <button id="stop-scan" style="display:none;">Stop Scanning</button>
+        
+        <button id="approve-btn" style="display:none;">Approve</button>
+        <button id="rescan-btn" style="display:none;">Rescan</button>
+        <button id="load-monster-btn" style="display:none;">Load</button> <!-- 🌟ここに移動 -->
+    
+        <button id="start-battle-btn" style="display:none;">Start Battle</button>
+        <button id="next-turn-btn" style="display:none;">Next</button>
+        <button id="fast-forward-btn" class="action-button" style="display:none; background-color:orange;">
+            ⏩ Fast Forward 5 Turns
+          </button>
+          
+        <button id="scan-next-battle-btn" style="display:none;">Scan for Next Battle</button>
+        <button id="quit-game-btn" style="display:none;">Quit Game</button>
+    </div>
+    
+    
+    
+    <div id="turn-display" style="
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none; /* 初期は非表示 */
+">
+    Turn: 30
+
+</div>
+
+
+<!-- register-slots-screenの中身を以下のように修正 -->
+<div id="register-slots-screen" class="screen-container" style="display:none;">
+    <!-- タイトル -->
+    <h2 class="title">Please choose slots to register your selected monsters.</h2>
+
+    <!-- スロットが並ぶコンテナ -->
+    <div id="slots-container">
+        <div class="slot" data-slot="0"></div>
+        <div class="slot" data-slot="1"></div>
+        <div class="slot" data-slot="2"></div>
+        <div class="slot" data-slot="3"></div>
+        <div class="slot" data-slot="4"></div>
+        <div class="slot" data-slot="5"></div>
+      </div>
+      
+
+    <!-- 下部ボタン（ボタン配置を他の画面と同じ位置に合わせるため、クラスを追加） -->
+    <div id="register-slots-buttons">
+      <button id="final-register-btn" class="bottom-button" disabled>Register</button>
+      <button id="register-slots-back-btn" class="bottom-button">Back</button>
+    </div>
+</div>
+
+<!-- 🌟新しい「呼び出す」画面 -->
+<div id="load-monster-screen" class="screen-container" style="display:none;">
+    <h2 class="title">Select Monster to Load</h2>
+  
+    <!-- スロットが並ぶコンテナ（register-slots-screenと同じCSSクラスを利用） -->
+    <div id="load-slots-container">
+      <div class="slot" data-slot="0"></div>
+      <div class="slot" data-slot="1"></div>
+      <div class="slot" data-slot="2"></div>
+      <div class="slot" data-slot="3"></div>
+      <div class="slot" data-slot="4"></div>
+      <div class="slot" data-slot="5"></div>
+    </div>
+  
+    <!-- 下部ボタン（決定と戻る） -->
+    <div id="load-monster-buttons">
+      <button id="load-confirm-btn" class="bottom-button" disabled>Confirm</button>
+      <button id="load-back-btn" class="bottom-button">Back</button>
+    </div>
+  </div>
+
+
+
+
+  <div id="sound-toggle-container" style="
+  position: fixed; 
+  top: 10px; 
+  right: 10px; 
+  z-index: 9999;
+  cursor: pointer;
+">
+  <img id="sound-toggle" src="assets/sound/1.png" alt="sound-toggle" style="width:30px;height:30px;">
+</div>
+
+<div id="exit-button-container">
+    <img id="exit-button" src="assets/exit.png" alt="Exit to Title" style="width:30px;height:30px;">
+</div>
+<div id="privacy-policy-link" style="
+    position: fixed;
+    top: 15px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    z-index: 10000;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    display: none;
+    text-decoration: underline;
+">
+    Privacy Policy
+</div>
+
+<div id="discovery-popup" style="display:none;"></div>
+<audio id="startup-bgm" src="assets/sound/start-bgm.mp3"></audio>
+<audio id="death-sound" src="assets/sound/death-sound.mp3"></audio>
+<audio id="battle-bgm" loop></audio>
+<audio id="win-sound" src="assets/sound/win-sound.mp3"></audio>
+
+
+<!-- 確認用ポップアップ（新規追加） -->
+<div id="confirmation-popup" style="display:none;">
+    <div class="popup-content">
+        <div id="confirmation-message"></div>
+        <div class="popup-buttons">
+            <button id="confirm-yes-btn">Yes</button>
+            <button id="confirm-no-btn">No</button>
+        </div>
+    </div>
+</div>
+
+<div id="special-screen" style="display: none;">
+    <div class="special-buttons-container">
+      <button id="special-1-btn" class="special-btn">
+        Special 1<br>
+        <span class="unlock-condition">(Unlock after discovering 10 monsters)</span>
+      </button>
+  
+      <button id="special-2-btn" class="special-btn" disabled>
+        Special 2<br>
+        <span class="unlock-condition">(Unlock after discovering 20 monsters)</span>
+      </button>
+  
+      <button id="special-3-btn" class="special-btn" disabled>
+        Special 3<br>
+        <span class="unlock-condition">(Unlock after discovering 30 monsters)</span>
+      </button>
+    </div>
+  
+    <div style="text-align:center; margin-top:60px;">
+      <button id="special-back-btn" class="special-btn">Back</button>
+    </div>
+  </div>
+  
+
+<!-- 必ずこの順番で読み込む（重要） -->
+<script type="module" src="js/utils.js"></script>
+<script type="module" src="js/monster-generator.js"></script>
+<script type="module" src="js/attackEffect.js"></script>
+<script type="module" src="js/qr-scanner.js"></script>
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/special.js"></script>
+
+<!-- script.js は、他ファイルを全部読み込んだ最後に書く -->
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
+

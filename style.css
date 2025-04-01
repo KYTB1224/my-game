@@ -1,0 +1,909 @@
+/* Noto Sansフォントを読み込み（ローカルファイルから） */
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('../fonts/NotoSans-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('../fonts/NotoSans-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: italic;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;  height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+  
+
+body {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #fff;
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+#startup-screen {
+    position: fixed; /* ←推奨（画面いっぱい表示） */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  #title-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: top;
+    z-index: -1;
+    animation: fadeInTitle 2s ease-in-out forwards;
+  }
+  
+  
+  @keyframes fadeInTitle {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+
+#battle-container {
+    position: fixed; /* ←推奨（画面いっぱい表示） */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh; /* 画面全体の高さにする */
+    overflow: visible; /* 画像がはみ出さないように */
+}
+
+
+
+#hp-display {
+    position: fixed;
+    bottom: 170px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-weight: 700;
+    background-color: transparent;
+    }
+
+#button-container {
+    position: fixed;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+#camera-container {
+    
+    width: 60%;
+    max-width: 250px;
+    margin: 200px auto 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#qr-video {
+    width: 100%;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border: 4px solid #ffffff; /* ここで枠線の太さと色を自由に調整できます */
+    background-color: black;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* 必要なら影も追加できます */
+}
+
+#scan-screen {
+    position: fixed; /* ←推奨（画面いっぱい表示） */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-image: url('assets/scanback.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+
+#player-status-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;                        /* ステータス同士の距離 */
+    max-width: 100%;                /* 幅を画面いっぱいに使う */
+    padding: 0 6px;                /* 左右にスペース（画面端との余白） */
+    margin: 0 auto 12px auto;       /* 上下中央寄せ */
+    box-sizing: border-box;         /* paddingがはみ出さないように */
+}
+
+.player-status {
+    width: 49%;
+    text-align: left;
+    font-size: 12px;
+    background-color: #1a1e2a;
+    padding: 8px;
+    border-radius: 6px;
+    border: 2px solid #66ccff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    position: relative; /*追加*/
+    top: -75px; /*追加（上方向に移動する距離。値は自由に調整可能）*/
+}
+
+
+.player-status strong {
+    font-size: 14px;
+    color: #fff;
+}
+
+.skill-details {
+    font-size: 10px;
+    margin-top: 8px;
+    padding: 4px;
+    background-color: transparent;
+    color: #ddd;
+    border-radius: 6px;
+    text-align: center;
+
+}
+
+.hp-bar {
+    background-color: #444;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.hp-fill {
+    background-color: #4caf50;
+    height: 100%;
+    width: 100%;
+    transition: background-color 0.5s ease;
+}
+
+#battle-log {
+    position: fixed;
+    top: 44% !important;;
+    left: 50%;
+    font-size: 12px;
+    transform: translate(-50%, -50%);
+    background-color: rgba(10, 25, 47, 0.95);
+    border: 2px solid #66ccff;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    text-align: center;
+    z-index: 6;
+}
+
+#battle-log p,
+#battle-log span,
+#battle-log strong {
+    font-size: 13px;
+}
+
+#scan-result {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;                             /* ← 中央揃えの起点 */
+    transform: translateX(-50%);          /* ← 真ん中に調整 */
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%; 
+    background-color: transparent;
+    border: none;
+    box-shadow: none;                     /* ← 影をなくす */
+}
+
+
+/* モンスター詳細を表示するときのみの背景 */
+#scan-result.monster-box {
+    background-image: url('assets/boxc.png');
+    background-size: 100% 100%;
+    box-shadow: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+
+/* 短文表示のときは背景なし */
+#scan-result.simple-text {
+    background-image: none;
+}
+
+
+button {
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #1a233a;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 2px solid #66ccff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none;
+}
+
+button:disabled {
+    background-color: #555; 
+    border-color: #888;
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ★追加部分★ 無効化時はホバーでも色が変わらないようにする */
+button:disabled:hover {
+    background-color: #555; /* グレーを維持 */
+    color: #ccc; /* テキスト色を維持 */
+    border-color: #888; /* 境界線も維持 */
+    transform: none; /* 動きもなし */
+}
+
+
+
+
+#turn-display {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background-color: rgba(26, 35, 58, 0.9);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+}
+
+/* Button Hover Effects */
+button:hover {
+    background-color: #66ccff;
+    color: #000;
+}
+
+button:active {
+    transform: translateY(2px);
+}
+/* バトルログ横長中央表示を維持するための修正 */
+
+
+#battle-log p,
+#battle-log span,
+#battle-log strong {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#monster-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 370px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 440px; /* 🌟画像のサイズと一致させる */
+    max-width: 90%; /* 🌟小さい画面でもはみ出さないように */
+    z-index: 500;
+}
+
+#monster-image {
+    width: 100% !important; /* 🌟親要素の幅に合わせるよう修正 */
+    height: auto !important;
+    display: block;
+    margin: 5px auto;
+}
+
+#monster-images-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 0 10px;
+    position: fixed;
+    top: 13vh;  /* ここで上下の位置を調整 */
+    z-index: 2;
+}
+
+
+#monster-images-container img {
+    position: relative; /* ←これを追加！ */
+    width: 50% !important; /* 各ステータスボックスと同じ幅にする */
+    height: auto !important; /* 比率を維持 */
+    object-fit: contain; /* 縦横比を保って全体表示 */
+}
+
+/* 左右反転（鏡像）するためのクラス */
+.mirror-image {
+    transform: scaleX(-1);
+}
+
+
+#battle-background {
+    position: fixed;
+    top: 4.5vh; /* この位置はそのままか、微調整 */
+    left: 0;
+    width: 100%;          
+    height:  270px;         
+    object-fit: contain;  
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 0; /* z-indexを1にして前面へ */
+}
+
+@keyframes pop-in {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.pop-animation {
+    animation: pop-in 0.6s ease-out;
+}
+
+/* モンスター画像が一瞬光るアニメーション */
+@keyframes flash-blue {
+    0% { filter: drop-shadow(0 0 10px cyan); }
+    100% { filter: none; }
+}
+
+@keyframes flash-red {
+    0% { filter: drop-shadow(0 0 10px red); }
+    100% { filter: none; }
+}
+
+/* 数字がポップアップして消えるアニメーション */
+@keyframes popup {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+@media (max-width: 480px) {
+    #hp-display {
+        bottom: 140px;
+    }
+
+#button-container {
+        flex-direction: column;
+        gap: 8px;
+        bottom: 10px;
+    }
+
+    .player-status {
+        font-size: 11px;
+        padding: 6px;
+    }
+}
+
+#title-button-container {
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* ボタン間の隙間（調整可能）*/
+    position: fixed;
+    bottom: 1vh;      /* 下端からの位置 */
+    left: 50%;         /* 中央配置 */
+    z-index: 100;      /* ボタンが必ず上に来るように調整 */
+  }
+  
+ #title-button-container button {
+    width: 130px;        /* ボタンの幅を統一する */
+    padding: 10px;       /* 余白調整（お好みで調整） */
+    white-space: nowrap; /* ← 念のため改行を禁止 */
+}
+
+#special-btn {
+    transform: scale(0.85); /* 少しだけ小さく */
+    transform-origin: center;
+}
+
+/* ポップアップ数字の共通スタイル */
+.hp-popup {
+    position: absolute;
+    font-weight: bold;
+    z-index: 10;
+    pointer-events: none;
+    user-select: none;
+    animation: popup 1s ease-out forwards;
+}
+
+.hp-popup.plus {
+    color: cyan;
+}
+
+.hp-popup.minus {
+    color: red;
+}
+
+#select-monster-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('assets/scanback.png');
+    background-size: cover;
+    background-position: center;
+    z-index: 10000; /* 絶対に最前面 */
+    overflow: auto;
+    padding-top: 40px;
+    text-align: center;
+}
+
+#select-monster-container {
+    position: relative;
+    z-index: 10001;
+    display: flex;
+    justify-content: center;
+    margin-top: 150px; /* ←ここで位置を調整（数値を調整して微調整可） */
+    gap: 20px;
+}
+
+#select-monster-screen button {
+    position: relative;
+    z-index: 10001;
+}
+
+#select-monster-container .player-status {
+    opacity: 0.5;  /* 半透明 */
+    transition: opacity 0.3s ease;
+}
+
+.selected-monster {
+    opacity: 1 !important; /* 不透明で濃い表示に */
+    border: 2px solid #66ccff !important;
+    background-color: rgba(102, 204, 255, 0.2) !important;
+}
+
+#add-to-collection-btn {
+    position: fixed;  /* ←これが重要 */
+    z-index: 99999;   /* 確実に最前面表示 */
+    bottom: 500px;     /* 表示位置調整（例） */
+    left: 50%;        /* 中央揃え */
+    transform: translateX(-50%);  /* 中央揃えの調整 */
+    pointer-events: auto;
+}
+
+/* ▼▼ 登録スロット画面のスタイル ▼▼ */
+
+/* 背景画像を設定（前の画面と同じ画像を指定してください） */
+.screen-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-image: url('assets/regback.png'); /* 背景を統一 */
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 10; /* 他画面より上に重なるように */
+}
+
+/* タイトルのスタイル */
+.title {
+    color: white;
+    font-size: 18px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* スロットコンテナのスタイル（縦3×横2に配置） */
+#slots-container {
+    display: grid;
+    margin-top: 10%;
+    grid-template-columns: repeat(2, 1fr); /* ← 画面の横幅に合わせて均等に2つに分割 */
+    gap: 10px; /* 隙間を少し狭く */
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px; /* コンテナに左右余白を設ける */
+    box-sizing: border-box; /* 余白がはみ出さないように */
+}
+
+/* 各スロットのスタイル（ステータス表示と同じサイズに調整） */
+.slot {
+    width: 160px;
+    height: 120px;
+    background-color: rgba(0,0,0,0.6);
+    border: 2px solid #888888; /* 未選択時をグレーに変更 */
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    font-size: 11px;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s; /* アニメーションをスムーズに */
+}
+
+/* 選択した時だけ青色にする */
+.slot.selected {
+    border-color: #66ccff; /* 選択時は青色の枠線 */
+    box-shadow: 0 0 8px #66ccff; /* 枠線を光らせる */
+}
+
+/* 下部ボタンを画面下端に配置する */
+#register-slots-buttons {
+    position: absolute;
+    bottom: 90px; /* もう少し上に上げたい場合は、数値を増やす */
+    left: 50%;
+    transform: translateX(-50%); /* 横方向の中央配置 */
+    display: flex; /* ここは1つでOK！ */
+    gap: 10px; /* ボタン間隔をさらに狭めるなら値を小さくする */
+    padding: 0 10px;
+}
+
+/* 下部ボタンのスタイル統一（他の画面の下部ボタンと同じスタイル） */
+.bottom-button {
+    padding: 10px 20px;
+    background-color: #1e293b;
+    color: white;
+    font-size: 16px;
+    border: 2px solid #66ccff;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* 🔷 Load画面のスロット表示を、登録画面と完全に統一（縦3×横2のグリッド） */
+#load-slots-container {
+    display: grid;
+    margin-top: 10%;
+    grid-template-columns: repeat(2, 1fr); /* 横2列で均等に分割 */
+    gap: 10px; /* スロット間の間隔 */
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px; /* 左右の余白 */
+    box-sizing: border-box;
+  }
+  
+  /* 下部ボタンを画面下端に中央揃え */
+  #load-monster-buttons {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    padding: 0 10px;
+  }
+  
+  #gallery-screen {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-image: url('assets/scanback.png');
+    background-size: cover;
+    color: #fff;
+    text-align: center;
+    padding-top: 10px;
+    z-index: 999;
+}
+
+#register-slots-buttons,
+#load-monster-buttons {
+    position: fixed;         /* fixedに変更して画面の固定位置に表示 */
+    bottom: 15px;            /* 「Scan QR」等と同じ高さ */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 100;            /* 上に重なるように設定 */
+}
+
+
+#gallery-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.gallery-slot {
+    background: rgba(0,0,0,0.6);
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 2px solid #555;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-size: 11px;
+}
+
+.gallery-slot img {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+#gallery-modal {
+    position: fixed;
+    top:0; left:0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1001;
+}
+
+#modal-image {
+    width: 300px;
+    height: auto;
+}
+
+#modal-name {
+    margin-top: 10px;
+    color: #fff;
+    font-size: 18px;
+}
+
+#gallery-buttons button {
+    margin: 5px;
+}
+
+
+#discovery-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+    text-align: center;
+    font-size: 14px;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 1.5s ease-out;
+}
+
+
+
+body, button, #battle-log, .player-status {
+    user-select: none; /* テキスト選択を禁止 */
+}
+
+
+/* Chrome, Edge, Safari用スクロールバーを非表示 */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Firefox用スクロールバーを非表示 */
+html {
+    scrollbar-width: none;
+}
+
+#exit-button-container {
+    position: fixed;        /* 画面に常に固定 */
+    top: 10px;              /* 上からの距離（音量マークと同じ高さに調整） */
+    left: 10px;             /* 左からの距離 */
+    z-index: 9999;          /* 他の要素より前面に表示 */
+    cursor: pointer;        /* クリック可能な表示 */
+}
+
+#confirmation-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-align: center;
+    width: 80%;
+    max-width: 300px;
+}
+
+.popup-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.popup-buttons button {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#confirmation-message {
+    color: #333;                 /* テキスト色を設定（読みやすく） */
+    font-size: 16px;             /* フォントサイズを調整 */
+    white-space: pre-wrap;       /* 改行を維持して表示 */
+    margin-bottom: 15px;         /* ボタンとの距離を調整 */
+    word-wrap: break-word;       /* 長い文字列でも折り返すように */
+}
+
+#select-monster-container .player-status {
+    text-align: center; /* 文字を中央寄せ */
+    display: flex;
+    align-items: center; /* 縦方向中央 */
+    justify-content: center; /* 横方向中央 */
+    flex-direction: column; /* 縦並びに整列 */
+    line-height: 1.6; /* 行間を整える */
+}
+
+#register-slots-screen h2 {
+    font-size: 16px;      /* 先ほど指定した小さめのサイズ */
+    font-weight: normal;  /* 太字解除 */
+    text-align: center;   /* 中央揃え */
+    margin-top: 65px;     /* この値を増やすことで位置を下げることができます */
+}
+
+#special-btn {
+    background-color: #1b2a41;
+    color: #fff;
+    font-size: 13px;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#special-btn:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+#special-screen {
+    background-image: url('assets/specialback.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.special-buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.special-btn {
+    width: 280px;
+    padding: 12px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #1b2a41;
+    border: 2px solid #0f1c2e;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.special-btn:hover {
+    background-color: #324a5f;
+    transform: translateY(-3px);
+}
+
+.special-btn:active {
+    transform: translateY(1px);
+}
+
+.unlock-condition {
+    font-size: 15px;
+    font-weight: normal;
+    color: #d1d1d1;
+}
+
+#special-back-btn {
+    width: 200px;
+    padding: 12px 18px;
+    font-size: 15px;
+    margin-top: 40px;
+}
+
+
+.special-btn:disabled {
+    background-color: #666; /* 無効時はグレー */
+    border-color: #555;
+    color: #aaa;
+    box-shadow: none;
+    cursor: default;
+}
+
+.unlock-condition {
+    font-size: 14px;
+    font-weight: normal;
+    color: #e0e0e0; /* 少し明るめのグレー（既存テキストに合わせる） */
+}
+
+#privacy-policy-link {
+    font-family: sans-serif;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+#privacy-policy-link:hover {
+    opacity: 0.7;
+}
