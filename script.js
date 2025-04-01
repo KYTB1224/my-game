@@ -1525,23 +1525,6 @@ scanNextBattleBtn.addEventListener("click", () => {
     startScanBtn.style.display = "inline-block";
     stopScanBtn.style.display = "inline-block";
     loadMonsterBtn.style.display = "inline-block";  // 🌟ここに追加
-    // 🌟【QRカメラ停止＆非表示処理（必須）】
-    await stopScanning();
-    const qrVideo = document.getElementById('qr-video');
-    if (qrVideo) qrVideo.style.display = 'none';
-
-    // 🌟【黒丸を再表示する処理（必須追加！）】
-    const monsterImage = document.getElementById('monster-image');
-    monsterImage.style.display = "none";
-
-
-            startScanBtn.disabled = false;  
-            stopScanBtn.disabled = true;   
-            loadMonsterBtn.disabled = false;
-
-            startScanBtn.removeAttribute("style");
-            stopScanBtn.removeAttribute("style");
-            loadMonsterBtn.removeAttribute("style");
 
     battleLogElement.classList.add("battle-log-style");
     battleContainer.style.display = 'none';
@@ -2557,6 +2540,7 @@ document.getElementById('exit-button').onclick = () => {
         null // 「No」の場合
     );
     document.getElementById('privacy-policy-link').style.display = 'block';
+    document.getElementById('privacy-policy-link').style.display = 'none';
 };
 
 
@@ -2574,7 +2558,7 @@ function resetTemporaryGameState() {
     localStorage.removeItem('isSpecialBattle');
     localStorage.removeItem('isNormalBattle');
     
-
+    document.getElementById('privacy-policy-link').style.display = 'block';
 
     const scanResult = document.getElementById('scan-result');
     scanResult.textContent = '';
@@ -2716,8 +2700,27 @@ document.getElementById('add-to-collection-btn').addEventListener('click', () =>
 
 
 // 🌟Scan for Next Battleボタン
-document.getElementById('scan-next-battle-btn').addEventListener('click', () => {
+document.getElementById('scan-next-battle-btn').addEventListener('click', async () => {
     resetMonsterFade();
+
+    // QRカメラ停止＆非表示処理
+    await stopScanning();
+    
+    // モンスター画像を非表示
+    const monsterImage = document.getElementById('monster-image');
+    if (monsterImage) monsterImage.style.display = "none";
+
+    const qrVideo = document.getElementById('qr-video');
+    if (qrVideo) qrVideo.style.display = 'block';
+
+    // ボタンの状態をリセット
+    startScanBtn.disabled = false;  
+    stopScanBtn.disabled = true;   
+    loadMonsterBtn.disabled = false;
+
+    startScanBtn.removeAttribute("style");
+    stopScanBtn.removeAttribute("style");
+    loadMonsterBtn.removeAttribute("style");
 });
 
 // 🌟Quit Gameボタン
