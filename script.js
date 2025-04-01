@@ -1525,6 +1525,23 @@ scanNextBattleBtn.addEventListener("click", () => {
     startScanBtn.style.display = "inline-block";
     stopScanBtn.style.display = "inline-block";
     loadMonsterBtn.style.display = "inline-block";  // 🌟ここに追加
+    // 🌟【QRカメラ停止＆非表示処理（必須）】
+    await stopScanning();
+    const qrVideo = document.getElementById('qr-video');
+    if (qrVideo) qrVideo.style.display = 'none';
+
+    // 🌟【黒丸を再表示する処理（必須追加！）】
+    const monsterImage = document.getElementById('monster-image');
+    monsterImage.style.display = "none";
+
+
+            startScanBtn.disabled = false;  
+            stopScanBtn.disabled = true;   
+            loadMonsterBtn.disabled = false;
+
+            startScanBtn.removeAttribute("style");
+            stopScanBtn.removeAttribute("style");
+            loadMonsterBtn.removeAttribute("style");
 
     battleLogElement.classList.add("battle-log-style");
     battleContainer.style.display = 'none';
