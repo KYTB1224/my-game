@@ -162,20 +162,22 @@ body {
   }
   
 
-#player-status-container {
+  #player-status-container {
+    position: relative; /* 🌟追加 */
     display: flex;
     justify-content: space-between;
-    gap: 4px;                        /* ステータス同士の距離 */
-    max-width: 100%;                /* 幅を画面いっぱいに使う */
-    padding: 0 6px;                /* 左右にスペース（画面端との余白） */
-    margin: 0 auto 12px auto;       /* 上下中央寄せ */
-    box-sizing: border-box;         /* paddingがはみ出さないように */
+    gap: 4px;
+    max-width: 100%;
+    padding: 0 6px;
+    margin: 0 auto 12px auto;
+    box-sizing: border-box;
 }
 
 .player-status {
     width: 49%;
     text-align: left;
-    height: 140px; /* 🌟このように直接固定できる */
+    position: absolute; /* 🌟これに変更 */
+    height:140px; /* 🌟このように直接固定できる */
     font-size: 12px;
     background-color: #1a1e2a;
     padding: 8px;
@@ -524,8 +526,12 @@ button:active {
     z-index: 10001;
     display: flex;
     justify-content: center;
-    margin-top: 150px; /* ←ここで位置を調整（数値を調整して微調整可） */
+    height: 180px; 
+    padding: 12px;
+    margin-top: 400px; /* ←ここで位置を調整（数値を調整して微調整可） */
     gap: 20px;
+    padding: 16px 8px; /* ←上下を広げる（上下16px, 左右8px）*/
+    box-sizing: border-box; /* 枠内に収める */
 }
 
 #select-monster-screen button {
@@ -536,6 +542,9 @@ button:active {
 #select-monster-container .player-status {
     opacity: 0.5;  /* 半透明 */
     transition: opacity 0.3s ease;
+    padding: 16px 8px; /* ←上下を広げる（上下16px, 左右8px）*/
+    height: auto; /* 高さを自動調整に戻す */
+    min-height: 180px; /* 最低高さを保つ */
 }
 
 .selected-monster {
