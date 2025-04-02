@@ -528,7 +528,7 @@ button:active {
     justify-content: center;
     height: 180px; 
     padding: 12px;
-    margin-top: 400px; /* ←ここで位置を調整（数値を調整して微調整可） */
+    margin-top: 300px; /* ←ここで位置を調整（数値を調整して微調整可） */
     gap: 20px;
     padding: 16px 8px; /* ←上下を広げる（上下16px, 左右8px）*/
     box-sizing: border-box; /* 枠内に収める */
