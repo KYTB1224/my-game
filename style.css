@@ -791,9 +791,15 @@ button:active {
     font-size: 18px;
 }
 
-#gallery-buttons button {
+#gallery-buttons{
     margin: 5px;
     font-size: 13px;
+    position: fixed;         
+    left: 50%;                  /* 中央寄せ */
+    transform: translateX(-50%);/* 中央揃えのための調整 */
+    display: flex;    
+    gap: 10px;     /* 固定表示にして常に画面下に置く */
+    bottom: 15px
 }
 
 
