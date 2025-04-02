@@ -175,8 +175,7 @@ body {
 .player-status {
     width: 49%;
     text-align: left;
-    
-    height: 140px; /* 🌟このように直接固定できる */
+    height: 200px; /* 🌟このように直接固定できる */
     font-size: 12px;
     background-color: #1a1e2a;
     padding: 8px;
