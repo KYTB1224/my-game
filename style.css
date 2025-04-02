@@ -523,7 +523,7 @@ button:active {
     height: 100vh;
     top: 0;
     left: 0;
-    background-image: url('assets/regback.png'); /* 背景を統一 */
+    background-image: url('assets/regback.webp'); /* 背景を統一 */
     background-size: cover;
     display: flex;
     flex-direction: column;
