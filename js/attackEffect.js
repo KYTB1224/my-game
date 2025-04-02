@@ -22,7 +22,7 @@ export function playAttackSpriteAnimation(player, callback) {
     container.style.width = `${imageHeight}px`;
     container.style.position = 'fixed';
 
-    const offsetY = 15; 
+    const offsetY = 0; 
     container.style.top = `${monsterRect.top + window.scrollY - offsetY}px`;
     container.style.left = `${monsterRect.left + window.scrollX + (monsterRect.width - imageHeight) / 2}px`;
     container.style.transform = 'none';
@@ -48,7 +48,7 @@ export function playAttackSpriteAnimation(player, callback) {
         }
 
         imageElement.src = `assets/effects/damage/frame_${currentFrame}.png`;
-    }, 35);
+    }, 50);
 }
 
 // スキルエフェクトの再生関数（★新規追加★）
