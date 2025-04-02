@@ -182,9 +182,9 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Fat Troll",
                 element: "Emotional",
-                maxHp: 1450,
+                maxHp: 2000,
                 baseAttack: 120,
-                baseDefense: 140,
+                baseDefense: 130,
                 speed: 20,
                 skill1: "Overload",
                 skill2: "Overload",
@@ -197,13 +197,13 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Drake",
                 element: "Instinctive",
-                maxHp: 1450,
-                baseAttack: 230,
-                baseDefense: 150,
+                maxHp: 1400,
+                baseAttack: 250,
+                baseDefense: 180,
                 speed: 220,
                 skill1: "Critical",
-                skill2: "Critical",
-                skills: ["Critical", "Critical"],
+                skill2: "Thorns",
+                skills: ["Critical", "Thorns"],
                 imagePath: "assets/monsters/drake.webp"
             };
             break;
@@ -212,9 +212,9 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Bael",
                 element: "Logical",
-                maxHp: 1550,
-                baseAttack: 210,
-                baseDefense: 180,
+                maxHp: 1700,
+                baseAttack: 230,
+                baseDefense: 200,
                 speed: 250,
                 skill1: "Vampire",
                 skill2: "Counter",
