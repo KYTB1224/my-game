@@ -161,6 +161,7 @@ body {
 
 .player-status {
     width: 49%;
+    height: 140px; 
     text-align: left;
     font-size: 12px;
     background-color: #1a1e2a;
