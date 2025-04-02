@@ -27,7 +27,7 @@ html, body {
 
 body {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.5;
     color: #fff;
     background-color: #000000;
@@ -84,13 +84,35 @@ body {
     background-color: transparent;
     }
 
-#button-container {
-    position: fixed;
-    bottom: 15px;
-    left: 0;
-    right: 0;
-    text-align: center;
-}
+    
+    #button-container {
+        position: fixed;      /* 固定位置にする場合 */
+        bottom: 30px !important;         /* 画面下から20px上に配置 */
+        left: 0;
+        width: 100%;          /* 横幅を画面いっぱいに */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* 中央揃え */
+        align-items: center;
+        gap: 10px;               /* 間隔 */
+    }
+
+    /* 上の2つだけ横並び */
+    /* すべてのbuttonの共通指定（最低限に） */
+    #button-container button {
+        padding: 10px 15px;
+        font-size: 13px !important;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+    }
+    
+    /* 特定のbuttonの横幅を強制 */
+    
+
+    
+
+
+    
 
 #camera-container {
     
@@ -147,7 +169,7 @@ body {
     border: 2px solid #66ccff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     position: relative; /*追加*/
-    top: -75px; /*追加（上方向に移動する距離。値は自由に調整可能）*/
+    top: -100px; /*追加（上方向に移動する距離。値は自由に調整可能）*/
 }
 
 
@@ -183,7 +205,7 @@ body {
 
 #battle-log {
     position: fixed;
-    top: 44% !important;;
+    top: 40% !important;;
     left: 50%;
     font-size: 12px;
     transform: translate(-50%, -50%);
@@ -209,7 +231,7 @@ body {
 
 #scan-result {
     position: fixed;
-    bottom: 100px;
+    bottom: 180px;
     left: 50%;                             /* ← 中央揃えの起点 */
     transform: translateX(-50%);          /* ← 真ん中に調整 */
     text-align: center;
@@ -250,7 +272,7 @@ body {
 
 button {
     cursor: pointer;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
     color: #fff;
     background-color: #1a233a;
@@ -317,11 +339,12 @@ button:active {
 }
 
 #monster-image-container {
+    
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    bottom: 370px; 
+    bottom: 410px; 
     left: 50%;
     transform: translateX(-50%);
     width: 440px; /* 🌟画像のサイズと一致させる */
@@ -411,6 +434,7 @@ button:active {
         bottom: 140px;
     }
 
+
 #button-container {
         flex-direction: column;
         gap: 8px;
@@ -439,6 +463,7 @@ button:active {
  #title-button-container button {
     width: 130px;        /* ボタンの幅を統一する */
     padding: 10px;       /* 余白調整（お好みで調整） */
+    font-size: 13px;
     white-space: nowrap; /* ← 念のため改行を禁止 */
 }
 
@@ -507,8 +532,9 @@ button:active {
 
 #add-to-collection-btn {
     position: fixed;  /* ←これが重要 */
+    font-size: 13px !important;
     z-index: 99999;   /* 確実に最前面表示 */
-    bottom: 500px;     /* 表示位置調整（例） */
+    bottom: 560px;     /* 表示位置調整（例） */
     left: 50%;        /* 中央揃え */
     transform: translateX(-50%);  /* 中央揃えの調整 */
     pointer-events: auto;
@@ -609,15 +635,7 @@ button:active {
   }
   
   /* 下部ボタンを画面下端に中央揃え */
-  #load-monster-buttons {
-    position: absolute;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    padding: 0 10px;
-  }
+
   
   #gallery-screen {
     width: 100vw;
@@ -636,7 +654,7 @@ button:active {
 #register-slots-buttons,
 #load-monster-buttons {
     position: fixed;         /* fixedに変更して画面の固定位置に表示 */
-    bottom: 15px;            /* 「Scan QR」等と同じ高さ */
+    bottom: 70px;            /* 「Scan QR」等と同じ高さ */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -644,6 +662,39 @@ button:active {
     z-index: 100;            /* 上に重なるように設定 */
 }
 
+#start-scan,
+#stop-scan,
+#approve-btn,
+#rescan-btn,
+#load-monster-btn,
+#quit-game-btn,
+#start-battle-btn,
+#next-turn-btn,
+#fast-forward-btn, 
+#select-confirm-btn,
+#select-back-btn,
+#final-register-btn,
+#register-slots-back-btn,
+#load-confirm-btn,
+#load-back-btn {
+    width: 130px;            /* 幅を指定（調整可能） */
+    padding: 8px 12px;       /* ボタン内の余白（調整可能） */
+    font-size: 13px;         /* フォントサイズ（調整可能） */
+    font-weight: bold;       /* フォントを太字に（調整可能） */
+    box-sizing: border-box;  /* paddingとborderを含んだサイズ設定 */
+    cursor: pointer;         /* カーソルをポインターにする */
+}
+
+
+#scan-next-battle-btn,
+#fast-forward-btn{
+    width: 180px;            /* 幅を指定（調整可能） */
+    padding: 8px 12px;       /* ボタン内の余白（調整可能） */
+    font-size: 13px;         /* フォントサイズ（調整可能） */
+    font-weight: bold;       /* フォントを太字に（調整可能） */
+    box-sizing: border-box;  /* paddingとborderを含んだサイズ設定 */
+    cursor: pointer;         /* カーソルをポインターにする */
+}
 
 #gallery-container {
     display: grid;
@@ -698,6 +749,7 @@ button:active {
 
 #gallery-buttons button {
     margin: 5px;
+    font-size: 13px;
 }
 
 
@@ -712,7 +764,7 @@ button:active {
     border-radius: 10px;
     border: 2px solid #ffffff;
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
     z-index: 10000;
     opacity: 0;
     pointer-events: none;
@@ -782,14 +834,14 @@ html {
 .popup-buttons button {
     padding: 10px 20px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 #confirmation-message {
     color: #333;                 /* テキスト色を設定（読みやすく） */
     font-size: 16px;             /* フォントサイズを調整 */
     white-space: pre-wrap;       /* 改行を維持して表示 */
-    margin-bottom: 15px;         /* ボタンとの距離を調整 */
+    margin-bottom: 13px;         /* ボタンとの距離を調整 */
     word-wrap: break-word;       /* 長い文字列でも折り返すように */
 }
 
@@ -877,10 +929,14 @@ html {
 }
 
 #special-back-btn {
-    width: 200px;
-    padding: 12px 18px;
-    font-size: 15px;
-    margin-top: 40px;
+    padding: 10px 20px;
+    background-color: #1e293b;
+    color: white;
+    font-size: 13px;
+    border: 2px solid #66ccff;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 80px !important; /* ←重要（優先度最大） */
 }
 
 
@@ -907,3 +963,4 @@ html {
 #privacy-policy-link:hover {
     opacity: 0.7;
 }
+
