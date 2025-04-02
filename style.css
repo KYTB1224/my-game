@@ -344,7 +344,7 @@ button:active {
     justify-content: center;
     align-items: center;
     position: fixed;
-    bottom: 410px; 
+    bottom: 470px; 
     left: 50%;
     transform: translateX(-50%);
     width: 440px; /* 🌟画像のサイズと一致させる */
