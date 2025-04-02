@@ -353,14 +353,6 @@ loadMonsterBtn.addEventListener('click', () => {
     loadConfirmBtn.disabled = true;
     selectedLoadSlot = null;
 
-    // 🌟以前のスロット選択状態をクリアする（青枠解除）
-    loadMonsterSlots.forEach(slot => slot.classList.remove('selected'));
-
-    loadStoredMonsters();
-
-    const monsterImage = document.getElementById('monster-image');
-    monsterImage.src = "";
-    monsterImage.style.display = "none";
 
 });
 
@@ -450,12 +442,12 @@ startBattleBtn.addEventListener("click", () => {
 
     if (specialBattle === 'special_3') {
         // 🌟 Special3専用の背景・BGM
-        battleBackground.src = 'assets/back/special3.png';
+        battleBackground.src = 'assets/back/special3.webp';
         battleBgmAudio.src = 'assets/sound/special3-bgm.mp3';
     } else {
         // 🔹 通常のランダム背景・BGM
         const randomBackgroundNumber = Math.floor(Math.random() * 8) + 1;
-        battleBackground.src = `assets/back/${randomBackgroundNumber}.png`;
+        battleBackground.src = `assets/back/${randomBackgroundNumber}.webp`;
 
         const bgmNumber = Math.floor(Math.random() * 3) + 1;
         battleBgmAudio.src = `assets/sound/b-bgm${bgmNumber}.mp3`;
@@ -1808,12 +1800,25 @@ document.getElementById('add-to-collection-btn').addEventListener('click', () =>
     p2div.onclick = () => toggleSelection(p2div, initialPlayer2Monster);
 
     confirmBtn.onclick = () => {
+
+            // 🌟以前のスロット選択状態をクリアする（青枠解除）
+    loadMonsterSlots.forEach(slot => slot.classList.remove('selected'));
+
+    loadStoredMonsters();
+
+    const monsterImage = document.getElementById('monster-image');
+    monsterImage.src = "";
+    monsterImage.style.display = "none";
+
         confirmBtn.textContent = 'Registered!';
         confirmBtn.disabled = true;
         setTimeout(() => {
             confirmBtn.textContent = 'Confirm';
             confirmBtn.disabled = true;
         }, 1500);
+
+
+        
     };
 
     document.getElementById('select-back-btn').addEventListener('click', () => {
