@@ -135,6 +135,19 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.5); /* 必要なら影も追加できます */
 }
 
+#qr-video::-webkit-media-controls {
+    display: none !important;
+}
+
+#qr-video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+#qr-video::-webkit-media-controls-enclosure {
+    display: none !important;
+}
+
+
 #scan-screen {
     position: fixed; /* ←推奨（画面いっぱい表示） */
     top: 0;
@@ -161,8 +174,9 @@ body {
 
 .player-status {
     width: 49%;
-    height: 140px; 
     text-align: left;
+    
+    height: 140px; /* 🌟このように直接固定できる */
     font-size: 12px;
     background-color: #1a1e2a;
     padding: 8px;
@@ -674,7 +688,6 @@ button:active {
 #load-monster-btn,
 #quit-game-btn,
 #start-battle-btn,
-#next-turn-btn,
 #fast-forward-btn, 
 #select-confirm-btn,
 #select-back-btn,
@@ -690,6 +703,16 @@ button:active {
     cursor: pointer;         /* カーソルをポインターにする */
 }
 
+#next-turn-btn{
+    width: 80px;            /* 幅を指定（調整可能） */
+    padding: 8px 12px;       /* ボタン内の余白（調整可能） */
+    font-size: 13px;         /* フォントサイズ（調整可能） */
+    font-weight: bold;       /* フォントを太字に（調整可能） */
+    box-sizing: border-box;  /* paddingとborderを含んだサイズ設定 */
+    cursor: pointer;         /* カーソルをポインターにする */
+}
+
+
 
 #scan-next-battle-btn{
     width: 180px;            /* 幅を指定（調整可能） */
@@ -701,7 +724,7 @@ button:active {
 }
 
 #fast-forward-btn{
-    width: 220px;            /* 幅を指定（調整可能） */
+    width: 200px;            /* 幅を指定（調整可能） */
     padding: 8px 12px;       /* ボタン内の余白（調整可能） */
     font-size: 13px;         /* フォントサイズ（調整可能） */
     font-weight: bold;       /* フォントを太字に（調整可能） */
