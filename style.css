@@ -120,7 +120,7 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-image: url('assets/scanback.png');
+    background-image: url('assets/scanback.webp');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -471,7 +471,7 @@ button:active {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url('assets/scanback.png');
+    background-image: url('assets/scanback.webp');
     background-size: cover;
     background-position: center;
     z-index: 10000; /* 絶対に最前面 */
@@ -625,7 +625,7 @@ button:active {
     position: fixed;
     top: 0;
     left: 0;
-    background-image: url('assets/scanback.png');
+    background-image: url('assets/scanback.webp');
     background-size: cover;
     color: #fff;
     text-align: center;
@@ -826,7 +826,7 @@ html {
 }
 
 #special-screen {
-    background-image: url('assets/specialback.png');
+    background-image: url('assets/specialback.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
