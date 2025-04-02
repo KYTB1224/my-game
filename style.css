@@ -344,7 +344,7 @@ button:active {
     justify-content: center;
     align-items: center;
     position: fixed;
-    bottom: 470px; 
+    bottom: 450px; 
     left: 50%;
     transform: translateX(-50%);
     width: 440px; /* 🌟画像のサイズと一致させる */
@@ -594,6 +594,10 @@ button:active {
     transition: border-color 0.2s, box-shadow 0.2s; /* アニメーションをスムーズに */
 }
 
+.slot, .slot * {
+    font-size: 11px !important;
+}
+
 /* 選択した時だけ青色にする */
 .slot.selected {
     border-color: #66ccff; /* 選択時は青色の枠線 */
@@ -686,9 +690,17 @@ button:active {
 }
 
 
-#scan-next-battle-btn,
-#fast-forward-btn{
+#scan-next-battle-btn{
     width: 180px;            /* 幅を指定（調整可能） */
+    padding: 8px 12px;       /* ボタン内の余白（調整可能） */
+    font-size: 13px;         /* フォントサイズ（調整可能） */
+    font-weight: bold;       /* フォントを太字に（調整可能） */
+    box-sizing: border-box;  /* paddingとborderを含んだサイズ設定 */
+    cursor: pointer;         /* カーソルをポインターにする */
+}
+
+#fast-forward-btn{
+    width: 220px;            /* 幅を指定（調整可能） */
     padding: 8px 12px;       /* ボタン内の余白（調整可能） */
     font-size: 13px;         /* フォントサイズ（調整可能） */
     font-weight: bold;       /* フォントを太字に（調整可能） */
@@ -839,7 +851,7 @@ html {
 
 #confirmation-message {
     color: #333;                 /* テキスト色を設定（読みやすく） */
-    font-size: 16px;             /* フォントサイズを調整 */
+    font-size: 13px;             /* フォントサイズを調整 */
     white-space: pre-wrap;       /* 改行を維持して表示 */
     margin-bottom: 13px;         /* ボタンとの距離を調整 */
     word-wrap: break-word;       /* 長い文字列でも折り返すように */
