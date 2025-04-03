@@ -227,7 +227,11 @@ approveBtn.addEventListener("click", async () => {
         console.error("⚠ エラー: currentScannedMonsterが存在しない");
         return;
     }
-
+    
+    if (window.AndroidInterface && AndroidInterface.showInterstitialAd) {
+        AndroidInterface.showInterstitialAd();  // ← これ！！
+    }
+    
     // 🌟【QRカメラ停止＆非表示処理（必須）】
     await stopScanning();
     removeQrVideo();
