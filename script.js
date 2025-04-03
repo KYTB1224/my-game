@@ -1,8 +1,3 @@
-window.addEventListener('DOMContentLoaded', () => {
-    const preloader = document.getElementById('preloader');
-    if (preloader) preloader.style.display = 'none';
-});
-
 import {getElementEmoji, getSkillEmoji } from './js/utils.js';
 import { 
     player1Monster, 
