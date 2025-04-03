@@ -1606,6 +1606,7 @@ quitGameBtn.addEventListener("click", () => {
     location.reload(); // ページをリロード
     document.getElementById('battle-background').style.display = 'none'; // 背景を消す
     document.getElementById('privacy-policy-link').style.display = 'block';
+    removeQrVideo();
 });
 
 function getElementMultiplier(attackerElement, defenderElement) {
