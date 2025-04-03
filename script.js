@@ -1763,6 +1763,12 @@ setTimeout(() => {
 
 document.getElementById('add-to-collection-btn').addEventListener('click', () => {
 
+        if (window.AndroidInterface && AndroidInterface.showRewardAd) {
+        AndroidInterface.showRewardAd();  // リワード広告を表示
+    } else {
+        onRewardUnavailable(); // 念のためJSだけでも進められるように
+    }
+    
     const winSound = document.getElementById('win-sound');
     winSound.pause();
     winSound.currentTime = 0;
@@ -2812,3 +2818,16 @@ function displayBattleLogWithCallback(callback) {
 document.getElementById('privacy-policy-link').addEventListener('click', () => {
     window.open('https://sites.google.com/view/qr-monster-battle-privacy/%E3%83%9B%E3%83%BC%E3%83%A0', '_blank');
 });
+
+function onRewardEarned() {
+    // 🌟 ここで登録画面へ進める
+    document.getElementById('battle-container').style.display = 'none';
+    document.getElementById('scan-screen').style.display = 'none';
+    document.getElementById('startup-screen').style.display = 'none';
+    document.getElementById('turn-display').style.display = 'none';
+    document.getElementById('select-monster-screen').style.display = 'block';
+}
+
+function onRewardUnavailable() {
+    alert("Ad not available right now. Please try again later!");
+}
