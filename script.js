@@ -27,6 +27,11 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('preloader').style.display = 'none';
+});
+
+
 let isFastForwarding = false;
 
 const startupScreen = document.getElementById('startup-screen');
@@ -227,28 +232,35 @@ approveBtn.addEventListener("click", async () => {
         return;
     }
 
+    // ✅ 広告表示
     if (window.AndroidInterface && AndroidInterface.showInterstitialAd) {
-        AndroidInterface.showInterstitialAd();  // ← これ！！
+        AndroidInterface.showInterstitialAd();
     }
-    
-    // 🌟【QRカメラ停止＆非表示処理（必須）】
+
+    // ✅ モンスター画像の非表示（チラ見え対策）
+    const monsterImage = document.getElementById('monster-image');
+    monsterImage.style.display = "none";
+    monsterImage.style.visibility = "hidden";  // 念のため透明に
+
+    // ✅ QRカメラ停止＆非表示
     await stopScanning();
     removeQrVideo();
     const qrVideo = document.getElementById('qr-video');
     if (qrVideo) qrVideo.style.display = 'none';
 
-    // 🌟【黒丸を再表示する処理（必須追加！）】
-    const monsterImage = document.getElementById('monster-image');
-    monsterImage.style.display = "none";
-
+    // ✅ モンスター登録
     registerMonster(currentScannedMonster);
+
+    // ✅ モンスターデータを初期化（これが後だと大丈夫）
     setCurrentScannedMonster(null);
 
+    // ✅ 特別バトル判定
     const specialBattle = localStorage.getItem('isSpecialBattle');
 
     if (specialBattle) {
         scanResultText.innerHTML = "✨ Let the battle begin! ✨";
         startBattleBtn.style.display = "inline-block";
+
         startScanBtn.style.display = "none";
         stopScanBtn.style.display = "none";
         loadMonsterBtn.style.display = "none";
@@ -263,9 +275,9 @@ approveBtn.addEventListener("click", async () => {
         if (currentPlayer === 1) {
             scanResultText.textContent = "Player 2, please scan your monster.";
 
-            // 🌟 ボタンの完全リセット（ここも再確認）
-            startScanBtn.disabled = false;  
-            stopScanBtn.disabled = true;   
+            // ✅ 各種ボタンのリセット
+            startScanBtn.disabled = false;
+            stopScanBtn.disabled = true;
             loadMonsterBtn.disabled = false;
 
             startScanBtn.removeAttribute("style");
@@ -283,7 +295,7 @@ approveBtn.addEventListener("click", async () => {
             setScanningForPlayer(2);
             currentPlayer = 2;
 
-            // 🌟【ここで再び黒丸を表示！】
+            // ✅ 次のQRスキャンの映像を再表示
             if (qrVideo) qrVideo.style.display = 'block';
 
         } else if (currentPlayer === 2) {
@@ -317,6 +329,7 @@ rescanBtn.addEventListener("click", async () => {
     const monsterImage = document.getElementById('monster-image');
     monsterImage.src = "";
     monsterImage.style.display = "none";
+    monsterImage.style.visibility = "visible";
 
     await stopScanning(); // 明示的に待機
     await scanQRCode();   // QRスキャナを再起動（awaitを付けるのがベスト）
@@ -458,107 +471,104 @@ startBattleBtn.addEventListener("click", () => {
     if (window.AndroidInterface && AndroidInterface.showBanner) {
         AndroidInterface.showBanner();
     }
-    
-    const specialBattle = localStorage.getItem('isSpecialBattle');
 
-    // 先にspecial判定を済ませる
+    const specialBattle = localStorage.getItem('isSpecialBattle');
     const battleBackground = document.getElementById('battle-background');
     const battleBgmAudio = document.getElementById('battle-bgm');
 
+    let battleBackgroundPath;
+    let battleBgmPath;
+
     if (specialBattle === 'special_3') {
-        // 🌟 Special3専用の背景・BGM
-        battleBackground.src = 'assets/back/special3.webp';
-        battleBgmAudio.src = 'assets/sound/special3-bgm.mp3';
+        battleBackgroundPath = 'assets/back/special3.webp';
+        battleBgmPath = 'assets/sound/special3-bgm.mp3';
     } else {
-        // 🔹 通常のランダム背景・BGM
         const randomBackgroundNumber = Math.floor(Math.random() * 8) + 1;
-        battleBackground.src = `assets/back/${randomBackgroundNumber}.webp`;
+        battleBackgroundPath = `assets/back/${randomBackgroundNumber}.webp`;
 
         const bgmNumber = Math.floor(Math.random() * 3) + 1;
-        battleBgmAudio.src = `assets/sound/b-bgm${bgmNumber}.mp3`;
+        battleBgmPath = `assets/sound/b-bgm${bgmNumber}.mp3`;
     }
 
-    battleBackground.style.display = 'block';
-    battleBgmAudio.currentTime = 0;
-    battleBgmAudio.loop = true;
-    if (!window.isMuted) battleBgmAudio.play();
-    
-    // 🌟別の変数名に変更して再定義を防ぐ！
-    const tempPlayer1Image = document.getElementById('player1-monster-image');
-    const tempPlayer2Image = document.getElementById('player2-monster-image');
+    // ✅ 背景画像を事前読み込みしてから処理を開始
+    const bg = new Image();
+    bg.src = battleBackgroundPath;
+    bg.onload = () => {
+        battleBackground.src = battleBackgroundPath;
+        battleBackground.style.display = 'block';
 
-    tempPlayer1Image.classList.remove('fade-out');
-    tempPlayer1Image.style.opacity = "";
-    tempPlayer1Image.style.visibility = "visible";
+        battleBgmAudio.src = battleBgmPath;
+        battleBgmAudio.currentTime = 0;
+        battleBgmAudio.loop = true;
+        if (!window.isMuted) battleBgmAudio.play();
 
-    tempPlayer2Image.classList.remove('fade-out');
-    tempPlayer2Image.style.opacity = "";
-    tempPlayer2Image.style.visibility = "visible";
+        const tempPlayer1Image = document.getElementById('player1-monster-image');
+        const tempPlayer2Image = document.getElementById('player2-monster-image');
 
-    document.getElementById('add-to-collection-btn').style.display = "none";
+        tempPlayer1Image.classList.remove('fade-out');
+        tempPlayer1Image.style.opacity = "";
+        tempPlayer1Image.style.visibility = "visible";
 
-    if (!player1Monster || !player2Monster) {
-        alert("Error: Monsters not set!");
-        return;
-    }
+        tempPlayer2Image.classList.remove('fade-out');
+        tempPlayer2Image.style.opacity = "";
+        tempPlayer2Image.style.visibility = "visible";
 
+        document.getElementById('add-to-collection-btn').style.display = "none";
 
-    initialPlayer1Monster = JSON.parse(JSON.stringify(player1Monster));
-    initialPlayer2Monster = JSON.parse(JSON.stringify(player2Monster));
+        if (!player1Monster || !player2Monster) {
+            alert("Error: Monsters not set!");
+            return;
+        }
 
-    [player1Monster, player2Monster].forEach(monster => {
-        monster.hp = monster.maxHp;
-        monster.attack = monster.baseAttack;
-        monster.defense = monster.baseDefense;
-        monster.growthActivation = 0;
-        monster.learningActivation = 0;
-        monster.reviveActivation = 0;
-        monster.healActivation = 0;
-        monster.attackCount = 0;
-        monster.defenseCount = 0;
-    });
+        initialPlayer1Monster = JSON.parse(JSON.stringify(player1Monster));
+        initialPlayer2Monster = JSON.parse(JSON.stringify(player2Monster));
 
+        [player1Monster, player2Monster].forEach(monster => {
+            monster.hp = monster.maxHp;
+            monster.attack = monster.baseAttack;
+            monster.defense = monster.baseDefense;
+            monster.growthActivation = 0;
+            monster.learningActivation = 0;
+            monster.reviveActivation = 0;
+            monster.healActivation = 0;
+            monster.attackCount = 0;
+            monster.defenseCount = 0;
+        });
 
-    scanScreen.style.display = 'none';  
-    battleContainer.style.display = 'block';
+        scanScreen.style.display = 'none';
+        battleContainer.style.display = 'block';
 
+        currentTurn = 20;
+        const turnDisplay = document.getElementById('turn-display');
+        turnDisplay.textContent = `Turn: ${currentTurn}`;
+        turnDisplay.style.display = "block";
 
-    currentTurn = 20; // 🔴 ターン数をリセット
-    const turnDisplay = document.getElementById('turn-display');
-    turnDisplay.textContent = `Turn: ${currentTurn}`;
-    turnDisplay.style.display = "block";  // 🔴 ターン表示を必ず再表示
-    
+        const player1ImagePath = `assets/monsters/${player1Monster.name.toLowerCase().replace(/ /g, "_")}.webp`;
+        const player2ImagePath = `assets/monsters/${player2Monster.name.toLowerCase().replace(/ /g, "_")}.webp`;
 
+        const player1Image = document.getElementById('player1-monster-image');
+        player1Image.src = player1ImagePath;
+        player1Image.classList.remove('mirror-image');
 
-    // ★↓↓ モンスター画像再設定処理（必須） ↓↓★
-    const player1ImagePath = `assets/monsters/${player1Monster.name.toLowerCase().replace(/ /g, "_")}.webp`;
-    const player2ImagePath = `assets/monsters/${player2Monster.name.toLowerCase().replace(/ /g, "_")}.webp`;
+        const player2Image = document.getElementById('player2-monster-image');
+        player2Image.src = player2ImagePath;
+        player2Image.classList.add('mirror-image');
 
-    const player1Image = document.getElementById('player1-monster-image');
-    player1Image.src = player1ImagePath;
-    player1Image.classList.remove('mirror-image'); // P1は通常向き
+        scanResultText.textContent = "";
+        startBattleBtn.style.display = "none";
+        nextTurnBtn.style.display = "inline-block";
+        scanNextBattleBtn.style.display = "none";
+        quitGameBtn.style.display = "none";
 
-    const player2Image = document.getElementById('player2-monster-image');
-    player2Image.src = player2ImagePath;
-    player2Image.classList.add('mirror-image'); // ★P2を反転表示
+        finalizeTurn();
 
-    scanResultText.textContent = "";
-    battleContainer.style.display = 'block';
-    startBattleBtn.style.display = "none";
-    nextTurnBtn.style.display = "inline-block";
-    scanNextBattleBtn.style.display = "none";
-    quitGameBtn.style.display = "none";
-
-    finalizeTurn();
-
-    if (player1Monster.speed >= player2Monster.speed) {
-        initializeBattle(player1Monster, player2Monster, "P1", "P2");
-    } else {
-        initializeBattle(player2Monster, player1Monster, "P2", "P1");
-    }
-
+        if (player1Monster.speed >= player2Monster.speed) {
+            initializeBattle(player1Monster, player2Monster, "P1", "P2");
+        } else {
+            initializeBattle(player2Monster, player1Monster, "P2", "P1");
+        }
+    };
 });
-
 
 
 // 🌟スキル発動表示用の関数を新規追加
@@ -1601,6 +1611,13 @@ const player2Img = document.getElementById('player2-monster-image');
 
 // **「Quit the Game」ボタンの動作**
 quitGameBtn.addEventListener("click", () => {
+    document.body.innerHTML = '';
+    document.body.style.backgroundColor = '#000'; // 黒にしてもOK
+
+    setTimeout(() => {
+        location.reload(); // 少し遅らせてリロード
+    }, 200); // 100ms くらい遅らせると滑らか
+
     document.getElementById('turn-display').style.display = "none";
     console.log("❌ ゲーム終了");
     location.reload(); // ページをリロード
@@ -1763,12 +1780,12 @@ setTimeout(() => {
 
 document.getElementById('add-to-collection-btn').addEventListener('click', () => {
 
-        if (window.AndroidInterface && AndroidInterface.showRewardAd) {
+    if (window.AndroidInterface && AndroidInterface.showRewardAd) {
         AndroidInterface.showRewardAd();  // リワード広告を表示
     } else {
         onRewardUnavailable(); // 念のためJSだけでも進められるように
     }
-    
+
     const winSound = document.getElementById('win-sound');
     winSound.pause();
     winSound.currentTime = 0;
@@ -2003,38 +2020,25 @@ finalRegisterBtn.addEventListener('click', () => {
         };
 
         localStorage.setItem(`monster-slot-${slotNumber}`, JSON.stringify(monsterWithImage));
+    });
 
+    // ✅ メッセージ表示（登録成功）
+    showPopupMessage("✅ Monster(s) Registered Successfully!");
 
-    // 追加① 🌟 scan-bgm を停止
+    // ✅ 音処理：scan-bgm停止 & 完了音再生
     scanBgmAudio.pause();
     scanBgmAudio.currentTime = 0;
 
-    // 追加② 🌟 scan-complete.mp3 を再生
-    if (!isMuted) { // ミュート状態でなければ再生
+    if (!isMuted) {
         scanCompleteSound.currentTime = 0;
         scanCompleteSound.play().catch(e => console.error("Scan complete 再生エラー:", e));
     }
-    
-        showPopupMessage("✅ Monster(s) Registered Successfully!");
-    
-        document.getElementById('scan-next-battle-btn').style.display = 'inline-block';
-        document.getElementById('quit-game-btn').style.display = 'inline-block';
-    
-        setTimeout(() => {
-            location.reload();
-        }, 1500);
 
-    });
-
-    // メッセージを登録用に変更
-    showPopupMessage("✅ Monster(s) Registered Successfully!");
-
-    document.getElementById('scan-next-battle-btn').style.display = 'inline-block';
-    document.getElementById('quit-game-btn').style.display = 'inline-block';
-
+    // ✅ 完全初期化（Quitと同じ）
     setTimeout(() => {
-        location.reload();
-    }, 1500);
+        resetMonsterFade(); // ← 画像のフェード処理リセット
+        resetTemporaryGameState(); // ← アプリ全体の状態を初期化してトップへ
+    }, 1000); // 音とポップアップを感じられるよう少し遅延
 });
 
   
@@ -2102,13 +2106,18 @@ loadConfirmBtn.addEventListener('click', () => {
     if (selectedLoadSlot === null) return;
 
     const loadedMonster = JSON.parse(localStorage.getItem(`monster-slot-${selectedLoadSlot}`));
-    
-
     if (!loadedMonster) {
         alert('Error: No monster data found!');
         return;
     }
 
+    // ✅ 前のモンスター画像を完全に非表示（チラ見え対策）
+    const monsterImage = document.getElementById('monster-image');
+    monsterImage.style.display = "none";           // 一時的に非表示
+    monsterImage.style.visibility = "visible";     // 表示は可能状態にしておく
+    monsterImage.src = "";                         // 念のため画像内容も初期化（ここはOK）
+
+    // ✅ モンスターデータをスキャン対象に登録
     setCurrentScannedMonster({
         ...loadedMonster,
         hp: loadedMonster.maxHp,
@@ -2118,31 +2127,29 @@ loadConfirmBtn.addEventListener('click', () => {
 
     const monsterImagePath = `assets/monsters/${loadedMonster.name.toLowerCase().replace(/ /g, "_")}.webp`;
 
-    // Load画面を閉じてScan画面に戻す処理
+    // ✅ Scan画面に遷移
     loadMonsterScreen.style.display = 'none';
     scanScreen.style.display = 'block';
-    
-    removeQrVideo();
-    createQrVideo(); 
-    
-    // 🌟重要：QRスキャン時と完全一致するように動画は非表示に
-    const video = document.getElementById('qr-video');
-    video.style.display = "none";
 
-    // 🌟重要：モンスター画像のコンテナを表示させる処理を追加（ズレの原因はこれ）
+    // ✅ QRビデオ再構築
+    removeQrVideo();
+    createQrVideo();
+
+    const video = document.getElementById('qr-video');
+    video.style.display = "none";  // QR動画は初期は非表示
+
+    // ✅ モンスター画像の表示準備
     const monsterImageContainer = document.getElementById('monster-image-container');
     monsterImageContainer.style.display = "block";
 
-    // モンスター画像表示処理（これは現状維持で良い）
-    const monsterImage = document.getElementById('monster-image');
+    // ✅ 新しい画像に更新＆表示
     monsterImage.src = monsterImagePath;
     monsterImage.style.display = "block";
     monsterImage.classList.add('pop-animation');
 
-    // スキャン結果テキストの設定（これは問題ない）
+    // ✅ スキャン結果表示の設定
     scanResultText.classList.remove('simple-text');
     scanResultText.classList.add('monster-box');
-
     scanResultText.innerHTML = `
         <strong>Loaded Monster:</strong><br>
         Name: ${loadedMonster.name}<br>
@@ -2157,13 +2164,13 @@ loadConfirmBtn.addEventListener('click', () => {
         </div>
     `;
 
+    // ✅ 効果音再生
     if (!isMuted) {
         scanCompleteSound.currentTime = 0;
         scanCompleteSound.play();
     }
-    
-    
-    // 🌟ボタン並び（問題なし・維持）
+
+    // ✅ 各種ボタン表示
     loadMonsterBtn.style.display = "inline-block";
     approveBtn.style.display = "inline-block";
     rescanBtn.style.display = "inline-block";
@@ -2171,6 +2178,7 @@ loadConfirmBtn.addEventListener('click', () => {
     startScanBtn.style.display = "none";
     stopScanBtn.style.display = "none";
 
+    // ✅ 状態リセット
     loadConfirmBtn.disabled = true;
     selectedLoadSlot = null;
 });
@@ -2598,6 +2606,13 @@ document.getElementById('exit-button').onclick = () => {
 
 
 function resetTemporaryGameState() {
+
+    document.body.innerHTML = '';
+    document.body.style.backgroundColor = '#000'; // 黒にしてもOK
+
+    setTimeout(() => {
+        location.reload(); // 少し遅らせてリロード
+    }, 200); // 100ms くらい遅らせると滑らか
     // main.js内のモンスター情報をリセット
     Main.resetMonsters();
 
