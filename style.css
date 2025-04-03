@@ -972,11 +972,6 @@ html {
     transform: translateY(1px);
 }
 
-.unlock-condition {
-    font-size: 15px;
-    font-weight: normal;
-    color: #d1d1d1;
-}
 
 #special-back-btn {
     padding: 10px 20px;
@@ -999,7 +994,7 @@ html {
 }
 
 .unlock-condition {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: normal;
     color: #e0e0e0; /* 少し明るめのグレー（既存テキストに合わせる） */
 }
