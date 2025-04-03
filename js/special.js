@@ -46,7 +46,6 @@ function updateSpecialStages() {
 // Specialボタンが押されたら画面遷移
 specialBtn.addEventListener('click', () => {
     document.getElementById('privacy-policy-link').style.display = 'none';
-    removeQrVideo();
     startupScreen.style.display = 'none';
     specialScreen.style.display = 'flex';
 
