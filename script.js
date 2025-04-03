@@ -55,6 +55,20 @@ fastForwardBtn.onclick = () => {
     fastForwardTurns(5); // ここで専用関数を呼ぶだけ
 };
 
+function removeQrVideo() {
+    const oldVideo = document.getElementById('qr-video');
+    if (oldVideo && oldVideo.parentNode) {
+        oldVideo.parentNode.removeChild(oldVideo);
+    }
+}
+
+function createQrVideo() {
+    const container = document.getElementById('camera-container');
+    const newVideo = document.createElement('video');
+    newVideo.id = 'qr-video';
+    newVideo.style.display = 'block';
+    container.appendChild(newVideo);
+}
 
 const buttonsToHide = [nextTurnBtn, startBattleBtn, approveBtn, rescanBtn, scanNextBattleBtn, quitGameBtn];
 buttonsToHide.forEach(btn => btn.style.display = "none");
@@ -183,6 +197,8 @@ function updateButtonState(button, isEnabled) {
 
 
 startScanBtn.addEventListener('click', () => {
+    removeQrVideo();    // まず古いvideo削除
+    createQrVideo(); 
     setCurrentScannedMonster(null);
     scanResultText.textContent = "Scanning...";
     scanQRCode();
@@ -195,7 +211,7 @@ startScanBtn.addEventListener('click', () => {
 // 正しく修正されたstopScanBtnイベントリスナー
 stopScanBtn.addEventListener('click', async () => {
     await stopScanning();
-
+    removeQrVideo();
     scanResultText.textContent = "";
     video.style.display = "none";
 
@@ -214,6 +230,7 @@ approveBtn.addEventListener("click", async () => {
 
     // 🌟【QRカメラ停止＆非表示処理（必須）】
     await stopScanning();
+    removeQrVideo();
     const qrVideo = document.getElementById('qr-video');
     if (qrVideo) qrVideo.style.display = 'none';
 
@@ -305,6 +322,7 @@ rescanBtn.addEventListener("click", async () => {
 
 
 gameStartBtn.addEventListener('click', () => {
+    removeQrVideo();
     localStorage.removeItem('isSpecialBattle'); // 必ず先頭で確実に消す
     localStorage.setItem('isNormalBattle', 'true'); // 🌟 通常バトルであるフラグを立てる（明示的）
 
@@ -2641,6 +2659,7 @@ function resetTemporaryGameState() {
     updateButtonState(document.getElementById('start-scan'), true);
     updateButtonState(document.getElementById('stop-scan'), false);
     updateButtonState(document.getElementById('load-monster-btn'), true);
+    removeQrVideo();
 }
 
 
