@@ -2107,6 +2107,8 @@ loadConfirmBtn.addEventListener('click', () => {
     loadMonsterScreen.style.display = 'none';
     scanScreen.style.display = 'block';
 
+    createQrVideo(); 
+    
     // 🌟重要：QRスキャン時と完全一致するように動画は非表示に
     const video = document.getElementById('qr-video');
     video.style.display = "none";
