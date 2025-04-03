@@ -9,6 +9,17 @@
 </head>
 
 <body>
+
+    <div id="preloader" style="
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  z-index:9999999;
+"></div>
+
     <div id="startup-screen">
         <img id="title-background" src="assets/title.webp" alt="Title Background">
         
@@ -145,6 +156,8 @@
         <button id="load-monster-btn" style="display:none;">Load</button> <!-- 🌟ここに移動 -->
     
         <button id="start-battle-btn" style="display:none;">Start Battle</button>
+
+        
         <button id="next-turn-btn" style="display:none;">Next</button>
         <button id="fast-forward-btn" class="action-button" style="display:none; background-color:orange;">
             ⏩ Fast Forward 5 Turns
@@ -227,7 +240,7 @@
   position: fixed; 
   top: 10px; 
   right: 10px; 
-  z-index: 99999999;
+  z-index: 999999999;
   cursor: pointer;
 ">
   <img id="sound-toggle" src="assets/sound/1.png" alt="sound-toggle" style="width:30px;height:30px;">
@@ -304,6 +317,19 @@
 <!-- script.js は、他ファイルを全部読み込んだ最後に書く -->
 <script type="module" src="script.js"></script>
 
+<!-- 🔥 背景プリロード用 -->
+<div style="display: none;">
+    <img src="assets/back/1.webp" alt="preload">
+    <img src="assets/back/2.webp" alt="preload">
+    <img src="assets/back/3.webp" alt="preload">
+    <img src="assets/back/4.webp" alt="preload">
+    <img src="assets/back/5.webp" alt="preload">
+    <img src="assets/back/6.webp" alt="preload">
+    <img src="assets/back/7.webp" alt="preload">
+    <img src="assets/back/8.webp" alt="preload">
+    <img src="assets/back/special3.webp" alt="preload">
+  </div>
+  
 </body>
 </html>
 
