@@ -1,9 +1,9 @@
-import QrScanner from "https://unpkg.com/qr-scanner@1.4.1/qr-scanner.min.js";
 import { generateSHA256, extendHashTo100Chars, getElementEmoji, getSkillEmoji, showDiscoveryPopup } from './utils.js';
 import { generateMonster } from './monster-generator.js';
 import { setCurrentScannedMonster } from './main.js';
 import { updateSpecialButtonState } from './special.js';
-
+import QrScanner from './qr-scanner.min.js';
+QrScanner.WORKER_PATH = './js/qr-scanner-worker.min.js';
 
 let qrScanner = null;
 
