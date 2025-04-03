@@ -27,7 +27,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
 let isFastForwarding = false;
 
 const startupScreen = document.getElementById('startup-screen');
