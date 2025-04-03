@@ -43,9 +43,17 @@ function updateSpecialStages() {
     document.getElementById('special-3-btn').disabled = discoveredCount < 30;
 }
 
+function removeQrVideo() {
+    const oldVideo = document.getElementById('qr-video');
+    if (oldVideo && oldVideo.parentNode) {
+        oldVideo.parentNode.removeChild(oldVideo);
+    }
+}
+
 // Specialボタンが押されたら画面遷移
 specialBtn.addEventListener('click', () => {
     document.getElementById('privacy-policy-link').style.display = 'none';
+    removeQrVideo();
     startupScreen.style.display = 'none';
     specialScreen.style.display = 'flex';
 
