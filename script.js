@@ -227,11 +227,7 @@ approveBtn.addEventListener("click", async () => {
         console.error("⚠ エラー: currentScannedMonsterが存在しない");
         return;
     }
-    
-    if (window.AndroidInterface && AndroidInterface.showInterstitialAd) {
-        AndroidInterface.showInterstitialAd();  // ← これ！！
-    }
-    
+
     // 🌟【QRカメラ停止＆非表示処理（必須）】
     await stopScanning();
     removeQrVideo();
@@ -456,6 +452,10 @@ startBattleBtn.addEventListener("click", () => {
     specialBgmAudio.pause();
     specialBgmAudio.currentTime = 0;
 
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
+    
     const specialBattle = localStorage.getItem('isSpecialBattle');
 
     // 先にspecial判定を済ませる
@@ -1773,6 +1773,7 @@ document.getElementById('add-to-collection-btn').addEventListener('click', () =>
     document.getElementById('startup-screen').style.display = 'none';
     document.getElementById('turn-display').style.display = 'none';
 
+    
     const selectScreen = document.getElementById('select-monster-screen');
     selectScreen.style.display = 'block';
 
@@ -2110,7 +2111,8 @@ loadConfirmBtn.addEventListener('click', () => {
     // Load画面を閉じてScan画面に戻す処理
     loadMonsterScreen.style.display = 'none';
     scanScreen.style.display = 'block';
-　　removeQrVideo();
+    
+    removeQrVideo();
     createQrVideo(); 
     
     // 🌟重要：QRスキャン時と完全一致するように動画は非表示に
@@ -2472,16 +2474,28 @@ const battleBgmAudio = document.getElementById('battle-bgm');
 document.getElementById('add-to-collection-btn').onclick = () => {
     stopAudioImmediately(battleBgmAudio);
     // ★他の処理があればここに追記
+    if (window.AndroidInterface && AndroidInterface.hideBanner) {
+        AndroidInterface.hideBanner();
+    }
+    
 };
 
 document.getElementById('scan-next-battle-btn').onclick = () => {
     stopAudioImmediately(battleBgmAudio);
     // ★他の処理があればここに追記
+    if (window.AndroidInterface && AndroidInterface.hideBanner) {
+        AndroidInterface.hideBanner();
+    }
+    
 };
 
 document.getElementById('quit-game-btn').onclick = () => {
     stopAudioImmediately(battleBgmAudio);
     // ★他の処理があればここに追記
+    if (window.AndroidInterface && AndroidInterface.hideBanner) {
+        AndroidInterface.hideBanner();
+    }
+    
 };
 
 
@@ -2644,6 +2658,10 @@ function resetTemporaryGameState() {
     document.getElementById('gallery-btn').style.display = 'inline-block';
     document.getElementById('special-btn').style.display = 'inline-block';
 
+    if (window.AndroidInterface && AndroidInterface.hideBanner) {
+        AndroidInterface.hideBanner();
+    }
+    
     specialBgmAudio.pause();
     specialBgmAudio.currentTime = 0;
 
