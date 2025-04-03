@@ -1,3 +1,8 @@
+window.addEventListener('DOMContentLoaded', () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) preloader.style.display = 'none';
+});
+
 import {getElementEmoji, getSkillEmoji } from './js/utils.js';
 import { 
     player1Monster, 
@@ -27,12 +32,9 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('preloader').style.display = 'none';
-});
-
 
 let isFastForwarding = false;
+
 
 const startupScreen = document.getElementById('startup-screen');
 const scanScreen = document.getElementById('scan-screen');
