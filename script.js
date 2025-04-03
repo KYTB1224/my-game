@@ -2106,7 +2106,7 @@ loadConfirmBtn.addEventListener('click', () => {
     // Load画面を閉じてScan画面に戻す処理
     loadMonsterScreen.style.display = 'none';
     scanScreen.style.display = 'block';
-
+　　removeQrVideo();
     createQrVideo(); 
     
     // 🌟重要：QRスキャン時と完全一致するように動画は非表示に
