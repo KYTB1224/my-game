@@ -373,7 +373,6 @@ button:active {
     height: auto !important;
     display: block;
     margin: 5px auto;
-    visibility: hidden;  /* ← 追加で透明化の保険 */
 }
 
 #monster-images-container {
@@ -849,7 +848,7 @@ html {
     position: fixed;        /* 画面に常に固定 */
     top: 10px;              /* 上からの距離（音量マークと同じ高さに調整） */
     left: 10px;             /* 左からの距離 */
-    z-index: 9999999999;          /* 他の要素より前面に表示 */
+    z-index: 9999999;          /* 他の要素より前面に表示 */
     cursor: pointer;        /* クリック可能な表示 */
 }
 
@@ -1009,4 +1008,3 @@ html {
 #privacy-policy-link:hover {
     opacity: 0.7;
 }
-
