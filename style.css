@@ -1018,7 +1018,7 @@ html {
     z-index: 2147483647; /* ← これでExitボタンも確実に覆える！ */
     opacity: 1;
     transition: opacity 0.6s ease;
-    pointer-events: none;
+    pointer-events: auto;
     display: flex;
     justify-content: center;
     align-items: center;
