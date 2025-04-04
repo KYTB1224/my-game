@@ -2045,33 +2045,33 @@ slots.forEach(slot => {
 finalRegisterBtn.addEventListener('click', () => {
     selectedSlots.forEach((slotNumber, index) => {
         const monster = monstersToRegister[index];
-
         const monsterWithImage = {
             ...monster,
             image: `${monster.name.replace(/\s/g, '_')}.webp`
         };
-
         localStorage.setItem(`monster-slot-${slotNumber}`, JSON.stringify(monsterWithImage));
     });
 
-    // ✅ メッセージ表示（登録成功）
     showPopupMessage("✅ Monster(s) Registered Successfully!");
 
-    // ✅ 音処理：scan-bgm停止 & 完了音再生
     scanBgmAudio.pause();
     scanBgmAudio.currentTime = 0;
 
     if (!isMuted) {
         scanCompleteSound.currentTime = 0;
-        scanCompleteSound.play().catch(e => console.error("Scan complete 再生エラー:", e));
+        scanCompleteSound.play();
     }
 
-    // ✅ 完全初期化（Quitと同じ）
     setTimeout(() => {
-        resetMonsterFade(); // ← 画像のフェード処理リセット
-        resetTemporaryGameState(); // ← アプリ全体の状態を初期化してトップへ
-    }, 1000); // 音とポップアップを感じられるよう少し遅延
+        resetMonsterFade();
+        resetTemporaryGameState();
+
+        // ✅ 明示的にトップ画面を表示（←これが超重要！）
+        showStartupScreen();
+
+    }, 1000);
 });
+
 
   
 
@@ -2145,11 +2145,11 @@ loadConfirmBtn.addEventListener('click', () => {
 
     // ✅ 前のモンスター画像を完全に非表示（チラ見え対策）
     const monsterImage = document.getElementById('monster-image');
-    monsterImage.style.display = "none";           // 一時的に非表示
-    monsterImage.style.visibility = "visible";     // 表示は可能状態にしておく
-    monsterImage.src = "";                         // 念のため画像内容も初期化（ここはOK）
+    monsterImage.style.display = "none";
+    monsterImage.style.visibility = "visible";
+    monsterImage.src = "";
 
-    // ✅ モンスターデータをスキャン対象に登録
+    // ✅ モンスターデータを登録
     setCurrentScannedMonster({
         ...loadedMonster,
         hp: loadedMonster.maxHp,
@@ -2159,27 +2159,29 @@ loadConfirmBtn.addEventListener('click', () => {
 
     const monsterImagePath = `assets/monsters/${loadedMonster.name.toLowerCase().replace(/ /g, "_")}.webp`;
 
-    // ✅ Scan画面に遷移
+    // ✅ Scan画面へ戻す
     loadMonsterScreen.style.display = 'none';
     scanScreen.style.display = 'block';
 
-    // ✅ QRビデオ再構築
+    // ✅ UIを完全に初期化
     removeQrVideo();
     createQrVideo();
 
-    const video = document.getElementById('qr-video');
-    video.style.display = "none";  // QR動画は初期は非表示
+    startScanBtn.style.display = "none";
+    stopScanBtn.style.display = "none";
+    loadMonsterBtn.style.display = "inline-block";
+    approveBtn.style.display = "inline-block";
+    rescanBtn.style.display = "inline-block";
 
-    // ✅ モンスター画像の表示準備
-    const monsterImageContainer = document.getElementById('monster-image-container');
-    monsterImageContainer.style.display = "block";
+    updateButtonState(startScanBtn, false);
+    updateButtonState(stopScanBtn, false);
+    updateButtonState(loadMonsterBtn, true);
 
-    // ✅ 新しい画像に更新＆表示
+    // ✅ モンスター画像とテキスト表示
     monsterImage.src = monsterImagePath;
     monsterImage.style.display = "block";
     monsterImage.classList.add('pop-animation');
 
-    // ✅ スキャン結果表示の設定
     scanResultText.classList.remove('simple-text');
     scanResultText.classList.add('monster-box');
     scanResultText.innerHTML = `
@@ -2196,19 +2198,11 @@ loadConfirmBtn.addEventListener('click', () => {
         </div>
     `;
 
-    // ✅ 効果音再生
-    if (!isMuted) {
+    // ✅ 効果音
+    if (!window.isMuted) {
         scanCompleteSound.currentTime = 0;
         scanCompleteSound.play();
     }
-
-    // ✅ 各種ボタン表示
-    loadMonsterBtn.style.display = "inline-block";
-    approveBtn.style.display = "inline-block";
-    rescanBtn.style.display = "inline-block";
-
-    startScanBtn.style.display = "none";
-    stopScanBtn.style.display = "none";
 
     // ✅ 状態リセット
     loadConfirmBtn.disabled = true;
@@ -2744,6 +2738,7 @@ function resetTemporaryGameState() {
     updateButtonState(document.getElementById('load-monster-btn'), true);
 }
 
+
 function showStartupScreen() {
     document.getElementById('startup-screen').style.display = 'block';
     document.getElementById('scan-screen').style.display = 'none';
@@ -2883,44 +2878,47 @@ function onRewardUnavailable() {
 
 
 
+
+
 function preloadTestMonsters() {
-  const testMonster1 = {
-    name: "Golem",
-    element: "Logical",
-    maxHp: 300,
-    hp: 300,
-    baseAttack: 80,
-    attack: 80,
-    baseDefense: 100,
-    defense: 100,
-    speed: 40,
-    skill1: "Critical",
-    skill2: "Growth",
-    image: "golem.webp"
-  };
-
-  const testMonster2 = {
-    name: "Vampire",
-    element: "Intuitive",
-    maxHp: 280,
-    hp: 280,
-    baseAttack: 90,
-    attack: 90,
-    baseDefense: 60,
-    defense: 60,
-    speed: 60,
-    skill1: "Vampire",
-    skill2: "Thorns",
-    image: "vampire.webp"
-  };
-
-  localStorage.setItem("monster-slot-0", JSON.stringify(testMonster1));
-  localStorage.setItem("monster-slot-1", JSON.stringify(testMonster2));
-}
-
-
-// 他のコードの後ろにそのまま追加！
-window.addEventListener("DOMContentLoaded", () => {
-  preloadTestMonsters();       // 🔥 仮モンスターを保存
-  loadStoredMonsters();        // ✅ スロットに即表示！！
-});
+    const testMonster1 = {
+      name: "Golem",
+      element: "Logical",
+      maxHp: 300,
+      hp: 300,
+      baseAttack: 80,
+      attack: 80,
+      baseDefense: 100,
+      defense: 100,
+      speed: 40,
+      skill1: "Critical",
+      skill2: "Growth",
+      image: "golem.webp"
+    };
+  
+    const testMonster2 = {
+      name: "Vampire",
+      element: "Intuitive",
+      maxHp: 280,
+      hp: 280,
+      baseAttack: 90,
+      attack: 90,
+      baseDefense: 60,
+      defense: 60,
+      speed: 60,
+      skill1: "Vampire",
+      skill2: "Thorns",
+      image: "vampire.webp"
+    };
+  
+    localStorage.setItem("monster-slot-0", JSON.stringify(testMonster1));
+    localStorage.setItem("monster-slot-1", JSON.stringify(testMonster2));
+  }
+  
+  
+  // 他のコードの後ろにそのまま追加！
+  window.addEventListener("DOMContentLoaded", () => {
+    preloadTestMonsters();       // 🔥 仮モンスターを保存
+    loadStoredMonsters();        // ✅ スロットに即表示！！
+  });
+  
