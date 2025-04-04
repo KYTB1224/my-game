@@ -249,7 +249,7 @@ body {
 
 #scan-result {
     position: fixed;
-    top: 270px;
+    top: 285px;
     left: 50%;                             /* ← 中央揃えの起点 */
     transform: translateX(-50%);          /* ← 真ん中に調整 */
     text-align: center;
