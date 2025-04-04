@@ -134,19 +134,17 @@ body {
     background-color: black;
     box-shadow: 0 0 10px rgba(0,0,0,0.5); /* 必要なら影も追加できます */
     z-index: 1;
-}
-
-#qr-video::-webkit-media-controls {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  #qr-video::-webkit-media-controls,
+  #qr-video::-webkit-media-controls-start-playback-button,
+  #qr-video::-webkit-media-controls-enclosure {
     display: none !important;
-}
-
-#qr-video::-webkit-media-controls-start-playback-button {
-    display: none !important;
-}
-
-#qr-video::-webkit-media-controls-enclosure {
-    display: none !important;
-}
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 
 
 #scan-screen {
