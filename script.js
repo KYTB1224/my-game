@@ -2529,6 +2529,7 @@ function fadeOutAudio(audio) {
             audio.volume = 0;
             audio.pause();
             audio.currentTime = 0;
+            audio.src = ''; // ← 再度ミュート解除しても復活しないように完全に消す！
             audio.volume = 1; // 元に戻しておく
         }
     }, 50);  // ← フェード速度調整（数値小さめで早め）
@@ -2559,7 +2560,8 @@ document.getElementById('scan-next-battle-btn').onclick = () => {
     if (window.AndroidInterface && AndroidInterface.hideBanner) {
         AndroidInterface.hideBanner();
     }
-    
+    scanBgmAudio.currentTime = 0;
+    scanBgmAudio.play(); // ← ✅ここで再開してるはず！
 };
 
 document.getElementById('quit-game-btn').onclick = () => {
