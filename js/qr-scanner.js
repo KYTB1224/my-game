@@ -90,6 +90,8 @@ function getMonsterSkillDescription(monster) {
     return descriptions;
 }
 
+let allowScan = false; // ✅ 最初はスキャン禁止
+
 export async function scanQRCode() {
     await stopScanning();
 
@@ -100,12 +102,12 @@ export async function scanQRCode() {
     const newVideo = document.createElement('video');
     newVideo.id = 'qr-video';
     newVideo.setAttribute('autoplay', true);
-    newVideo.setAttribute('muted', true);         // 自動再生に必須！
-    newVideo.setAttribute('playsinline', true);   // iOS対応
-    newVideo.setAttribute('controls', false);     // 再生ボタン封じ
+    newVideo.setAttribute('muted', true);
+    newVideo.setAttribute('playsinline', true);
+    newVideo.setAttribute('controls', false);
 
-    newVideo.style.display = 'block';             // 要素自体は存在
-    newVideo.style.opacity = '0';                 // 透明で待機
+    newVideo.style.display = 'block';
+    newVideo.style.opacity = '0'; // ✅ 最初は透明
     newVideo.style.transition = 'opacity 0.3s ease';
     newVideo.style.objectFit = 'cover';
     newVideo.style.backgroundColor = 'black';
@@ -114,7 +116,11 @@ export async function scanQRCode() {
     cameraContainer.appendChild(newVideo);
 
     qrScanner = new QrScanner(newVideo, async result => {
+        if (!allowScan) return; // ✅ 映像出るまでは無視！
+
+        allowScan = false; // ✅ 1回でスキャン終了
         qrScanner.stop();
+
         if (!window.isMuted) {
             window.scanCompleteSound.currentTime = 0;
             window.scanCompleteSound.play();
@@ -177,7 +183,8 @@ export async function scanQRCode() {
                 video.videoWidth > 16 &&
                 video.videoHeight > 16
             ) {
-                video.style.opacity = "1";  // 🎯 フェードインここで解禁
+                video.style.opacity = "1"; // ✅ 映像出たら表示
+                allowScan = true;          // ✅ この瞬間だけスキャン解禁！
                 clearInterval(interval);
             }
         }, 50);
