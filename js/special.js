@@ -26,7 +26,7 @@ export function updateSpecialButtonState(specialBtn) {
         if (localStorage.getItem(`discovered-${name}`)) discoveredCount++;
     });
 
-    specialBtn.disabled = discoveredCount < 1;
+    specialBtn.disabled = discoveredCount < 5;
 }
 
 // 発見モンスター数に応じて各Specialボタンの有効化を判定
@@ -38,9 +38,9 @@ function updateSpecialStages() {
         if (localStorage.getItem(`discovered-${name}`)) discoveredCount++;
     });
 
-    document.getElementById('special-1-btn').disabled = discoveredCount < 1;
-    document.getElementById('special-2-btn').disabled = discoveredCount < 1;
-    document.getElementById('special-3-btn').disabled = discoveredCount < 1;
+    document.getElementById('special-1-btn').disabled = discoveredCount < 10;
+    document.getElementById('special-2-btn').disabled = discoveredCount < 20;
+    document.getElementById('special-3-btn').disabled = discoveredCount < 30;
 }
 
 function removeQrVideo() {
@@ -207,7 +207,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Drake",
                 element: "Instinctive",
-                maxHp: 140,
+                maxHp: 1400,
                 baseAttack: 250,
                 baseDefense: 180,
                 speed: 220,
@@ -222,9 +222,9 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Bael",
                 element: "Logical",
-                maxHp: 160,
+                maxHp: 1600,
                 baseAttack: 230,
-                baseDefense: 220,
+                baseDefense: 230,
                 speed: 250,
                 skill1: "Vampire",
                 skill2: "Counter",
