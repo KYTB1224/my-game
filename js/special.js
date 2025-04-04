@@ -207,7 +207,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Drake",
                 element: "Instinctive",
-                maxHp: 1400,
+                maxHp: 140,
                 baseAttack: 250,
                 baseDefense: 180,
                 speed: 220,
@@ -222,7 +222,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Bael",
                 element: "Logical",
-                maxHp: 1600,
+                maxHp: 160,
                 baseAttack: 230,
                 baseDefense: 220,
                 speed: 250,
