@@ -2917,3 +2917,10 @@ function preloadTestMonsters() {
   localStorage.setItem("monster-slot-0", JSON.stringify(testMonster1));
   localStorage.setItem("monster-slot-1", JSON.stringify(testMonster2));
 }
+
+
+// 他のコードの後ろにそのまま追加！
+window.addEventListener("DOMContentLoaded", () => {
+  // 🔥 仮モンスターを自動ロードする
+  preloadTestMonsters();
+});
