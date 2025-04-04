@@ -491,6 +491,7 @@ let battlePhase = "attackTurnStart"; // 初期状態はattackTurnStart
 let currentTurn = 20; // これに統一！
 let initialPlayer1Monster = null;
 let initialPlayer2Monster = null;
+let selectedMonsters = []; // ←これをグローバルに！
 const MIN_TURNS = 1;
 
 
@@ -1862,6 +1863,7 @@ document.getElementById('add-to-collection-btn').addEventListener('click', () =>
     container.appendChild(p2div);
 
     const selectedMonsters = [];
+
     const confirmBtn = document.getElementById('select-confirm-btn');
     confirmBtn.disabled = true;  // 初期状態で押せない（グレー）
 
@@ -1894,12 +1896,7 @@ document.getElementById('add-to-collection-btn').addEventListener('click', () =>
 
         confirmBtn.textContent = 'Registered!';
         confirmBtn.disabled = true;
-        setTimeout(() => {
-            confirmBtn.textContent = 'Confirm';
-            confirmBtn.disabled = true;
-        }, 1500);
-
-
+        
         
     };
 
@@ -1956,11 +1953,17 @@ document.getElementById('select-confirm-btn').addEventListener('click', () => {
     const confirmBtn = document.getElementById('select-confirm-btn');
     confirmBtn.textContent = 'Confirm';
     confirmBtn.disabled = false;
+    
+    slots.forEach(s => s.classList.remove('selected'));
+    selectedSlots = [];
+    updateFinalRegisterBtn();
 
     document.getElementById('scan-next-battle-btn').style.display = 'inline-block';
     document.getElementById('quit-game-btn').style.display = 'inline-block';
   });
   
+
+
   // ▼ Select Monster画面のBackボタン（修正版）
   document.getElementById('select-back-btn').addEventListener('click', () => {
     document.getElementById('select-monster-screen').style.display = 'none';
@@ -2081,19 +2084,7 @@ function updateFinalRegisterBtn() {
 }
 
 // Backボタンの処理（元のコードを維持）
-document.getElementById('register-slots-back-btn').addEventListener('click', () => {
-  document.getElementById('register-slots-screen').style.display = 'none';
-  document.getElementById('select-monster-screen').style.display = 'block';
 
-  // Confirmボタンの状態も元に戻す
-  const confirmBtn = document.getElementById('select-confirm-btn');
-  confirmBtn.textContent = 'Confirm';
-  confirmBtn.disabled = false;
-
-  // 選択状態をリセット
-  slots.forEach(s => s.classList.remove('selected'));
-  selectedSlots = [];
-});
 
 // ▼▼ 画面を表示したらスロット情報をロード ▼▼
 loadSlots();
