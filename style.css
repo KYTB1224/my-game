@@ -249,7 +249,7 @@ body {
 
 #scan-result {
     position: fixed;
-    bottom: 180px;
+    top: 270px;
     left: 50%;                             /* ← 中央揃えの起点 */
     transform: translateX(-50%);          /* ← 真ん中に調整 */
     text-align: center;
@@ -560,7 +560,7 @@ button:active {
     position: fixed;  /* ←これが重要 */
     font-size: 13px !important;
     z-index: 99999;   /* 確実に最前面表示 */
-    bottom: 560px;     /* 表示位置調整（例） */
+    top: 150px;     /* 表示位置調整（例） */
     left: 50%;        /* 中央揃え */
     transform: translateX(-50%);  /* 中央揃えの調整 */
     pointer-events: auto;
@@ -656,7 +656,7 @@ button:active {
 /* 🔷 Load画面のスロット表示を、登録画面と完全に統一（縦3×横2のグリッド） */
 #load-slots-container {
     display: grid;
-    margin-top: 10%;
+    margin-top: 20%;
     grid-template-columns: repeat(2, 1fr); /* 横2列で均等に分割 */
     gap: 10px; /* スロット間の間隔 */
     justify-content: center;
