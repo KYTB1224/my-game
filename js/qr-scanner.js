@@ -94,22 +94,24 @@ export async function scanQRCode() {
     await stopScanning();
 
     const oldVideo = document.getElementById('qr-video');
-    const cameraContainer = oldVideo.parentNode;
-    cameraContainer.removeChild(oldVideo);
+    const cameraContainer = oldVideo?.parentNode || document.getElementById('camera-container');
+    if (oldVideo) cameraContainer.removeChild(oldVideo);
 
     const newVideo = document.createElement('video');
     newVideo.id = 'qr-video';
-    newVideo.style.display = 'none';
+    newVideo.setAttribute('autoplay', true);
+    newVideo.setAttribute('muted', true);         // 自動再生に必須！
+    newVideo.setAttribute('playsinline', true);   // iOS対応
+    newVideo.setAttribute('controls', false);     // 再生ボタン封じ
+
+    newVideo.style.display = 'block';             // 要素自体は存在
+    newVideo.style.opacity = '0';                 // 透明で待機
+    newVideo.style.transition = 'opacity 0.3s ease';
+    newVideo.style.objectFit = 'cover';
+    newVideo.style.backgroundColor = 'black';
+    newVideo.style.border = '4px solid white';
+
     cameraContainer.appendChild(newVideo);
-
-    newVideo.setAttribute('controls', false);
-newVideo.setAttribute('autoplay', true);
-newVideo.setAttribute('playsinline', true);
-newVideo.setAttribute('muted', true);
-
-newVideo.style.objectFit = 'cover';
-newVideo.style.backgroundColor = 'black';
-newVideo.style.border = '4px solid white';
 
     qrScanner = new QrScanner(newVideo, async result => {
         qrScanner.stop();
@@ -133,46 +135,57 @@ newVideo.style.border = '4px solid white';
                     monsterImage.classList.add('pop-animation');
                 });
             });
-        
         } else {
             monsterImage.style.display = "none";
         }
 
-        // 🌟 新規モンスターの場合、発見POP表示＋galleryに自動登録
         if (!localStorage.getItem(`discovered-${monster.name}`)) {
             localStorage.setItem(`discovered-${monster.name}`, true);
             updateSpecialButtonState(document.getElementById('special-btn'));
             showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
         }
-        
 
         scanResultText.classList.remove('simple-text');
         scanResultText.classList.add('monster-box');
         scanResultText.innerHTML = `
-        <strong>Scanned Monster:</strong><br>
-        Name: ${monster.name}<br>
-        Persona: ${monster.element} ${getElementEmoji(monster.element)}<br>
-        HP: ${monster.hp}<br>
-        ATK: ${monster.attack}<br>
-        DEF: ${monster.defense}<br>
-        SPD: ${monster.speed}<br>
-        Skills: ${monster.skill1} ${getSkillEmoji(monster.skill1)}, ${monster.skill2} ${getSkillEmoji(monster.skill2)}<br>
-        <div class="skill-details">
-            ${getMonsterSkillDescription(monster)}
-        </div>
+            <strong>Scanned Monster:</strong><br>
+            Name: ${monster.name}<br>
+            Persona: ${monster.element} ${getElementEmoji(monster.element)}<br>
+            HP: ${monster.hp}<br>
+            ATK: ${monster.attack}<br>
+            DEF: ${monster.defense}<br>
+            SPD: ${monster.speed}<br>
+            Skills: ${monster.skill1} ${getSkillEmoji(monster.skill1)}, ${monster.skill2} ${getSkillEmoji(monster.skill2)}<br>
+            <div class="skill-details">
+                ${getMonsterSkillDescription(monster)}
+            </div>
         `;
 
-        newVideo.style.display = "none";
+        newVideo.style.opacity = "0";
         startScanBtn.style.display = "none";
         stopScanBtn.style.display = "none";
         approveBtn.style.display = "inline-block";
         rescanBtn.style.display = "inline-block";
     });
 
-    qrScanner.start().catch(error => {
+    qrScanner.start().then(() => {
+        const video = document.getElementById('qr-video');
+
+        const interval = setInterval(() => {
+            if (
+                video.readyState === 4 &&
+                video.videoWidth > 16 &&
+                video.videoHeight > 16
+            ) {
+                video.style.opacity = "1";  // 🎯 フェードインここで解禁
+                clearInterval(interval);
+            }
+        }, 50);
+    }).catch(error => {
         console.error("Failed to start QR scanner:", error);
     });
 }
+
 
   
   export async function stopScanning() {
