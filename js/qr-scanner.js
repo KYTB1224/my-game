@@ -102,6 +102,15 @@ export async function scanQRCode() {
     newVideo.style.display = 'block';
     cameraContainer.appendChild(newVideo);
 
+    newVideo.setAttribute('controls', false);
+newVideo.setAttribute('autoplay', true);
+newVideo.setAttribute('playsinline', true);
+newVideo.setAttribute('muted', true);
+
+newVideo.style.objectFit = 'cover';
+newVideo.style.backgroundColor = 'black';
+newVideo.style.border = '4px solid white';
+
     qrScanner = new QrScanner(newVideo, async result => {
         qrScanner.stop();
         if (!window.isMuted) {
@@ -117,9 +126,14 @@ export async function scanQRCode() {
 
         const monsterImage = document.getElementById('monster-image');
         if (monsterImageMap[monster.name]) {
-            monsterImage.src = monsterImageMap[monster.name];
-            monsterImage.style.display = "block";
-            monsterImage.classList.add('pop-animation');
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    monsterImage.src = monsterImageMap[monster.name];
+                    monsterImage.style.display = "block";
+                    monsterImage.classList.add('pop-animation');
+                });
+            });
+        
         } else {
             monsterImage.style.display = "none";
         }
