@@ -232,8 +232,10 @@ startScanBtn.addEventListener('click', async () => {
     monsterImage.style.visibility = "visible";
 
     await stopScanning(); // 明示的に待機
-    await scanQRCode();   // QRスキャナを再起動（awaitを付けるのがベスト）
-
+    await scanQRCode();   // スキャナ起動
+    const video = document.getElementById('qr-video');
+    if (video) video.style.display = "block"; // ← このタイミングで表示！
+    
     updateButtonState(startScanBtn, false);
     updateButtonState(stopScanBtn, true);
 });
@@ -256,7 +258,10 @@ rescanBtn.addEventListener("click", async () => {
     monsterImage.style.visibility = "visible";
 
     await stopScanning(); // 明示的に待機
-    await scanQRCode();   // QRスキャナを再起動（awaitを付けるのがベスト）
+    await scanQRCode();   // スキャナ起動
+    const video = document.getElementById('qr-video');
+    if (video) video.style.display = "block"; // ← このタイミングで表示！
+    
 });
 
 
