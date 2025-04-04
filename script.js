@@ -197,17 +197,55 @@ function updateButtonState(button, isEnabled) {
 }
 
 
-startScanBtn.addEventListener('click', () => {
-    removeQrVideo();    // まず古いvideo削除
-    createQrVideo(); 
+
+startScanBtn.addEventListener('click', async () => {
+    removeQrVideo();
+    createQrVideo();
     setCurrentScannedMonster(null);
+
+    scanResultText.classList.remove('monster-box');
+    scanResultText.classList.add('simple-text');
     scanResultText.textContent = "Scanning...";
-    scanQRCode();
-    video.style.display = "block";
+
+    approveBtn.style.display = "none";
+    rescanBtn.style.display = "none";
+
+
+    const monsterImage = document.getElementById('monster-image');
+    monsterImage.src = "";
+    monsterImage.style.display = "none";
+    monsterImage.style.visibility = "visible";
+
+    await stopScanning(); // 明示的に待機
+    await scanQRCode();   // QRスキャナを再起動（awaitを付けるのがベスト）
 
     updateButtonState(startScanBtn, false);
     updateButtonState(stopScanBtn, true);
 });
+
+// 🌟修正後はこのコードで正常動作します（変更不要）
+rescanBtn.addEventListener("click", async () => {
+    setCurrentScannedMonster(null);
+
+    scanResultText.classList.remove('monster-box');
+    scanResultText.classList.add('simple-text');
+    scanResultText.textContent = "Rescanning... Please scan again.";
+
+    approveBtn.style.display = "none";
+    rescanBtn.style.display = "none";
+
+
+    const monsterImage = document.getElementById('monster-image');
+    monsterImage.src = "";
+    monsterImage.style.display = "none";
+    monsterImage.style.visibility = "visible";
+
+    await stopScanning(); // 明示的に待機
+    await scanQRCode();   // QRスキャナを再起動（awaitを付けるのがベスト）
+});
+
+
+
 
 // 正しく修正されたstopScanBtnイベントリスナー
 stopScanBtn.addEventListener('click', async () => {
@@ -309,29 +347,6 @@ approveBtn.addEventListener("click", async () => {
         }
     }
 });
-
-// 🌟修正後はこのコードで正常動作します（変更不要）
-rescanBtn.addEventListener("click", async () => {
-    console.log("🔄 Rescan ボタンが押されました！");
-    setCurrentScannedMonster(null);
-
-    scanResultText.classList.remove('monster-box');
-    scanResultText.classList.add('simple-text');
-    scanResultText.textContent = "Rescanning... Please scan again.";
-
-    approveBtn.style.display = "none";
-    rescanBtn.style.display = "none";
-
-
-    const monsterImage = document.getElementById('monster-image');
-    monsterImage.src = "";
-    monsterImage.style.display = "none";
-    monsterImage.style.visibility = "visible";
-
-    await stopScanning(); // 明示的に待機
-    await scanQRCode();   // QRスキャナを再起動（awaitを付けるのがベスト）
-});
-
 
 
 gameStartBtn.addEventListener('click', () => {
