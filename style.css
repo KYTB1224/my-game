@@ -322,7 +322,7 @@ button:disabled:hover {
 
 #turn-display {
     position: fixed;
-    top: 20px;
+    top: 10px !important;
     left: 50%;
     transform: translateX(-50%);
     padding: 5px 10px;
