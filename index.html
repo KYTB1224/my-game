@@ -391,5 +391,15 @@
 <link rel="preload" as="image" href="assets/specialback.webp">
 <link rel="preload" as="image" href="assets/title.webp">
 
+<script>
+    setTimeout(() => {
+      const mask = document.getElementById('startup-mask');
+      if (mask) {
+        mask.style.opacity = '0';
+        setTimeout(() => mask.remove(), 800);
+      }
+    }, 3000); // 最悪3秒後には強制解除
+  </script>
+
 </body>
 </html>
