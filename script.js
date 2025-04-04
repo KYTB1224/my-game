@@ -82,7 +82,7 @@ function createQrVideo() {
     const container = document.getElementById('camera-container');
     const newVideo = document.createElement('video');
     newVideo.id = 'qr-video';
-    newVideo.style.display = 'block';
+    newVideo.style.display = 'none';
     container.appendChild(newVideo);
 }
 
