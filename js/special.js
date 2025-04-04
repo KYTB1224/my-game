@@ -222,9 +222,9 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Bael",
                 element: "Logical",
-                maxHp: 1700,
+                maxHp: 1600,
                 baseAttack: 230,
-                baseDefense: 200,
+                baseDefense: 220,
                 speed: 250,
                 skill1: "Vampire",
                 skill2: "Counter",
