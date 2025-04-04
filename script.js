@@ -35,31 +35,6 @@ import { setSpecialBattleOpponent } from './js/special.js';
 
 import { setScanningForPlayer } from './js/main.js';
 
-
-
-
-// 🌟テスト用：完全な構造でモンスター2体を登録（あとで削除OK）
-import { generateMonster } from './js/monster-generator.js';
-
-console.log("✅ TEST: Registering fully-functional test monsters...");
-
-// 任意の文字列を使って一意なモンスターを生成
-const dummy1 = generateMonster("a".repeat(100));
-const dummy2 = generateMonster("b".repeat(100));
-
-// 画像フィールドだけ追加（使ってるなら）
-dummy1.image = `${dummy1.name.toLowerCase().replace(/\s/g, "_")}.webp`;
-dummy2.image = `${dummy2.name.toLowerCase().replace(/\s/g, "_")}.webp`;
-
-// 保存
-localStorage.setItem('monster-slot-0', JSON.stringify(dummy1));
-localStorage.setItem('monster-slot-1', JSON.stringify(dummy2));
-
-
-
-
-
-
 window.addEventListener('DOMContentLoaded', () => {
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
     document.getElementById('privacy-policy-link').style.display = 'block'; // 追加
