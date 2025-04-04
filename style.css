@@ -1005,11 +1005,6 @@ html {
     color: #e0e0e0; /* 少し明るめのグレー（既存テキストに合わせる） */
 }
 
-#privacy-policy-link {
-    font-family: sans-serif;
-    font-weight: bold;
-    transition: opacity 0.3s;
-}
 
 #privacy-policy-link:hover {
     opacity: 0.7;
@@ -1038,3 +1033,29 @@ html {
     text-align: center;
     user-select: none;
   }
+
+  
+  #top-bar {
+    position: fixed;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; /* 常にflex！ */
+    gap: 20px;
+    z-index: 10000;
+    white-space: nowrap;
+    font-size: 8px;
+    color: #ffffff;
+    align-items: center;
+}
+#copyright-notice,
+#privacy-policy-link {
+    display: none;
+    white-space: nowrap;
+    color: #ffffff;
+}
+
+#privacy-policy-link {
+    text-decoration: underline;
+    cursor: pointer;
+}
