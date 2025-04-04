@@ -2638,74 +2638,64 @@ document.getElementById('exit-button').onclick = () => {
 
 
 function resetTemporaryGameState() {
+    // ✅ サウンド設定を保存
+    localStorage.setItem('muted', window.isMuted ? 'true' : 'false');
 
-    document.body.innerHTML = '';
-    document.body.style.backgroundColor = '#000'; // 黒にしてもOK
-
-    setTimeout(() => {
-        location.reload(); // 少し遅らせてリロード
-    }, 200); // 100ms くらい遅らせると滑らか
-    // main.js内のモンスター情報をリセット
-    Main.resetMonsters();
-
-    battleLogData = [];
-    setCurrentScannedMonster(null); 
-    battleIndex = 0;    
-    currentPlayer = 1;
-    setScanningForPlayer(1);
-    setCurrentScannedMonster(null);
-
-    localStorage.removeItem('isSpecialBattle');
-    localStorage.removeItem('isNormalBattle');
-    
-    document.getElementById('privacy-policy-link').style.display = 'block';
-
-    const scanResult = document.getElementById('scan-result');
-    scanResult.textContent = '';
-    scanResult.classList.remove('monster-box', 'simple-text');
-
-    document.getElementById('battle-log').textContent = '';
-
-    const buttonsToHide = [
-        'start-scan', 'stop-scan', 'load-monster-btn', 'approve-btn', 
-        'rescan-btn', 'start-battle-btn', 'next-turn-btn',
-        'scan-next-battle-btn', 'quit-game-btn', 'add-to-collection-btn'
-    ];
-
-    buttonsToHide.forEach(id => {
-        const btn = document.getElementById(id);
-        btn.style.display = 'none';
-        btn.disabled = false;
-    });
-
-    fastForwardBtn.style.display = "none";
-
-    document.getElementById('battle-background').style.display = 'none';
-    document.getElementById('turn-display').style.display = 'none';
-
-    const monsterImage = document.getElementById('monster-image');
-    monsterImage.style.display = 'none';
-    monsterImage.src = '';
-    monsterImage.classList.remove('pop-animation');
-
-    document.getElementById('player1-monster-image').src = '';
-    document.getElementById('player2-monster-image').src = '';
-
-    const qrVideo = document.getElementById('qr-video');
-    if (qrVideo) {
-        qrVideo.style.display = 'none';
-    }
-
-    if (typeof stopScanning === 'function') {
-        stopScanning();
-    }
-
+    // ✅ サウンドを止める（状態はまだ保持）
     const audios = document.querySelectorAll('audio');
     audios.forEach(audio => {
         audio.pause();
         audio.currentTime = 0;
     });
 
+    // ✅ スキャン関連停止
+    if (typeof stopScanning === 'function') stopScanning();
+    removeQrVideo();
+
+    // ✅ モンスター・ログなどをリセット
+    Main.resetMonsters();
+    battleLogData = [];
+    setCurrentScannedMonster(null);
+    battleIndex = 0;
+    currentPlayer = 1;
+    setScanningForPlayer(1);
+
+    // ✅ ローカル状態リセット（※音ミュート除く）
+    localStorage.removeItem('isSpecialBattle');
+    localStorage.removeItem('isNormalBattle');
+
+    // ✅ 画面・テキスト初期化
+    const scanResult = document.getElementById('scan-result');
+    scanResult.textContent = '';
+    scanResult.classList.remove('monster-box', 'simple-text');
+
+    document.getElementById('battle-log').textContent = '';
+    document.getElementById('battle-background').style.display = 'none';
+    document.getElementById('turn-display').style.display = 'none';
+
+    document.getElementById('monster-image').style.display = 'none';
+    document.getElementById('monster-image').src = '';
+    document.getElementById('monster-image').classList.remove('pop-animation');
+
+    document.getElementById('player1-monster-image').src = '';
+    document.getElementById('player2-monster-image').src = '';
+
+    const buttonsToHide = [
+        'start-scan', 'stop-scan', 'load-monster-btn', 'approve-btn',
+        'rescan-btn', 'start-battle-btn', 'next-turn-btn',
+        'scan-next-battle-btn', 'quit-game-btn', 'add-to-collection-btn'
+    ];
+    buttonsToHide.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.style.display = 'none';
+            btn.disabled = false;
+        }
+    });
+
+    fastForwardBtn.style.display = "none";
+
+    // ✅ 各画面切り替え
     document.getElementById('startup-screen').style.display = 'block';
     document.getElementById('scan-screen').style.display = 'none';
     document.getElementById('special-screen').style.display = 'none';
@@ -2715,34 +2705,44 @@ function resetTemporaryGameState() {
     document.getElementById('gallery-btn').style.display = 'inline-block';
     document.getElementById('special-btn').style.display = 'inline-block';
 
-    if (window.AndroidInterface && AndroidInterface.hideBanner) {
-        AndroidInterface.hideBanner();
-    }
-    
-    specialBgmAudio.pause();
-    specialBgmAudio.currentTime = 0;
-
-    scanBgmAudio.pause();
-    scanBgmAudio.currentTime = 0;
-
-    const startupBgm = document.getElementById('startup-bgm');
-    if (!window.isMuted) {
-        startupBgm.currentTime = 0;
-        startupBgm.play();
-    }
+    document.getElementById('privacy-policy-link').style.display = 'block';
 
     const galleryModal = document.getElementById('gallery-modal');
     if (galleryModal) {
         galleryModal.style.display = 'none';
     }
 
-    // ★★ここに追加★★ ボタン状態の初期化
+    if (window.AndroidInterface && AndroidInterface.hideBanner) {
+        AndroidInterface.hideBanner();
+    }
+
+    // ✅ BGM：scanとspecialは停止
+    specialBgmAudio.pause();
+    specialBgmAudio.currentTime = 0;
+    scanBgmAudio.pause();
+    scanBgmAudio.currentTime = 0;
+
+    // ✅ BGM：startupだけ再生（ミュートされてなければ）
+    const startupBgm = document.getElementById('startup-bgm');
+    if (!window.isMuted) {
+        startupBgm.currentTime = 0;
+        startupBgm.play();
+    }
+
+    // ✅ 🔁 ミュート状態の復元（UI含む）
+    const muted = localStorage.getItem('muted') === 'true';
+    window.isMuted = muted;
+
+    const soundIcon = document.getElementById('sound-toggle');
+    if (soundIcon) {
+        soundIcon.src = muted ? 'assets/sound/2.png' : 'assets/sound/1.png';
+    }
+
+    // ✅ ボタンUI初期化
     updateButtonState(document.getElementById('start-scan'), true);
     updateButtonState(document.getElementById('stop-scan'), false);
     updateButtonState(document.getElementById('load-monster-btn'), true);
-    removeQrVideo();
 }
-
 
 function showStartupScreen() {
     document.getElementById('startup-screen').style.display = 'block';
