@@ -63,6 +63,8 @@ localStorage.setItem('monster-slot-1', JSON.stringify(dummy2));
 window.addEventListener('DOMContentLoaded', () => {
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
     document.getElementById('privacy-policy-link').style.display = 'block'; // 追加
+    document.getElementById('copyright-notice').style.display = 'block';
+
 });
 
 
@@ -400,6 +402,8 @@ gameStartBtn.addEventListener('click', () => {
 
     const startupBgm = document.getElementById('startup-bgm');
     document.getElementById('privacy-policy-link').style.display = 'none';
+    document.getElementById('copyright-notice').style.display = 'none';
+
     startupBgm.pause();
     startupBgm.currentTime = 0;
 
@@ -1680,6 +1684,8 @@ quitGameBtn.addEventListener("click", () => {
     location.reload(); // ページをリロード
     document.getElementById('battle-background').style.display = 'none'; // 背景を消す
     document.getElementById('privacy-policy-link').style.display = 'block';
+    document.getElementById('copyright-notice').style.display = 'block';
+
     removeQrVideo();
 });
 
@@ -2247,6 +2253,8 @@ let currentGalleryPage = 1;
 function loadGalleryPage(page) {
     
     document.getElementById('privacy-policy-link').style.display = 'none';
+    document.getElementById('copyright-notice').style.display = 'none';
+
     currentGalleryPage = page;
 
     const startIndex = (page - 1) * 15;
@@ -2280,6 +2288,8 @@ document.getElementById('gallery-exit-btn').onclick = () => {
     document.getElementById('gallery-screen').style.display = 'none';
     document.getElementById('startup-screen').style.display = 'block';
     document.getElementById('privacy-policy-link').style.display = 'block';
+    document.getElementById('copyright-notice').style.display = 'block';
+
     const startupBgm = document.getElementById('startup-bgm');
     startupBgm.currentTime = 0;
     if (!window.isMuted) startupBgm.play();
@@ -2646,7 +2656,10 @@ document.getElementById('exit-button').onclick = () => {
         null // 「No」の場合
     );
     document.getElementById('privacy-policy-link').style.display = 'block';
+    document.getElementById('copyright-notice').style.display = 'block';
     document.getElementById('privacy-policy-link').style.display = 'none';
+    document.getElementById('copyright-notice').style.display = 'none';
+
 };
 
 
@@ -2719,6 +2732,8 @@ function resetTemporaryGameState() {
     document.getElementById('special-btn').style.display = 'inline-block';
 
     document.getElementById('privacy-policy-link').style.display = 'block';
+    document.getElementById('copyright-notice').style.display = 'block';
+
 
     const galleryModal = document.getElementById('gallery-modal');
     if (galleryModal) {
