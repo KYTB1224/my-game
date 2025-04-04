@@ -2921,6 +2921,6 @@ function preloadTestMonsters() {
 
 // 他のコードの後ろにそのまま追加！
 window.addEventListener("DOMContentLoaded", () => {
-  // 🔥 仮モンスターを自動ロードする
-  preloadTestMonsters();
+  preloadTestMonsters();       // 🔥 仮モンスターを保存
+  loadStoredMonsters();        // ✅ スロットに即表示！！
 });
