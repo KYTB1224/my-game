@@ -2878,3 +2878,42 @@ function onRewardEarned() {
 function onRewardUnavailable() {
     alert("Ad not available right now. Please try again later!");
 }
+
+
+
+
+
+function preloadTestMonsters() {
+  const testMonster1 = {
+    name: "Golem",
+    element: "Logical",
+    maxHp: 300,
+    hp: 300,
+    baseAttack: 80,
+    attack: 80,
+    baseDefense: 100,
+    defense: 100,
+    speed: 40,
+    skill1: "Critical",
+    skill2: "Growth",
+    image: "golem.webp"
+  };
+
+  const testMonster2 = {
+    name: "Vampire",
+    element: "Intuitive",
+    maxHp: 280,
+    hp: 280,
+    baseAttack: 90,
+    attack: 90,
+    baseDefense: 60,
+    defense: 60,
+    speed: 60,
+    skill1: "Vampire",
+    skill2: "Thorns",
+    image: "vampire.webp"
+  };
+
+  localStorage.setItem("monster-slot-0", JSON.stringify(testMonster1));
+  localStorage.setItem("monster-slot-1", JSON.stringify(testMonster2));
+}
