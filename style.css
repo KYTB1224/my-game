@@ -634,14 +634,15 @@ button:active {
 
 /* 下部ボタンを画面下端に配置する */
 #register-slots-buttons {
-    position: absolute;
-    bottom: 90px; /* もう少し上に上げたい場合は、数値を増やす */
+    position: fixed;
+    bottom: 30px !important; /* ✅ セレクト画面と同じにする */
     left: 50%;
-    transform: translateX(-50%); /* 横方向の中央配置 */
-    display: flex; /* ここは1つでOK！ */
-    gap: 10px; /* ボタン間隔をさらに狭めるなら値を小さくする */
-    padding: 0 10px;
+    transform: translateX(-50%);
+    display: flex;
+    margin-right: 10px!important;
+    z-index: 100;
 }
+
 
 /* 下部ボタンのスタイル統一（他の画面の下部ボタンと同じスタイル） */
 .bottom-button {
