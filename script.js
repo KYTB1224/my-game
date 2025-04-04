@@ -36,6 +36,38 @@ import { setSpecialBattleOpponent } from './js/special.js';
 import { setScanningForPlayer } from './js/main.js';
 
 
+
+// 🌟テスト用：起動時にモンスター2体を強制登録（あとで消してOK）
+console.log("✅ TEST: Registering default monsters in slots 0 and 1...");
+
+const dummy1 = {
+    name: "Goblin",
+    element: "Emotional",
+    maxHp: 800,
+    baseAttack: 100,
+    baseDefense: 90,
+    speed: 120,
+    skill1: "Heal",
+    skill2: "Critical",
+    image: "goblin.webp"
+};
+
+const dummy2 = {
+    name: "Phoenix",
+    element: "Instinctive",
+    maxHp: 900,
+    baseAttack: 120,
+    baseDefense: 100,
+    speed: 110,
+    skill1: "Revive",
+    skill2: "Revive",
+    image: "phoenix.webp"
+};
+
+localStorage.setItem('monster-slot-0', JSON.stringify(dummy1));
+localStorage.setItem('monster-slot-1', JSON.stringify(dummy2));
+
+
 window.addEventListener('DOMContentLoaded', () => {
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
     document.getElementById('privacy-policy-link').style.display = 'block'; // 追加
