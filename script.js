@@ -37,35 +37,27 @@ import { setScanningForPlayer } from './js/main.js';
 
 
 
-// 🌟テスト用：起動時にモンスター2体を強制登録（あとで消してOK）
-console.log("✅ TEST: Registering default monsters in slots 0 and 1...");
 
-const dummy1 = {
-    name: "Goblin",
-    element: "Emotional",
-    maxHp: 800,
-    baseAttack: 100,
-    baseDefense: 90,
-    speed: 120,
-    skill1: "Heal",
-    skill2: "Critical",
-    image: "goblin.webp"
-};
+// 🌟テスト用：完全な構造でモンスター2体を登録（あとで削除OK）
+import { generateMonster } from './js/monster-generator.js';
 
-const dummy2 = {
-    name: "Phoenix",
-    element: "Instinctive",
-    maxHp: 900,
-    baseAttack: 120,
-    baseDefense: 100,
-    speed: 110,
-    skill1: "Revive",
-    skill2: "Revive",
-    image: "phoenix.webp"
-};
+console.log("✅ TEST: Registering fully-functional test monsters...");
 
+// 任意の文字列を使って一意なモンスターを生成
+const dummy1 = generateMonster("a".repeat(100));
+const dummy2 = generateMonster("b".repeat(100));
+
+// 画像フィールドだけ追加（使ってるなら）
+dummy1.image = `${dummy1.name.toLowerCase().replace(/\s/g, "_")}.webp`;
+dummy2.image = `${dummy2.name.toLowerCase().replace(/\s/g, "_")}.webp`;
+
+// 保存
 localStorage.setItem('monster-slot-0', JSON.stringify(dummy1));
 localStorage.setItem('monster-slot-1', JSON.stringify(dummy2));
+
+
+
+
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -1926,8 +1918,7 @@ document.getElementById('add-to-collection-btn').addEventListener('click', () =>
     monsterImage.src = "";
     monsterImage.style.display = "none";
 
-        confirmBtn.textContent = 'Registered!';
-        confirmBtn.disabled = true;
+    confirmBtn.disabled = true;
         
         
     };
@@ -1989,6 +1980,7 @@ document.getElementById('select-confirm-btn').addEventListener('click', () => {
     slots.forEach(s => s.classList.remove('selected'));
     selectedSlots = [];
     updateFinalRegisterBtn();
+
 
     document.getElementById('scan-next-battle-btn').style.display = 'inline-block';
     document.getElementById('quit-game-btn').style.display = 'inline-block';
@@ -2096,6 +2088,10 @@ finalRegisterBtn.addEventListener('click', () => {
         scanCompleteSound.currentTime = 0;
         scanCompleteSound.play();
     }
+
+    slots.forEach(s => s.classList.remove('selected'));
+    selectedSlots = [];
+    updateFinalRegisterBtn();
 
     setTimeout(() => {
         resetMonsterFade();
@@ -2759,6 +2755,8 @@ function resetTemporaryGameState() {
     updateButtonState(document.getElementById('start-scan'), true);
     updateButtonState(document.getElementById('stop-scan'), false);
     updateButtonState(document.getElementById('load-monster-btn'), true);
+
+    removeAllTemporaryAnimations();
 }
 
 
@@ -2895,6 +2893,18 @@ function onRewardEarned() {
 
 function onRewardUnavailable() {
     alert("Ad not available right now. Please try again later!");
+}
+
+// アニメーション残り対策：一時的なUI残骸を完全削除
+function removeAllTemporaryAnimations() {
+    const popups = document.querySelectorAll('.hp-popup');
+    popups.forEach(el => el.remove());
+
+    const p1 = document.getElementById('player1-monster-image');
+    const p2 = document.getElementById('player2-monster-image');
+    [p1, p2].forEach(img => {
+        img.style.animation = '';
+    });
 }
 
 
