@@ -133,6 +133,7 @@ body {
     border: 4px solid #ffffff; /* ここで枠線の太さと色を自由に調整できます */
     background-color: black;
     box-shadow: 0 0 10px rgba(0,0,0,0.5); /* 必要なら影も追加できます */
+    z-index: 1;
 }
 
 #qr-video::-webkit-media-controls {
@@ -372,7 +373,10 @@ button:active {
     width: 100% !important; /* 🌟親要素の幅に合わせるよう修正 */
     height: auto !important;
     display: block;
+    display: none;
     margin: 5px auto;
+    visibility: hidden;  /* ← 追加で透明化の保険 */
+    z-index: 10;
 }
 
 #monster-images-container {
@@ -848,7 +852,7 @@ html {
     position: fixed;        /* 画面に常に固定 */
     top: 10px;              /* 上からの距離（音量マークと同じ高さに調整） */
     left: 10px;             /* 左からの距離 */
-    z-index: 9999999;          /* 他の要素より前面に表示 */
+    z-index: 9999;          /* 他の要素より前面に表示 */
     cursor: pointer;        /* クリック可能な表示 */
 }
 
@@ -1008,3 +1012,27 @@ html {
 #privacy-policy-link:hover {
     opacity: 0.7;
 }
+
+#startup-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 2147483647; /* ← これでExitボタンも確実に覆える！ */
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #loading-text {
+    color: white;
+    font-size: 18px;
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
+    user-select: none;
+  }
