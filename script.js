@@ -1,3 +1,18 @@
+window.addEventListener('load', () => {
+    const mask = document.getElementById('startup-mask');
+    if (mask) {
+        mask.style.opacity = '0';
+
+        // 完全に透明になったあと、DOMから削除
+        setTimeout(() => {
+            if (mask.parentNode) {
+                mask.parentNode.removeChild(mask);
+            }
+        }, 800); // CSSのtransition時間＋α
+    }
+});
+
+
 import {getElementEmoji, getSkillEmoji } from './js/utils.js';
 import { 
     player1Monster, 
