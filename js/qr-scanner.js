@@ -99,7 +99,7 @@ export async function scanQRCode() {
 
     const newVideo = document.createElement('video');
     newVideo.id = 'qr-video';
-    newVideo.style.display = 'block';
+    newVideo.style.display = 'none';
     cameraContainer.appendChild(newVideo);
 
     newVideo.setAttribute('controls', false);
