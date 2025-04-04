@@ -272,7 +272,7 @@ rescanBtn.addEventListener("click", async () => {
 
     scanResultText.classList.remove('monster-box');
     scanResultText.classList.add('simple-text');
-    scanResultText.textContent = "Rescanning... Please scan again.";
+    scanResultText.textContent = "Rescanning...";
 
     approveBtn.style.display = "none";
     rescanBtn.style.display = "none";
