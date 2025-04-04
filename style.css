@@ -356,13 +356,42 @@ button:active {
     vertical-align: middle;
 }
 
+
+#battle-visual-wrapper {
+    position: fixed;
+    top: 4.5vh;
+    width: 100%;
+    height: 270px; /* 背景と一致させる */
+    z-index: 1;
+}
+
+#monster-images-container {
+    position: absolute;         /* ← ここが超重要！fixed → absolute に！ */
+    bottom: 25px;                  /* 背景画像の下に合わせる */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    z-index: 2;
+}
+
+#battle-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 0;
+}
+
 #monster-image-container {
-    
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    bottom: 450px; 
+    top:10px; 
     left: 50%;
     transform: translateX(-50%);
     width: 440px; /* 🌟画像のサイズと一致させる */
@@ -380,17 +409,6 @@ button:active {
     z-index: 10;
 }
 
-#monster-images-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    max-width: 450px;
-    margin: 0 auto;
-    padding: 0 10px;
-    position: fixed;
-    top: 13vh;  /* ここで上下の位置を調整 */
-    z-index: 2;
-}
 
 
 #monster-images-container img {
@@ -406,17 +424,6 @@ button:active {
 }
 
 
-#battle-background {
-    position: fixed;
-    top: 4.5vh; /* この位置はそのままか、微調整 */
-    left: 0;
-    width: 100%;          
-    height:  270px;         
-    object-fit: contain;  
-    opacity: 0.8;
-    pointer-events: none;
-    z-index: 0; /* z-indexを1にして前面へ */
-}
 
 @keyframes pop-in {
     0% { transform: scale(0.5); opacity: 0; }
