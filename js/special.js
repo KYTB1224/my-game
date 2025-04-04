@@ -26,7 +26,7 @@ export function updateSpecialButtonState(specialBtn) {
         if (localStorage.getItem(`discovered-${name}`)) discoveredCount++;
     });
 
-    specialBtn.disabled = discoveredCount < 5;
+    specialBtn.disabled = discoveredCount < 0;
 }
 
 // 発見モンスター数に応じて各Specialボタンの有効化を判定
@@ -38,9 +38,9 @@ function updateSpecialStages() {
         if (localStorage.getItem(`discovered-${name}`)) discoveredCount++;
     });
 
-    document.getElementById('special-1-btn').disabled = discoveredCount < 10;
-    document.getElementById('special-2-btn').disabled = discoveredCount < 20;
-    document.getElementById('special-3-btn').disabled = discoveredCount < 30;
+    document.getElementById('special-1-btn').disabled = discoveredCount < 0;
+    document.getElementById('special-2-btn').disabled = discoveredCount < 0;
+    document.getElementById('special-3-btn').disabled = discoveredCount < 0;
 }
 
 function removeQrVideo() {
