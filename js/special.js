@@ -53,6 +53,8 @@ function removeQrVideo() {
 // Specialボタンが押されたら画面遷移
 specialBtn.addEventListener('click', () => {
     document.getElementById('privacy-policy-link').style.display = 'none';
+    document.getElementById('copyright-notice').style.display = 'none';
+
     removeQrVideo();
     startupScreen.style.display = 'none';
     specialScreen.style.display = 'flex';
@@ -243,6 +245,8 @@ const specialBackBtn = document.getElementById('special-back-btn');
 
 specialBackBtn.addEventListener('click', () => {
     document.getElementById('privacy-policy-link').style.display = 'block';
+    document.getElementById('copyright-notice').style.display = 'block';
+
     // 🌟 special BGMを停止
     specialBgmAudio.pause();
     specialBgmAudio.currentTime = 0;
