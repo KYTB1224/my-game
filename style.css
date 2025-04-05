@@ -100,7 +100,7 @@ body {
     
     #button-container {
         position: fixed;      /* 固定位置にする場合 */
-        bottom: 3% !important;         /* 画面下から20px上に配置 */
+        bottom: 65px !important;         /* 画面下から20px上に配置 */
         left: 0;
         width: 100%;          /* 横幅を画面いっぱいに */
         display: flex;
@@ -262,7 +262,7 @@ body {
 
 #scan-result {
     position: fixed;
-    top: 285px;
+    top: 245px;
     left: 50%;                             /* ← 中央揃えの起点 */
     transform: translateX(-50%);          /* ← 真ん中に調整 */
     text-align: center;
@@ -375,7 +375,7 @@ button:active {
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 10px; 
+    top: -5px; 
     left: 50%;
     transform: translateX(-50%);
     width: 440px; /* 🌟画像のサイズと一致させる */
@@ -646,7 +646,7 @@ button:active {
 /* 下部ボタンを画面下端に配置する */
 #register-slots-buttons {
     position: fixed;
-    bottom: 30px !important; /* ✅ セレクト画面と同じにする */
+    bottom: 65px !important; /* ✅ セレクト画面と同じにする */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -698,7 +698,7 @@ button:active {
 #register-slots-buttons,
 #load-monster-buttons {
     position: fixed;         /* fixedに変更して画面の固定位置に表示 */
-    bottom: 70px;            /* 「Scan QR」等と同じ高さ */
+    bottom: 65px;            /* 「Scan QR」等と同じ高さ */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
