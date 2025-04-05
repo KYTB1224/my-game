@@ -1089,61 +1089,9 @@ function processBattlePhase() {
                             break;
                         
                             case "timeUp":
-                                const p1Hp = player1Monster.hp;
-                                const p2Hp = player2Monster.hp;
-                            
-                                let resultLog = "";
-                                let winner = null;
-                            
-                                if (p1Hp > p2Hp) {
-                                    resultLog = `⏰ Time Up! 🏆 Player 1's ${player1Monster.name} wins by remaining HP!`;
-                                    winner = 'P1';
-                                } else if (p2Hp > p1Hp) {
-                                    resultLog = `⏰ Time Up! 🏆 Player 2's ${player2Monster.name} wins by remaining HP!`;
-                                    winner = 'P2';
-                                } else {
-                                    resultLog = `⏰ Time Up! 🤝 It's a Draw!`;
-                                }
-                            
-                                // ✅ battlePhaseを先に切り替え（ここが超重要！）
-                                battlePhase = "battleFinished";
-                            
-                                battleLogData = [{ log: resultLog }];
-                                battleIndex = 0;
-                            
-                                currentTurn = 0;
-                                updateTurnDisplay();
-                            
-                                fadeOutAudio(document.getElementById('battle-bgm'));
-                            
-                                setTimeout(() => {
-                                    const winSound = document.getElementById('win-sound');
-                                    winSound.currentTime = 0;
-                                    if (!isMuted) winSound.play();
-                                }, 500);
-                            
-                                const specialBattle = localStorage.getItem('isSpecialBattle');
-                            
-                                displayBattleLogWithCallback(() => {
-                                    nextTurnBtn.style.display = "none";
-                                    quitGameBtn.style.display = "inline-block";
-                            
-                                    const addToCollectionBtn = document.getElementById('add-to-collection-btn');
-                            
-                                    if (specialBattle) {
-                                        scanNextBattleBtn.style.display = "none";
-                                        if (winner === 'P1') {
-                                            addToCollectionBtn.style.display = "inline-block";
-                                        } else {
-                                            addToCollectionBtn.style.display = "none";
-                                        }
-                                        localStorage.removeItem('isSpecialBattle');
-                                    } else {
-                                        scanNextBattleBtn.style.display = "inline-block";
-                                        addToCollectionBtn.style.display = "inline-block";
-                                    }
-                                });
-                            
+                                currentTurn = 0;  // ✅ 明示的に0にする！
+                                updateTurnDisplay();  // ✅ 表示も更新！
+                                battlePhase = "battleFinished";  // フェーズ切り替えだけ！
                                 break;
                             
                             
@@ -1571,24 +1519,51 @@ function handleBattleEnd() {
     let finalLog = '';
     let winner = null;
 
-    if (player1Monster.hp <= 0 && player2Monster.hp <= 0) {
+    if (currentTurn <= 0) {
+        // 🌟 ターン切れでの勝敗を判定（TimeUp）
+        const p1Hp = player1Monster.hp;
+        const p2Hp = player2Monster.hp;
+
+        if (p1Hp > p2Hp) {
+            finalLog = `⏰ Time Up! 🏆 Player 1's ${player1Monster.name} wins by remaining HP!`;
+            winner = 'P1';
+        } else if (p2Hp > p1Hp) {
+            finalLog = `⏰ Time Up! 🏆 Player 2's ${player2Monster.name} wins by remaining HP!`;
+            winner = 'P2';
+        } else {
+            finalLog = `⏰ Time Up! 🤝 It's a Draw!`;
+        }
+
+    } else if (player1Monster.hp <= 0 && player2Monster.hp <= 0) {
+        // 引き分け（両方0）
         finalLog = `🤝 The battle ended in a draw!`;
+
     } else if (player1Monster.hp <= 0) {
+        // Player 2 勝利
         finalLog = `🏆 Player 2's ${player2Monster.name} wins!`;
         winner = 'P2';
+
     } else if (player2Monster.hp <= 0) {
+        // Player 1 勝利
         finalLog = `🏆 Player 1's ${player1Monster.name} wins!`;
         winner = 'P1';
     }
 
+    // 🎯 結果ログを即表示（typewriterなし）
     battleLogElement.textContent = finalLog;
 
-    if (finalLog.includes("wins!")) {
+    fadeOutAudio(document.getElementById('battle-bgm'));
+
+    // 🎵 勝利音
+    if (finalLog.includes("wins")) {
+    setTimeout(() => {
         const winSound = document.getElementById('win-sound');
         winSound.currentTime = 0;
-        winSound.play().catch(e => console.error("勝利サウンド再生エラー:", e));
-    }
+        if (!isMuted) winSound.play();
+    }, 200);  // ← BGMが静かになった頃に鳴らすと確実
+}
 
+    // 🎮 ボタン表示処理
     nextTurnBtn.style.display = "none";
     quitGameBtn.style.display = "inline-block";
 
@@ -1596,18 +1571,21 @@ function handleBattleEnd() {
 
     if (specialBattle) {
         scanNextBattleBtn.style.display = "none";
+
         if (winner === 'P1') {
             addToCollectionBtn.style.display = "inline-block";
         } else {
             addToCollectionBtn.style.display = "none";
         }
+
         localStorage.removeItem('isSpecialBattle');
+
     } else {
         addToCollectionBtn.style.display = "inline-block";
         scanNextBattleBtn.style.display = "inline-block";
     }
-}
 
+}
 
 
 function endOfTurn(attackerPlayer, defenderPlayer) {
@@ -1647,7 +1625,7 @@ function initializeBattle(first, second, firstPlayer, secondPlayer) {
     attackerPlayer = firstPlayer;
     defenderPlayer = secondPlayer;
 
-    currentTurn = 20; 
+    currentTurn = 6; 
     updateTurnDisplay();
 
     battleLogData = [];
@@ -1669,10 +1647,35 @@ function initializeBattle(first, second, firstPlayer, secondPlayer) {
     nextTurnBtn.style.display = "none";
     scanNextBattleBtn.style.display = "none";
     quitGameBtn.style.display = "none";
+    document.getElementById('player1-status').style.visibility = 'hidden';
+    document.getElementById('player2-status').style.visibility = 'hidden';
+    document.getElementById('player1-monster-image').style.visibility = 'hidden';
+    document.getElementById('player2-monster-image').style.visibility = 'hidden';
+    
+    // 🌊 背後で0をセット（表示されないので違和感ゼロ）
+    updatePlayerStatusDisplay(1, {
+        ...player1Monster,
+        hp: 0,
+        attack: 0,
+        defense: 0
+    });
+    updatePlayerStatusDisplay(2, {
+        ...player2Monster,
+        hp: 0,
+        attack: 0,
+        defense: 0
+    });
 
     typeWriterEffect(battleLogElement, battleLogData[battleIndex].log, () => {
-        updatePlayerStatusDisplay(1, player1Monster);
-        updatePlayerStatusDisplay(2, player2Monster);
+    updatePlayerStatusDisplay(1, player1Monster);
+    updatePlayerStatusDisplay(2, player2Monster);
+
+    // 🎬 表示ON（アニメだけ見える！）
+    document.getElementById('player1-status').style.visibility = 'visible';
+    document.getElementById('player2-status').style.visibility = 'visible';
+    document.getElementById('player1-monster-image').style.visibility = 'visible';
+    document.getElementById('player2-monster-image').style.visibility = 'visible';
+
 
         battleIndex++;
         nextTurnBtn.style.display = "inline-block";
@@ -3067,6 +3070,5 @@ function removeAllTemporaryAnimations() {
         img.style.animation = '';
     });
 }
-
 
 
