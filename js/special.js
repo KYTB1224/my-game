@@ -279,6 +279,10 @@ export function setSpecialBattleOpponent(specialBattleName) {
 const specialBackBtn = document.getElementById('special-back-btn');
 
 specialBackBtn.addEventListener('click', () => {
+        if (window.AndroidInterface && AndroidInterface.hideBanner) {
+        AndroidInterface.hideBanner();
+    }
+    
     document.getElementById('privacy-policy-link').style.display = 'block';
     document.getElementById('copyright-notice').style.display = 'block';
 
