@@ -100,7 +100,7 @@ body {
     
     #button-container {
         position: fixed;      /* 固定位置にする場合 */
-        bottom: 65px !important;         /* 画面下から20px上に配置 */
+        bottom: 75px !important;         /* 画面下から20px上に配置 */
         left: 0;
         width: 100%;          /* 横幅を画面いっぱいに */
         display: flex;
@@ -646,7 +646,7 @@ button:active {
 /* 下部ボタンを画面下端に配置する */
 #register-slots-buttons {
     position: fixed;
-    bottom: 65px !important; /* ✅ セレクト画面と同じにする */
+    bottom: 75px !important; /* ✅ セレクト画面と同じにする */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -698,7 +698,7 @@ button:active {
 #register-slots-buttons,
 #load-monster-buttons {
     position: fixed;         /* fixedに変更して画面の固定位置に表示 */
-    bottom: 65px;            /* 「Scan QR」等と同じ高さ */
+    bottom: 75px;            /* 「Scan QR」等と同じ高さ */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
