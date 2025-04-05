@@ -6,7 +6,7 @@ const monsterNames = [
     "Cerberus", "Cockatrice", "Dark Knight", "Death Plant", "Demon", "Dinosaur",
     "Gargoyle", "Ghost", "Goblin", "Gryphon", "Harpy", "Living Dead", "Lizardman",
     "Mandrake", "Minotaur", "Mummy", "Orc", "Phantom", "Sea Serpent", "Skeleton",
-    "Troll", "Werewolf", "Yeti", "Jack-o'-lantern", "Dark Pharaoh"
+    "Troll", "Werewolf", "Yeti", "Jack-o'-Lantern", "Dark Pharaoh"
 ];
 
 const skillList = [
