@@ -73,6 +73,19 @@ body {
 }
 
 
+#new-button-container {
+    position: fixed;      /* 固定位置にする場合 */
+    left: 0;
+    width: 100%;          /* 横幅を画面いっぱいに */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 中央揃え */
+    align-items: center;
+    gap: 10px;               /* 間隔 */
+    top: 500px !important;
+}
+
+
 
 #hp-display {
     position: fixed;
@@ -87,7 +100,7 @@ body {
     
     #button-container {
         position: fixed;      /* 固定位置にする場合 */
-        bottom: 30px !important;         /* 画面下から20px上に配置 */
+        bottom: 3% !important;         /* 画面下から20px上に配置 */
         left: 0;
         width: 100%;          /* 横幅を画面いっぱいに */
         display: flex;
@@ -559,7 +572,7 @@ button:active {
 #add-to-collection-btn {
     position: fixed;  /* ←これが重要 */
     font-size: 13px !important;
-    z-index: 9;   /* 確実に最前面表示 */
+    z-index: 99;   /* 確実に最前面表示 */
     top: 150px;     /* 表示位置調整（例） */
     left: 50%;        /* 中央揃え */
     transform: translateX(-50%);  /* 中央揃えの調整 */
@@ -745,7 +758,9 @@ button:active {
     font-size: 13px;         /* フォントサイズ（調整可能） */
     font-weight: bold;       /* フォントを太字に（調整可能） */
     box-sizing: border-box;  /* paddingとborderを含んだサイズ設定 */
-    cursor: pointer;         /* カーソルをポインターにする */
+    cursor: pointer;   
+    bottom: px !important;  
+          /* カーソルをポインターにする */
 }
 
 #gallery-container {
