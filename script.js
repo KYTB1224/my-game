@@ -400,11 +400,15 @@ approveBtn.addEventListener("click", async () => {
 
 
 gameStartBtn.addEventListener('click', () => {
+
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
     removeQrVideo();
     localStorage.removeItem('isSpecialBattle'); // 必ず先頭で確実に消す
     localStorage.setItem('isNormalBattle', 'true'); // 🌟 通常バトルであるフラグを立てる（明示的）
     window.isCodeCheckMode = false;  // ← 追加！
-    window.codeCheckRegisteredMonster = null; // 念のためクリア
+    window.codeCheckRegisteredMonster = null; // 念のためクリアga
 
     const startupBgm = document.getElementById('startup-bgm');
     document.getElementById('privacy-policy-link').style.display = 'none';
@@ -444,6 +448,10 @@ gameStartBtn.addEventListener('click', () => {
 codeCheckBtn.addEventListener('click', () => {
         window.isCodeCheckMode = true; // ← ここが重要！
     
+        if (window.AndroidInterface && AndroidInterface.showBanner) {
+            AndroidInterface.showBanner();
+        }
+        
         removeQrVideo();
         localStorage.removeItem('isSpecialBattle');
         localStorage.setItem('isNormalBattle', 'true');
@@ -522,6 +530,9 @@ document.getElementById('codecheck-confirm-btn').addEventListener('click', () =>
 document.getElementById('codecheck-quit-btn').addEventListener('click', () => {
     resetTemporaryGameState(); // ← これで全て戻る！
 });
+
+
+
 document.getElementById('codecheck-confirm-btn').style.display = "none";
 // スキャン成功時の中で分岐を追加
 if (window.isCodeCheckMode) {
@@ -630,9 +641,6 @@ startBattleBtn.addEventListener("click", () => {
     specialBgmAudio.pause();
     specialBgmAudio.currentTime = 0;
 
-    if (window.AndroidInterface && AndroidInterface.showBanner) {
-        AndroidInterface.showBanner();
-    }
 
     const specialBattle = localStorage.getItem('isSpecialBattle');
     const battleBackground = document.getElementById('battle-background');
@@ -1625,7 +1633,7 @@ function initializeBattle(first, second, firstPlayer, secondPlayer) {
     attackerPlayer = firstPlayer;
     defenderPlayer = secondPlayer;
 
-    currentTurn = 20; 
+    currentTurn = 6; 
     updateTurnDisplay();
 
     battleLogData = [];
@@ -2690,18 +2698,13 @@ const battleBgmAudio = document.getElementById('battle-bgm');
 document.getElementById('add-to-collection-btn').onclick = () => {
     stopAudioImmediately(battleBgmAudio);
     // ★他の処理があればここに追記
-    if (window.AndroidInterface && AndroidInterface.hideBanner) {
-        AndroidInterface.hideBanner();
-    }
-    
+
 };
 
 document.getElementById('scan-next-battle-btn').onclick = () => {
     stopAudioImmediately(battleBgmAudio);
     // ★他の処理があればここに追記
-    if (window.AndroidInterface && AndroidInterface.hideBanner) {
-        AndroidInterface.hideBanner();
-    }
+
     scanBgmAudio.currentTime = 0;
     scanBgmAudio.play(); // ← ✅ここで再開してるはず！
 };
@@ -2921,6 +2924,11 @@ function resetTemporaryGameState() {
     window.isCodeCheckMode = false;
     window.codeCheckRegisteredMonster = null;
     document.getElementById('codecheck-confirm-btn').style.display = "none";
+
+    if (window.AndroidInterface && AndroidInterface.hideBanner) {
+        AndroidInterface.hideBanner();
+    }
+    
 }
 
 
