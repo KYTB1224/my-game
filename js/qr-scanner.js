@@ -39,7 +39,7 @@ const monsterImageMap = {
     "Troll": "assets/monsters/troll.webp",
     "Werewolf": "assets/monsters/werewolf.webp",
     "Yeti": "assets/monsters/yeti.webp",
-    "Jack-o'-lantern":"assets/monsters/jack-o'-lantern.webp",
+    "Jack-o'-Lantern":"assets/monsters/jack-o'-lantern.webp",
     "Dark Pharaoh":"assets/monsters/dark_pharaoh.webp", 
     "Asian Dragon": "assets/monsters/asian_dragon.webp",
     "Dragon": "assets/monsters/dragon.webp",
@@ -170,8 +170,16 @@ export async function scanQRCode() {
         newVideo.style.opacity = "0";
         startScanBtn.style.display = "none";
         stopScanBtn.style.display = "none";
-        approveBtn.style.display = "inline-block";
+        if (window.isCodeCheckMode) {
+            document.getElementById('codecheck-confirm-btn').style.display = "inline-block";
+            document.getElementById('codecheck-quit-btn').style.display = "inline-block";
+            approveBtn.style.display = "none";
+        } else {
+            approveBtn.style.display = "inline-block";
+        }
+        
         rescanBtn.style.display = "inline-block";
+        
     });
 
     qrScanner.start().then(() => {
