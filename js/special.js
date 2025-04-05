@@ -82,6 +82,10 @@ special1Btn.addEventListener('click', () => {
     specialScreen.style.display = 'none';
     scanScreen.style.display = 'block';
     setupScanUIForSpecial();
+    
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
 });
 
 // Special 2ボタン処理
@@ -92,6 +96,10 @@ special2Btn.addEventListener('click', () => {
     specialScreen.style.display = 'none';
     scanScreen.style.display = 'block';
     setupScanUIForSpecial();
+    
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
 });
 
 // Special 3ボタン処理
@@ -102,6 +110,11 @@ special3Btn.addEventListener('click', () => {
     specialScreen.style.display = 'none';
     scanScreen.style.display = 'block';
     setupScanUIForSpecial();
+
+    
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
 });
 
 const special4Btn = document.getElementById('special-4-btn');
@@ -111,6 +124,10 @@ special4Btn.addEventListener('click', () => {
     specialScreen.style.display = 'none';
     scanScreen.style.display = 'block';
     setupScanUIForSpecial();
+    
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
 });
 
 const special5Btn = document.getElementById('special-5-btn');
@@ -120,6 +137,11 @@ special5Btn.addEventListener('click', () => {
     specialScreen.style.display = 'none';
     scanScreen.style.display = 'block';
     setupScanUIForSpecial();
+
+    
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
 });
 
 const special6Btn = document.getElementById('special-6-btn');
@@ -129,6 +151,10 @@ special6Btn.addEventListener('click', () => {
     specialScreen.style.display = 'none';
     scanScreen.style.display = 'block';
     setupScanUIForSpecial();
+    
+    if (window.AndroidInterface && AndroidInterface.showBanner) {
+        AndroidInterface.showBanner();
+    }
 });
 
 function setupScanUIForSpecial() {
