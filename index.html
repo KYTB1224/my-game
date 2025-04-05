@@ -19,6 +19,7 @@
         
         <div id="title-button-container"> <!-- 🌟ボタンをまとめる -->
             <button id="game-start-btn">Game Start</button>
+            <button id="code-check-btn">Scan & Save</button>
             <button id="gallery-btn">Gallery</button>
             <button id="special-btn">Special</button>
 
@@ -147,9 +148,14 @@
             Approve
           </button>
           
+        <button id="codecheck-confirm-btn" style="display:none;">Register</button>
         <button id="rescan-btn" style="display:none;">Rescan</button>
         <button id="load-monster-btn" style="display:none;">Load</button> <!-- 🌟ここに移動 -->
     
+        <!-- 🌟 CodeCheck専用ボタン（最初は非表示） -->
+        <button id="codecheck-quit-btn" style="display:none;">Exit Check</button>
+
+
         <button id="start-battle-btn" style="display:none;">Start Battle</button>
         <button id="next-turn-btn" style="display:none;">Next</button>
         <button id="fast-forward-btn" class="action-button" style="display:none; background-color:orange;">
@@ -268,25 +274,43 @@
 
 <div id="special-screen" style="display: none;">
     <div class="special-buttons-container">
-      <button id="special-1-btn" class="special-btn">
-        Special 1<br>
-        <span class="unlock-condition">(Unlock after discovering 10 monsters)</span>
-      </button>
-  
-      <button id="special-2-btn" class="special-btn" disabled>
-        Special 2<br>
-        <span class="unlock-condition">(Unlock after discovering 20 monsters)</span>
-      </button>
-  
-      <button id="special-3-btn" class="special-btn" disabled>
-        Special 3<br>
-        <span class="unlock-condition">(Unlock after discovering 30 monsters)</span>
-      </button>
-    </div>
-  
-    <div style="text-align:center; margin-top:60px;">
-      <button id="special-back-btn" class="special-btn">Back</button>
-    </div>
+
+        <button id="special-1-btn" class="special-btn">
+          Special 1<br>
+          <span class="unlock-condition">(Unlock after discovering 5 monsters)</span>
+        </button>
+      
+        <button id="special-2-btn" class="special-btn" disabled>
+          Special 2<br>
+          <span class="unlock-condition">(Unlock after discovering 10 monsters)</span>
+        </button>
+      
+        <button id="special-3-btn" class="special-btn" disabled>
+          Special 3<br>
+          <span class="unlock-condition">(Unlock after discovering 15 monsters)</span>
+        </button>
+      
+        <button id="special-4-btn" class="special-btn" disabled>
+          Special 4<br>
+          <span class="unlock-condition">(Unlock after discovering 20 monsters)</span>
+        </button>
+      
+        <button id="special-5-btn" class="special-btn" disabled>
+          Special 5<br>
+          <span class="unlock-condition">(Unlock after discovering 25 monsters)</span>
+        </button>
+      
+        <button id="special-6-btn" class="special-btn" disabled>
+          Special 6<br>
+          <span class="unlock-condition">(Unlock after discovering 30 monsters)</span>
+        </button>
+      </div>
+      
+      <div style="text-align:center; margin-top:60px;">
+        <button id="special-back-btn" class="special-btn">Back</button>
+      </div>
+      
+
   </div>
   
 
@@ -390,7 +414,7 @@
         mask.style.opacity = '0';
         setTimeout(() => mask.remove(), 800);
       }
-    }, 3000); // 最悪3秒後には強制解除
+    }, 5000); // 最悪5秒後には強制解除
   </script>
 
 </body>
