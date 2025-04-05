@@ -1087,7 +1087,6 @@ function processBattlePhase() {
                             }
                             break;
 
-
                             case "timeUp":
                                 const p1Hp = player1Monster.hp;
                                 const p2Hp = player2Monster.hp;
@@ -1105,6 +1104,9 @@ function processBattlePhase() {
                                     resultLog = `⏰ Time Up! 🤝 It's a Draw!`;
                                 }
                             
+                                // ✅ battlePhaseを先に切り替え（ここが超重要！）
+                                battlePhase = "battleFinished";
+                            
                                 battleLogData = [{ log: resultLog }];
                                 battleIndex = 0;
                             
@@ -1119,8 +1121,7 @@ function processBattlePhase() {
                                     if (!isMuted) winSound.play();
                                 }, 500);
                             
-                                // ★★ここからが超重要な修正★★
-                                const specialBattle = localStorage.getItem('isSpecialBattle'); // ← ここで取得（コールバック外）
+                                const specialBattle = localStorage.getItem('isSpecialBattle');
                             
                                 displayBattleLogWithCallback(() => {
                                     nextTurnBtn.style.display = "none";
@@ -1129,21 +1130,19 @@ function processBattlePhase() {
                                     const addToCollectionBtn = document.getElementById('add-to-collection-btn');
                             
                                     if (specialBattle) {
-                                        scanNextBattleBtn.style.display = "none"; // specialでは必ず非表示
+                                        scanNextBattleBtn.style.display = "none";
                                         if (winner === 'P1') {
                                             addToCollectionBtn.style.display = "inline-block";
                                         } else {
                                             addToCollectionBtn.style.display = "none";
                                         }
-                                        localStorage.removeItem('isSpecialBattle'); // ←ここに移動！（超重要！）
+                                        localStorage.removeItem('isSpecialBattle');
                                     } else {
-                                        // 通常バトル
                                         scanNextBattleBtn.style.display = "inline-block";
                                         addToCollectionBtn.style.display = "inline-block";
                                     }
                                 });
                             
-                                battlePhase = "battleFinished";
                                 break;
                             
                             
@@ -1171,7 +1170,9 @@ function processBattlePhase() {
                             }
                             }
                             
-                            nextTurnBtn.onclick = () => {    
+                            nextTurnBtn.onclick = (event) => {
+                                event?.stopImmediatePropagation?.();  // ← これを追加
+                            
                                 fastForwardBtn.style.display = "none";
                                 if (battlePhase !== "battleFinished") {
                                     processBattlePhase();
