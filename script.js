@@ -317,10 +317,7 @@ approveBtn.addEventListener("click", async () => {
         return;
     }
 
-    // ✅ 広告表示
-    if (window.AndroidInterface && AndroidInterface.showInterstitialAd) {
-        AndroidInterface.showInterstitialAd();
-    }
+
 
     // ✅ モンスター画像の非表示（チラ見え対策）
     const monsterImage = document.getElementById('monster-image');
@@ -636,6 +633,10 @@ const MIN_TURNS = 1;
 
 
 startBattleBtn.addEventListener("click", () => {
+        // ✅ 広告表示
+    if (window.AndroidInterface && AndroidInterface.showInterstitialAd) {
+        AndroidInterface.showInterstitialAd();
+    }
     scanBgmAudio.pause();
     scanBgmAudio.currentTime = 0;
     specialBgmAudio.pause();
