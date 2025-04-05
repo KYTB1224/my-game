@@ -559,7 +559,7 @@ button:active {
 #add-to-collection-btn {
     position: fixed;  /* ←これが重要 */
     font-size: 13px !important;
-    z-index: 99999;   /* 確実に最前面表示 */
+    z-index: 9;   /* 確実に最前面表示 */
     top: 150px;     /* 表示位置調整（例） */
     left: 50%;        /* 中央揃え */
     transform: translateX(-50%);  /* 中央揃えの調整 */
