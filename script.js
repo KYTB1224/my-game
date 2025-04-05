@@ -1071,22 +1071,23 @@ function processBattlePhase() {
                         break;
                     
                         case "endOfTurn":
-                            currentTurn--; // 🔴ターンをここで減らす（最重要）
-                        
-                            if (currentTurn <= 0) {
-                                // タイムアップ処理
-                                battlePhase = "timeUp";
-                            } else {
+                            currentTurn--;
+                            
+                            // 🔒 タイムアップ寸前だったらログを表示しない！
+                            if (currentTurn > 0) {
                                 phaseLogs = endOfTurn(attackerPlayer, defenderPlayer);
                                 finalizeTurn();
+                            }
                         
+                            if (currentTurn <= 0) {
+                                battlePhase = "timeUp";
+                            } else {
                                 [attacker, defender] = [defender, attacker];
                                 [attackerPlayer, defenderPlayer] = [defenderPlayer, attackerPlayer];
-                        
                                 battlePhase = "attackTurnStart";
                             }
                             break;
-
+                        
                             case "timeUp":
                                 const p1Hp = player1Monster.hp;
                                 const p2Hp = player2Monster.hp;
