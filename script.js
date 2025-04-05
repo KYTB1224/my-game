@@ -35,11 +35,40 @@ import { setSpecialBattleOpponent } from './js/special.js';
 
 import { setScanningForPlayer } from './js/main.js';
 
+
+
+
+// 🌟テスト用：完全な構造でモンスター2体を登録（あとで削除OK）
+import { generateMonster } from './js/monster-generator.js';
+
+console.log("✅ TEST: Registering fully-functional test monsters...");
+
+// 任意の文字列を使って一意なモンスターを生成
+const dummy1 = generateMonster("a".repeat(100));
+const dummy2 = generateMonster("b".repeat(100));
+
+// 画像フィールドだけ追加（使ってるなら）
+dummy1.image = `${dummy1.name.toLowerCase().replace(/\s/g, "_")}.webp`;
+dummy2.image = `${dummy2.name.toLowerCase().replace(/\s/g, "_")}.webp`;
+
+// 保存
+localStorage.setItem('monster-slot-0', JSON.stringify(dummy1));
+localStorage.setItem('monster-slot-1', JSON.stringify(dummy2));
+
+// グローバル領域の上部などに追加
+window.isCodeCheckMode = false;
+window.codeCheckRegisteredMonster = null;
+
+
 window.addEventListener('DOMContentLoaded', () => {
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
     document.getElementById('privacy-policy-link').style.display = 'block'; // 追加
     document.getElementById('copyright-notice').style.display = 'block';
-
+    approveBtn.style.display = "none";
+    rescanBtn.style.display = "none";
+    document.getElementById('codecheck-confirm-btn').style.display = "none";
+    document.getElementById('codecheck-quit-btn').style.display = "none";
+    
 });
 
 
@@ -52,6 +81,7 @@ const scanScreen = document.getElementById('scan-screen');
 const battleContainer = document.getElementById('battle-container');
 const video = document.getElementById('qr-video');
 const gameStartBtn = document.getElementById('game-start-btn');
+const codeCheckBtn = document.getElementById('code-check-btn');
 const startScanBtn = document.getElementById('start-scan');
 const stopScanBtn = document.getElementById('stop-scan');
 const specialBtn = document.getElementById('special-btn');
@@ -154,7 +184,7 @@ const monsterImageMap = {
     "Troll": "assets/monsters/troll.webp",
     "Werewolf": "assets/monsters/werewolf.webp",
     "Yeti": "assets/monsters/yeti.webp",
-    "Jack-o'-lantern":"assets/monsters/jack-o'-lantern.webp",
+    "Jack-o'-Lantern":"assets/monsters/jack-o'-lantern.webp",
     "Dark Pharaoh":"assets/monsters/dark_pharaoh.webp",
   
     // 🔸 レアモンスター
@@ -251,7 +281,7 @@ rescanBtn.addEventListener("click", async () => {
 
     approveBtn.style.display = "none";
     rescanBtn.style.display = "none";
-
+    document.getElementById('codecheck-confirm-btn').style.display = "none"; // ✅ これを追加！
 
     const monsterImage = document.getElementById('monster-image');
     monsterImage.src = "";
@@ -262,7 +292,6 @@ rescanBtn.addEventListener("click", async () => {
     await scanQRCode();   // スキャナ起動
     const video = document.getElementById('qr-video');
     if (video) video.style.display = "block"; // ← このタイミングで表示！
-    
 });
 
 
@@ -374,6 +403,8 @@ gameStartBtn.addEventListener('click', () => {
     removeQrVideo();
     localStorage.removeItem('isSpecialBattle'); // 必ず先頭で確実に消す
     localStorage.setItem('isNormalBattle', 'true'); // 🌟 通常バトルであるフラグを立てる（明示的）
+    window.isCodeCheckMode = false;  // ← 追加！
+    window.codeCheckRegisteredMonster = null; // 念のためクリア
 
     const startupBgm = document.getElementById('startup-bgm');
     document.getElementById('privacy-policy-link').style.display = 'none';
@@ -410,6 +441,100 @@ gameStartBtn.addEventListener('click', () => {
 });
 
 
+codeCheckBtn.addEventListener('click', () => {
+        window.isCodeCheckMode = true; // ← ここが重要！
+    
+        removeQrVideo();
+        localStorage.removeItem('isSpecialBattle');
+        localStorage.setItem('isNormalBattle', 'true');
+    
+        document.getElementById('privacy-policy-link').style.display = 'none';
+        document.getElementById('copyright-notice').style.display = 'none';
+
+        const startupBgm = document.getElementById('startup-bgm');
+        startupBgm.pause();
+        startupBgm.currentTime = 0;
+    
+        scanBgmAudio.currentTime = 0;
+        scanBgmAudio.play();
+    
+        startupScreen.style.display = 'none';  
+        scanScreen.style.display = 'block';   
+        battleContainer.style.display = 'none';
+        gameStartBtn.style.display = 'none';
+    
+        startScanBtn.style.display = "inline-block";
+        startScanBtn.disabled = false;
+    
+        stopScanBtn.style.display = "inline-block";
+        stopScanBtn.disabled = true;
+    
+        // ✅ CodeCheckではLoadボタンは使わない！
+        loadMonsterBtn.style.display = "none";
+    
+        scanResultText.textContent = "Tap Scan to check a monster.";
+    
+        const qrVideo = document.getElementById('qr-video');
+        if (qrVideo) {
+            qrVideo.style.display = 'block';
+        }
+    
+        // ✅ CodeCheck専用ボタン表示（Confirm/Quit）
+        document.getElementById('codecheck-confirm-btn').style.display = 'none';
+        document.getElementById('codecheck-quit-btn').style.display = 'inline-block';
+    });
+    
+// Confirm（スキャンされた1体を登録画面へ）
+document.getElementById('codecheck-confirm-btn').addEventListener('click', () => {
+
+    if (window.AndroidInterface && AndroidInterface.showRewardAd) {
+        AndroidInterface.showRewardAd();  // リワード広告を表示
+    } else {
+        onRewardUnavailable(); // 念のためJSだけでも進められるように
+    }
+
+    if (!currentScannedMonster) return;
+
+    window.codeCheckRegisteredMonster = currentScannedMonster;
+
+    // モンスター1体だけを登録対象に
+    monstersToRegister = [currentScannedMonster];
+    selectedSlots = [];
+    loadSlots();  // ← スロット読み込み！
+
+    // ✨ 即、register画面に移行！
+    document.getElementById('scan-screen').style.display = 'none';
+    document.getElementById('register-slots-screen').style.display = 'flex';
+
+    // 必要なUI初期化
+    const confirmBtn = document.getElementById('select-confirm-btn');
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+    }
+
+    // 他の不要な画面は全て非表示
+    document.getElementById('select-monster-screen').style.display = 'none';
+});
+
+
+
+// Quit Check（完全リセットしてトップへ）
+document.getElementById('codecheck-quit-btn').addEventListener('click', () => {
+    resetTemporaryGameState(); // ← これで全て戻る！
+});
+document.getElementById('codecheck-confirm-btn').style.display = "none";
+// スキャン成功時の中で分岐を追加
+if (window.isCodeCheckMode) {
+    approveBtn.style.display = "none";
+    rescanBtn.style.display = "inline-block";
+    document.getElementById('codecheck-confirm-btn').style.display = "inline-block";
+    document.getElementById('codecheck-quit-btn').style.display = "inline-block";
+} else {
+    // 既存通り：通常スキャン時
+    approveBtn.style.display = "inline-block";
+    rescanBtn.style.display = "inline-block";
+}
+
 
 // 🌟新規追加：Loadボタンが押されたら呼び出し画面へ
 const loadMonsterBtn = document.getElementById('load-monster-btn');
@@ -438,7 +563,8 @@ const loadMonsterSlots = document.querySelectorAll('#load-slots-container .slot'
 function loadStoredMonsters() {
     const specialBattle = localStorage.getItem('isSpecialBattle');
     const isNormalBattle = localStorage.getItem('isNormalBattle');
-    const excludedMonsters = ["Fat Troll", "Drake", "Bael"]; // 除外モンスターリスト
+    const excludedMonsters = ["Fat Troll", "Drake", "Bael", "Imp", "Nine-Tailed Fox", "Lucifer"];
+
 
     loadMonsterSlots.forEach((slot, index) => {
         const data = JSON.parse(localStorage.getItem(`monster-slot-${index}`));
@@ -515,9 +641,9 @@ startBattleBtn.addEventListener("click", () => {
     let battleBackgroundPath;
     let battleBgmPath;
 
-    if (specialBattle === 'special_3') {
-        battleBackgroundPath = 'assets/back/special3.webp';
-        battleBgmPath = 'assets/sound/special3-bgm.mp3';
+    if (specialBattle === 'special_6') {
+        battleBackgroundPath = 'assets/back/special6.webp';
+        battleBgmPath = 'assets/sound/special6-bgm.mp3';
     } else {
         const randomBackgroundNumber = Math.floor(Math.random() * 8) + 1;
         battleBackgroundPath = `assets/back/${randomBackgroundNumber}.webp`;
@@ -1951,20 +2077,56 @@ document.getElementById('select-confirm-btn').addEventListener('click', () => {
   // ▼ Register Slots画面のBackボタンの動作（修正版）
   document.getElementById('register-slots-back-btn').addEventListener('click', () => {
     document.getElementById('register-slots-screen').style.display = 'none';
-    document.getElementById('select-monster-screen').style.display = 'block';
   
-    // Confirmボタンを再表示＆再度使用可能にする
-    const confirmBtn = document.getElementById('select-confirm-btn');
-    confirmBtn.textContent = 'Confirm';
-    confirmBtn.disabled = false;
-    
-    slots.forEach(s => s.classList.remove('selected'));
-    selectedSlots = [];
-    updateFinalRegisterBtn();
-
-
-    document.getElementById('scan-next-battle-btn').style.display = 'inline-block';
-    document.getElementById('quit-game-btn').style.display = 'inline-block';
+    if (window.isCodeCheckMode) {
+      // ✅ Scan & Saveから来た場合の戻り処理
+      const scanned = window.codeCheckRegisteredMonster;
+      if (!scanned) return;
+  
+      const monsterImage = document.getElementById('monster-image');
+      const scanResultText = document.getElementById('scan-result');
+  
+      document.getElementById('scan-screen').style.display = 'block';
+  
+      monsterImage.src = `assets/monsters/${scanned.name.toLowerCase().replace(/ /g, "_")}.webp`;
+      monsterImage.style.display = "block";
+      monsterImage.classList.add('pop-animation');
+  
+      scanResultText.classList.remove('simple-text');
+      scanResultText.classList.add('monster-box');
+      scanResultText.innerHTML = `
+        <strong>Scanned Monster:</strong><br>
+        Name: ${scanned.name}<br>
+        Persona: ${scanned.element} ${getElementEmoji(scanned.element)}<br>
+        HP: ${scanned.hp}<br>
+        ATK: ${scanned.attack}<br>
+        DEF: ${scanned.defense}<br>
+        SPD: ${scanned.speed}<br>
+        Skills: ${scanned.skill1} ${getSkillEmoji(scanned.skill1)}, ${scanned.skill2} ${getSkillEmoji(scanned.skill2)}<br>
+        <div class="skill-details">
+          ${getMonsterSkillDescription(scanned)}
+        </div>
+      `;
+  
+      document.getElementById('codecheck-confirm-btn').style.display = 'inline-block';
+      document.getElementById('rescan-btn').style.display = 'inline-block';
+      document.getElementById('codecheck-quit-btn').style.display = 'inline-block';
+  
+    } else {
+      // ✅ 通常のバトル後の戻り処理（既存）
+      document.getElementById('select-monster-screen').style.display = 'block';
+  
+      const confirmBtn = document.getElementById('select-confirm-btn');
+      confirmBtn.textContent = 'Confirm';
+      confirmBtn.disabled = false;
+  
+      slots.forEach(s => s.classList.remove('selected'));
+      selectedSlots = [];
+      updateFinalRegisterBtn();
+  
+      document.getElementById('scan-next-battle-btn').style.display = 'inline-block';
+      document.getElementById('quit-game-btn').style.display = 'inline-block';
+    }
   });
   
 
@@ -2211,7 +2373,7 @@ loadConfirmBtn.addEventListener('click', () => {
 
 
 
-const monsterNamesABC = ["Asian Dragon","Cerberus", "Cockatrice", "Dark Knight", "Dark Pharaoh", "Death Plant", "Demon", "Dinosaur", "Dragon", "Gargoyle", "Ghost", "Goblin", "Golem", "Gryphon", "Harpy", "Jack-o'-lantern", "Living Dead", "Lizardman", "Mandrake", "Minotaur", "Mummy", "Orc", "Phantom", "Phoenix", "Sea Serpent", "Skeleton", "Troll", "Vampire", "Werewolf", "Yeti"];
+const monsterNamesABC = ["Asian Dragon","Cerberus", "Cockatrice", "Dark Knight", "Dark Pharaoh", "Death Plant", "Demon", "Dinosaur", "Dragon", "Gargoyle", "Ghost", "Goblin", "Golem", "Gryphon", "Harpy", "Jack-o'-Lantern", "Living Dead", "Lizardman", "Mandrake", "Minotaur", "Mummy", "Orc", "Phantom", "Phoenix", "Sea Serpent", "Skeleton", "Troll", "Vampire", "Werewolf", "Yeti"];
 
 document.getElementById('gallery-btn').onclick = () => {
     const startupBgm = document.getElementById('startup-bgm');
@@ -2703,6 +2865,7 @@ function resetTemporaryGameState() {
     document.getElementById('scan-screen').style.display = 'none';
     document.getElementById('special-screen').style.display = 'none';
     document.getElementById('battle-container').style.display = 'none';
+    document.getElementById('codecheck-quit-btn').style.display = "none";
 
     document.getElementById('game-start-btn').style.display = 'inline-block';
     document.getElementById('gallery-btn').style.display = 'inline-block';
@@ -2749,6 +2912,10 @@ function resetTemporaryGameState() {
     updateButtonState(document.getElementById('load-monster-btn'), true);
 
     removeAllTemporaryAnimations();
+
+    window.isCodeCheckMode = false;
+    window.codeCheckRegisteredMonster = null;
+    document.getElementById('codecheck-confirm-btn').style.display = "none";
 }
 
 
