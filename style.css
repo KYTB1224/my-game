@@ -693,12 +693,16 @@ button:active {
     z-index: 100;            /* 上に重なるように設定 */
 }
 
+
+#codecheck-confirm-btn,
+#codecheck-quit-btn,
 #start-scan,
 #stop-scan,
 #approve-btn,
 #rescan-btn,
 #load-monster-btn,
 #quit-game-btn,
+#code-check-btn,
 #start-battle-btn,
 #fast-forward-btn, 
 #select-confirm-btn,
@@ -951,7 +955,7 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: 12px;
 }
 
 .special-btn {
