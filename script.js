@@ -1633,7 +1633,7 @@ function initializeBattle(first, second, firstPlayer, secondPlayer) {
     attackerPlayer = firstPlayer;
     defenderPlayer = secondPlayer;
 
-    currentTurn = 6; 
+    currentTurn = 20; 
     updateTurnDisplay();
 
     battleLogData = [];
