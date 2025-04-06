@@ -2803,10 +2803,6 @@ document.getElementById('exit-button').onclick = () => {
         },
         null // 「No」の場合
     );
-    document.getElementById('privacy-policy-link').style.display = 'block';
-    document.getElementById('copyright-notice').style.display = 'block';
-    document.getElementById('privacy-policy-link').style.display = 'none';
-    document.getElementById('copyright-notice').style.display = 'none';
 
 };
 
