@@ -487,7 +487,7 @@ button:active {
     align-items: center;
     gap: 10px; /* ボタン間の隙間（調整可能）*/
     position: fixed;
-    bottom: 1vh;      /* 下端からの位置 */
+    bottom: 13px !important;       /* 下端からの位置 */
     left: 50%;         /* 中央配置 */
     z-index: 100;      /* ボタンが必ず上に来るように調整 */
   }
