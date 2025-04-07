@@ -103,26 +103,25 @@ export async function scanQRCode() {
 
 const stream = await navigator.mediaDevices.getUserMedia({
   video: {
-    facingMode: "environment",
-width: { ideal: 1920 },
-height: { ideal: 1080 },  // ← カンマが必要！
-focusMode: "continuous",
-zoom: true,
-advanced: [
-  { focusMode: "continuous" },
-  { torch: false },
-]
+    facingMode: { ideal: "environment" },
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+    advanced: [
+      { focusMode: "continuous" },
+      { torch: false },
+      { zoom: 2.0 } // 任意でズームを試す
+    ]
   }
 });
 
+
 const track = stream.getVideoTracks()[0];
-const capabilities = track.getCapabilities();
-
-if (capabilities.focusMode && capabilities.focusMode.includes("continuous")) {
-  await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
+if (track.getCapabilities) {
+  const capabilities = track.getCapabilities();
+  if (capabilities.focusMode && capabilities.focusMode.includes("continuous")) {
+    await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
+  }
 }
-
-
 
 newVideo.srcObject = stream;
     newVideo.id = 'qr-video';
