@@ -104,14 +104,14 @@ export async function scanQRCode() {
 const stream = await navigator.mediaDevices.getUserMedia({
   video: {
     facingMode: "environment",
-    width: { ideal: 1920 },
-    height: { ideal: 1080 }
-    focusMode: "continuous",  // ✅ 自動フォーカス
-    zoom: true,               // ✅ ズームを許可（対応端末のみ）
-    advanced: [
-      { focusMode: "continuous" },
-      { torch: false },       // ← optional, avoid LED interference
-    ]
+width: { ideal: 1920 },
+height: { ideal: 1080 },  // ← カンマが必要！
+focusMode: "continuous",
+zoom: true,
+advanced: [
+  { focusMode: "continuous" },
+  { torch: false },
+]
   }
 });
 
