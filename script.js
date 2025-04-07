@@ -334,12 +334,10 @@ rescanBtn.addEventListener("click", async () => {
 
 
 stopScanBtn.addEventListener('click', async () => {
-    // ✅ Kotlin側でスキャンしてた場合は明示的な停止は不要
-    if (window.AndroidInterface && AndroidInterface.cancelCameraScan) {
-        AndroidInterface.cancelCameraScan(); // Kotlin側のスキャンキャンセル（任意）
-    }
-
-    await stopScanning(); // JS側も一応止めておく（安全）
+if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
+    AndroidInterface.closeCameraActivity();
+} else {
+    stopScanning(); // ブラウザ用
     removeQrVideo();
 
     scanResultText.textContent = "";
