@@ -9,12 +9,6 @@ const stopScanBtn = document.getElementById('stop-scan');
 const approveBtn = document.getElementById('approve-btn');
 const rescanBtn = document.getElementById('rescan-btn');
 
-const scanResultText = document.getElementById('scan-result');
-const startScanBtn = document.getElementById('start-scan');
-const stopScanBtn = document.getElementById('stop-scan');
-const approveBtn = document.getElementById('approve-btn');
-const rescanBtn = document.getElementById('rescan-btn');
-
 
 
 const monsterImageMap = {
