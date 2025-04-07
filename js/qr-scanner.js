@@ -91,6 +91,7 @@ let allowScan = false; // ✅ 最初はスキャン禁止
 export function scanQRCode() {
     if (window.AndroidInterface && AndroidInterface.startScan) {
         AndroidInterface.startScan();
+        console.log("🛰 AndroidInterface.startScan を呼び出しました");
     } else {
         console.error("AndroidInterface未設定です");
     }
