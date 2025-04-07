@@ -33,7 +33,7 @@ import { updateSpecialButtonState } from './js/special.js';
 import { specialBgmAudio } from './js/special.js';
 
 import { setScanningForPlayer } from './js/main.js';
-import { generateSHA256, extendHashTo100Chars, getElementEmoji, getSkillEmoji, showDiscoveryPopup } from './utils.js';
+import { generateSHA256, extendHashTo100Chars, getSkillEmoji, showDiscoveryPopup } from './utils.js';
 import { generateMonster } from './monster-generator.js';
 import { setCurrentScannedMonster } from './main.js';
 import { updateSpecialButtonState } from './special.js';
