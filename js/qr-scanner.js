@@ -106,8 +106,24 @@ const stream = await navigator.mediaDevices.getUserMedia({
     facingMode: "environment",
     width: { ideal: 1920 },
     height: { ideal: 1080 }
+    focusMode: "continuous",  // ✅ 自動フォーカス
+    zoom: true,               // ✅ ズームを許可（対応端末のみ）
+    advanced: [
+      { focusMode: "continuous" },
+      { torch: false },       // ← optional, avoid LED interference
+    ]
   }
 });
+
+const track = stream.getVideoTracks()[0];
+const capabilities = track.getCapabilities();
+
+if (capabilities.focusMode && capabilities.focusMode.includes("continuous")) {
+  await track.applyConstraints({ advanced: [{ focusMode: "continuous" }] });
+}
+
+
+
 newVideo.srcObject = stream;
     newVideo.id = 'qr-video';
     newVideo.setAttribute('autoplay', true);
