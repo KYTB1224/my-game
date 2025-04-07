@@ -334,20 +334,22 @@ rescanBtn.addEventListener("click", async () => {
 
 
 stopScanBtn.addEventListener('click', async () => {
-if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
-    AndroidInterface.closeCameraActivity();
-} else {
-    stopScanning(); // ブラウザ用
-    removeQrVideo();
+    if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
+        AndroidInterface.closeCameraActivity();
+    } else {
+        await stopScanning(); // 🔁 念のためawait
+        removeQrVideo();
 
-    scanResultText.textContent = "";
+        scanResultText.textContent = "";
 
-    const video = document.getElementById('qr-video');
-    if (video) video.style.display = "none";
+        const video = document.getElementById('qr-video');
+        if (video) video.style.display = "none";
 
-    updateButtonState(startScanBtn, true);
-    updateButtonState(stopScanBtn, false);
+        updateButtonState(startScanBtn, true);
+        updateButtonState(stopScanBtn, false);
+    } // ← 🔥ここがなかった！
 });
+
 
 
 
