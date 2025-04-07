@@ -3108,6 +3108,10 @@ function removeAllTemporaryAnimations() {
     });
 }
 
+console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
+console.log("startScanBtn:", startScanBtn);
+console.log("stopScanBtn:", stopScanBtn);
+
 window.onScanResult = async function(qrText) {
     console.log("📥 QR Text received from CameraX:", qrText);
 
