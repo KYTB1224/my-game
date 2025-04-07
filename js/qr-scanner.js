@@ -163,24 +163,6 @@ window.onScanResult = async function(result) {
 
     rescanBtn.style.display = "inline-block";
 };
-    qrScanner.start().then(() => {
-        const video = document.getElementById('qr-video');
-
-        const interval = setInterval(() => {
-            if (
-                video.readyState === 4 &&
-                video.videoWidth > 16 &&
-                video.videoHeight > 16
-            ) {
-                video.style.opacity = "1"; // ✅ 映像出たら表示
-                allowScan = true;          // ✅ この瞬間だけスキャン解禁！
-                clearInterval(interval);
-            }
-        }, 50);
-    }).catch(error => {
-        console.error("Failed to start QR scanner:", error);
-    });
-}
 
 
   
