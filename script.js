@@ -23,7 +23,6 @@ import {
     resetMonsters // 🌟 ここを追記
 } from './js/main.js';
 
-import { generateSHA256, extendHashTo100Chars } from './utils.js';
 
 import { playAttackSpriteAnimation } from './js/attackEffect.js';
 import { playSkillSpriteAnimation } from './js/attackEffect.js';
