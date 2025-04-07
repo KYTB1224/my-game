@@ -1787,21 +1787,10 @@ const player2Img = document.getElementById('player2-monster-image');
 
 // **「Quit the Game」ボタンの動作**
 quitGameBtn.addEventListener("click", () => {
-    document.body.innerHTML = '';
-    document.body.style.backgroundColor = '#000'; // 黒にしてもOK
-
-    setTimeout(() => {
-        location.reload(); // 少し遅らせてリロード
-    }, 200); // 100ms くらい遅らせると滑らか
-
-    document.getElementById('turn-display').style.display = "none";
-    console.log("❌ ゲーム終了");
-    location.reload(); // ページをリロード
-    document.getElementById('battle-background').style.display = 'none'; // 背景を消す
-    document.getElementById('privacy-policy-link').style.display = 'block';
-    document.getElementById('copyright-notice').style.display = 'block';
-
-    removeQrVideo();
+            resetMonsterFade(); // ←ここに移動！
+            
+            resetTemporaryGameState();
+            showStartupScreen();
 });
 
 function getElementMultiplier(attackerElement, defenderElement) {
