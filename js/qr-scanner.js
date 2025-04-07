@@ -140,72 +140,92 @@ newVideo.srcObject = stream;
 
     cameraContainer.appendChild(newVideo);
 
-    qrScanner = new QrScanner(newVideo, async result => {
-        if (!allowScan) return; // ✅ 映像出るまでは無視！
+qrScanner = new QrScanner(newVideo, async result => {
+    if (!allowScan) return;
 
-        allowScan = false; // ✅ 1回でスキャン終了
-        qrScanner.stop();
+    allowScan = false; // 一時停止（スキャン成功/失敗で再許可する）
 
-        if (!window.isMuted) {
-            window.scanCompleteSound.currentTime = 0;
-            window.scanCompleteSound.play();
-        }
+    let retryCount = 0;
+    const MAX_RETRIES = 5;
+    const RETRY_INTERVAL_MS = 200;
 
-        const hash = await generateSHA256(result);
-        const extendedHash = extendHashTo100Chars(hash);
-        const monster = generateMonster(extendedHash);
+    const tryDecode = async () => {
+        try {
+            const hash = await generateSHA256(result);
+            const extendedHash = extendHashTo100Chars(hash);
+            const monster = generateMonster(extendedHash);
 
-        setCurrentScannedMonster(monster);
+            if (!window.isMuted) {
+                window.scanCompleteSound.currentTime = 0;
+                window.scanCompleteSound.play();
+            }
 
-        const monsterImage = document.getElementById('monster-image');
-        if (monsterImageMap[monster.name]) {
-            requestAnimationFrame(() => {
+            setCurrentScannedMonster(monster);
+
+            // 🔽 正常処理（UI表示など）はここから
+            const monsterImage = document.getElementById('monster-image');
+            if (monsterImageMap[monster.name]) {
                 requestAnimationFrame(() => {
-                    monsterImage.src = monsterImageMap[monster.name];
-                    monsterImage.style.display = "block";
-                    monsterImage.classList.add('pop-animation');
+                    requestAnimationFrame(() => {
+                        monsterImage.src = monsterImageMap[monster.name];
+                        monsterImage.style.display = "block";
+                        monsterImage.classList.add('pop-animation');
+                    });
                 });
-            });
-        } else {
-            monsterImage.style.display = "none";
-        }
+            } else {
+                monsterImage.style.display = "none";
+            }
 
-        if (!localStorage.getItem(`discovered-${monster.name}`)) {
-            localStorage.setItem(`discovered-${monster.name}`, true);
-            updateSpecialButtonState(document.getElementById('special-btn'));
-            showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
-        }
+            if (!localStorage.getItem(`discovered-${monster.name}`)) {
+                localStorage.setItem(`discovered-${monster.name}`, true);
+                updateSpecialButtonState(document.getElementById('special-btn'));
+                showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
+            }
 
-        scanResultText.classList.remove('simple-text');
-        scanResultText.classList.add('monster-box');
-        scanResultText.innerHTML = `
-            <strong>Scanned Monster:</strong><br>
-            Name: ${monster.name}<br>
-            Persona: ${monster.element} ${getElementEmoji(monster.element)}<br>
-            HP: ${monster.hp}<br>
-            ATK: ${monster.attack}<br>
-            DEF: ${monster.defense}<br>
-            SPD: ${monster.speed}<br>
-            Skills: ${monster.skill1} ${getSkillEmoji(monster.skill1)}, ${monster.skill2} ${getSkillEmoji(monster.skill2)}<br>
-            <div class="skill-details">
-                ${getMonsterSkillDescription(monster)}
-            </div>
-        `;
+            scanResultText.classList.remove('simple-text');
+            scanResultText.classList.add('monster-box');
+            scanResultText.innerHTML = `
+                <strong>Scanned Monster:</strong><br>
+                Name: ${monster.name}<br>
+                Persona: ${monster.element} ${getElementEmoji(monster.element)}<br>
+                HP: ${monster.hp}<br>
+                ATK: ${monster.attack}<br>
+                DEF: ${monster.defense}<br>
+                SPD: ${monster.speed}<br>
+                Skills: ${monster.skill1} ${getSkillEmoji(monster.skill1)}, ${monster.skill2} ${getSkillEmoji(monster.skill2)}<br>
+                <div class="skill-details">
+                    ${getMonsterSkillDescription(monster)}
+                </div>
+            `;
 
-        newVideo.style.opacity = "0";
-        startScanBtn.style.display = "none";
-        stopScanBtn.style.display = "none";
-        if (window.isCodeCheckMode) {
-            document.getElementById('codecheck-confirm-btn').style.display = "inline-block";
-            document.getElementById('codecheck-quit-btn').style.display = "inline-block";
-            approveBtn.style.display = "none";
-        } else {
-            approveBtn.style.display = "inline-block";
+            startScanBtn.style.display = "none";
+            stopScanBtn.style.display = "none";
+            if (window.isCodeCheckMode) {
+                document.getElementById('codecheck-confirm-btn').style.display = "inline-block";
+                document.getElementById('codecheck-quit-btn').style.display = "inline-block";
+                approveBtn.style.display = "none";
+            } else {
+                approveBtn.style.display = "inline-block";
+            }
+
+            rescanBtn.style.display = "inline-block";
+
+        } catch (err) {
+            if (retryCount < MAX_RETRIES) {
+                retryCount++;
+                setTimeout(() => {
+                    allowScan = true; // 次の試行許可
+                }, RETRY_INTERVAL_MS);
+            } else {
+                console.warn("🔁 マイクロスキャン再試行失敗");
+                allowScan = true; // スキャン可能状態に戻す
+            }
         }
-        
-        rescanBtn.style.display = "inline-block";
-        
-    });
+    };
+
+    await tryDecode();
+});
+
 
     qrScanner.start().then(() => {
         const video = document.getElementById('qr-video');
