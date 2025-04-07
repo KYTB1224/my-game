@@ -2,10 +2,12 @@ import { generateSHA256, extendHashTo100Chars, getElementEmoji, getSkillEmoji, s
 import { generateMonster } from './monster-generator.js';
 import { setCurrentScannedMonster } from './main.js';
 import { updateSpecialButtonState } from './special.js';
-import QrScanner from './qr-scanner.min.js';
-QrScanner.WORKER_PATH = './js/qr-scanner-worker.min.js';
 
-let qrScanner = null;
+const scanResultText = document.getElementById('scan-result');
+const startScanBtn = document.getElementById('start-scan');
+const stopScanBtn = document.getElementById('stop-scan');
+const approveBtn = document.getElementById('approve-btn');
+const rescanBtn = document.getElementById('rescan-btn');
 
 const scanResultText = document.getElementById('scan-result');
 const startScanBtn = document.getElementById('start-scan');
@@ -92,96 +94,75 @@ function getMonsterSkillDescription(monster) {
 
 let allowScan = false; // ✅ 最初はスキャン禁止
 
-export async function scanQRCode() {
-    await stopScanning();
+export function scanQRCode() {
+    if (window.AndroidInterface && AndroidInterface.startScan) {
+        AndroidInterface.startScan();
+    } else {
+        console.error("AndroidInterface未設定です");
+    }
+}
 
-    const oldVideo = document.getElementById('qr-video');
-    const cameraContainer = oldVideo?.parentNode || document.getElementById('camera-container');
-    if (oldVideo) cameraContainer.removeChild(oldVideo);
+// Androidからスキャン結果を受け取る
+window.onScanResult = async function(result) {
+    if (!window.isMuted) {
+        window.scanCompleteSound.currentTime = 0;
+        window.scanCompleteSound.play();
+    }
 
-    const newVideo = document.createElement('video');
-    newVideo.id = 'qr-video';
-    newVideo.setAttribute('autoplay', true);
-    newVideo.setAttribute('muted', true);
-    newVideo.setAttribute('playsinline', true);
-    newVideo.setAttribute('controls', false);
+    const hash = await generateSHA256(result);
+    const extendedHash = extendHashTo100Chars(hash);
+    const monster = generateMonster(extendedHash);
 
-    newVideo.style.display = 'block';
-    newVideo.style.opacity = '0'; // ✅ 最初は透明
-    newVideo.style.transition = 'opacity 0.3s ease';
-    newVideo.style.objectFit = 'cover';
-    newVideo.style.backgroundColor = 'black';
-    newVideo.style.border = '4px solid white';
+    setCurrentScannedMonster(monster);
 
-    cameraContainer.appendChild(newVideo);
-
-    qrScanner = new QrScanner(newVideo, async result => {
-        if (!allowScan) return; // ✅ 映像出るまでは無視！
-
-        allowScan = false; // ✅ 1回でスキャン終了
-        qrScanner.stop();
-
-        if (!window.isMuted) {
-            window.scanCompleteSound.currentTime = 0;
-            window.scanCompleteSound.play();
-        }
-
-        const hash = await generateSHA256(result);
-        const extendedHash = extendHashTo100Chars(hash);
-        const monster = generateMonster(extendedHash);
-
-        setCurrentScannedMonster(monster);
-
-        const monsterImage = document.getElementById('monster-image');
-        if (monsterImageMap[monster.name]) {
+    const monsterImage = document.getElementById('monster-image');
+    if (monsterImageMap[monster.name]) {
+        requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    monsterImage.src = monsterImageMap[monster.name];
-                    monsterImage.style.display = "block";
-                    monsterImage.classList.add('pop-animation');
-                });
+                monsterImage.src = monsterImageMap[monster.name];
+                monsterImage.style.display = "block";
+                monsterImage.classList.add('pop-animation');
             });
-        } else {
-            monsterImage.style.display = "none";
-        }
+        });
+    } else {
+        monsterImage.style.display = "none";
+    }
 
-        if (!localStorage.getItem(`discovered-${monster.name}`)) {
-            localStorage.setItem(`discovered-${monster.name}`, true);
-            updateSpecialButtonState(document.getElementById('special-btn'));
-            showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
-        }
+    if (!localStorage.getItem(`discovered-${monster.name}`)) {
+        localStorage.setItem(`discovered-${monster.name}`, true);
+        updateSpecialButtonState(document.getElementById('special-btn'));
+        showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
+    }
 
-        scanResultText.classList.remove('simple-text');
-        scanResultText.classList.add('monster-box');
-        scanResultText.innerHTML = `
-            <strong>Scanned Monster:</strong><br>
-            Name: ${monster.name}<br>
-            Persona: ${monster.element} ${getElementEmoji(monster.element)}<br>
-            HP: ${monster.hp}<br>
-            ATK: ${monster.attack}<br>
-            DEF: ${monster.defense}<br>
-            SPD: ${monster.speed}<br>
-            Skills: ${monster.skill1} ${getSkillEmoji(monster.skill1)}, ${monster.skill2} ${getSkillEmoji(monster.skill2)}<br>
-            <div class="skill-details">
-                ${getMonsterSkillDescription(monster)}
-            </div>
-        `;
+    scanResultText.classList.remove('simple-text');
+    scanResultText.classList.add('monster-box');
+    scanResultText.innerHTML = `
+        <strong>Scanned Monster:</strong><br>
+        Name: ${monster.name}<br>
+        Persona: ${monster.element} ${getElementEmoji(monster.element)}<br>
+        HP: ${monster.hp}<br>
+        ATK: ${monster.attack}<br>
+        DEF: ${monster.defense}<br>
+        SPD: ${monster.speed}<br>
+        Skills: ${monster.skill1} ${getSkillEmoji(monster.skill1)}, ${monster.skill2} ${getSkillEmoji(monster.skill2)}<br>
+        <div class="skill-details">
+            ${getMonsterSkillDescription(monster)}
+        </div>
+    `;
 
-        newVideo.style.opacity = "0";
-        startScanBtn.style.display = "none";
-        stopScanBtn.style.display = "none";
-        if (window.isCodeCheckMode) {
-            document.getElementById('codecheck-confirm-btn').style.display = "inline-block";
-            document.getElementById('codecheck-quit-btn').style.display = "inline-block";
-            approveBtn.style.display = "none";
-        } else {
-            approveBtn.style.display = "inline-block";
-        }
-        
-        rescanBtn.style.display = "inline-block";
-        
-    });
+    startScanBtn.style.display = "none";
+    stopScanBtn.style.display = "none";
 
+    if (window.isCodeCheckMode) {
+        document.getElementById('codecheck-confirm-btn').style.display = "inline-block";
+        document.getElementById('codecheck-quit-btn').style.display = "inline-block";
+        approveBtn.style.display = "none";
+    } else {
+        approveBtn.style.display = "inline-block";
+    }
+
+    rescanBtn.style.display = "inline-block";
+};
     qrScanner.start().then(() => {
         const video = document.getElementById('qr-video');
 
