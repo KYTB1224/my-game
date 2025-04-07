@@ -25,18 +25,21 @@ import {
 
 import { playAttackSpriteAnimation } from './js/attackEffect.js';
 import { playSkillSpriteAnimation } from './js/attackEffect.js';
-import { scanQRCode, stopScanning, handleScanResult, showPopupMessage } from './js/qr-scanner.js';
+import { scanQRCode, stopScanning } from './js/qr-scanner.js';
+import { showPopupMessage } from './js/qr-scanner.js';
 import * as Main from './js/main.js';
+// script.js の最初の方に追記
 import { updateSpecialButtonState } from './js/special.js';
 import { specialBgmAudio } from './js/special.js';
 import { setSpecialBattleOpponent } from './js/special.js';
+
 import { setScanningForPlayer } from './js/main.js';
+
+
+
+
+// 🌟テスト用：完全な構造でモンスター2体を登録（あとで削除OK）
 import { generateMonster } from './js/monster-generator.js';
-
-window.onScanResult = function(result) {
-    handleScanResult(result); // qr-scanner.jsからインポート済み
-};
-
 
 console.log("✅ TEST: Registering fully-functional test monsters...");
 
@@ -3072,5 +3075,4 @@ function removeAllTemporaryAnimations() {
         img.style.animation = '';
     });
 }
-
 
