@@ -13,7 +13,7 @@ window.addEventListener('load', () => {
 });
 
 
-import {getElementEmoji, getSkillEmoji } from './js/utils.js';
+import { generateSHA256, extendHashTo100Chars, getElementEmoji, getSkillEmoji,showDiscoveryPopup } from './js/utils.js';
 import { 
     player1Monster, 
     player2Monster, 
@@ -31,9 +31,7 @@ import * as Main from './js/main.js';
 // script.js の最初の方に追記
 import { updateSpecialButtonState } from './js/special.js';
 import { specialBgmAudio } from './js/special.js';
-
 import { setScanningForPlayer } from './js/main.js';
-import { generateSHA256, extendHashTo100Chars, getSkillEmoji, showDiscoveryPopup } from './utils.js';
 import { generateMonster } from './monster-generator.js';
 import { setCurrentScannedMonster } from './main.js';
 import { updateSpecialButtonState } from './special.js';
