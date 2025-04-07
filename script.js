@@ -3107,3 +3107,46 @@ function removeAllTemporaryAnimations() {
     });
 }
 
+window.onScanResult = async function(qrText) {
+    console.log("📥 QR Text received from CameraX:", qrText);
+
+    const hash = await generateSHA256(qrText);
+    const extendedHash = extendHashTo100Chars(hash);
+    const monster = generateMonster(extendedHash);
+
+    setCurrentScannedMonster(monster);
+
+    const monsterImage = document.getElementById('monster-image');
+    if (monsterImageMap[monster.name]) {
+        monsterImage.src = monsterImageMap[monster.name];
+        monsterImage.style.display = "block";
+        monsterImage.classList.add('pop-animation');
+    } else {
+        monsterImage.style.display = "none";
+    }
+
+    if (!localStorage.getItem(`discovered-${monster.name}`)) {
+        localStorage.setItem(`discovered-${monster.name}`, true);
+        updateSpecialButtonState(document.getElementById('special-btn'));
+        showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
+    }
+
+    scanResultText.classList.remove('simple-text');
+    scanResultText.classList.add('monster-box');
+    scanResultText.innerHTML = `
+        <strong>Scanned Monster:</strong><br>
+        Name: ${monster.name}<br>
+        Persona: ${monster.element} ${getElementEmoji(monster.element)}<br>
+        HP: ${monster.hp}<br>
+        ATK: ${monster.attack}<br>
+        DEF: ${monster.defense}<br>
+        SPD: ${monster.speed}<br>
+        Skills: ${monster.skill1} ${getSkillEmoji(monster.skill1)}, ${monster.skill2} ${getSkillEmoji(monster.skill2)}<br>
+        <div class="skill-details">
+            ${getMonsterSkillDescription(monster)}
+        </div>
+    `;
+
+    approveBtn.style.display = "inline-block";
+    rescanBtn.style.display = "inline-block";
+};
