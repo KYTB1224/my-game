@@ -100,6 +100,15 @@ export async function scanQRCode() {
     if (oldVideo) cameraContainer.removeChild(oldVideo);
 
     const newVideo = document.createElement('video');
+
+const stream = await navigator.mediaDevices.getUserMedia({
+  video: {
+    facingMode: "environment",
+    width: { ideal: 1920 },
+    height: { ideal: 1080 }
+  }
+});
+newVideo.srcObject = stream;
     newVideo.id = 'qr-video';
     newVideo.setAttribute('autoplay', true);
     newVideo.setAttribute('muted', true);
