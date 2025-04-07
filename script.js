@@ -337,19 +337,19 @@ stopScanBtn.addEventListener('click', async () => {
     if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
         AndroidInterface.closeCameraActivity();
     } else {
-        await stopScanning(); // 🔁 念のためawait
+        await stopScanning();
         removeQrVideo();
+    }
 
-        scanResultText.textContent = "";
+    // ✅ 共通処理（どちらの環境でも実行される！）
+    scanResultText.textContent = "";
 
-        const video = document.getElementById('qr-video');
-        if (video) video.style.display = "none";
+    const video = document.getElementById('qr-video');
+    if (video) video.style.display = "none";
 
-        updateButtonState(startScanBtn, true);
-        updateButtonState(stopScanBtn, false);
-    } // ← 🔥ここがなかった！
+    updateButtonState(startScanBtn, true);
+    updateButtonState(stopScanBtn, false);
 });
-
 
 
 
