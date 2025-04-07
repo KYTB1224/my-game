@@ -3108,21 +3108,24 @@ function removeAllTemporaryAnimations() {
     });
 }
 
-
 window.onScanResult = async function(qrText) {
+    console.log("📥 QR Text received from CameraX:", qrText);
 
+    // DOM要素を都度取得（null対策）
     const startScanBtn = document.getElementById('start-scan');
     const stopScanBtn = document.getElementById('stop-scan');
+    const approveBtn = document.getElementById('approve-btn');
+    const rescanBtn = document.getElementById('rescan-btn');
+    const monsterImage = document.getElementById('monster-image');
+    const scanResultText = document.getElementById('scan-result');
 
-console.log("📥 QR Text received from CameraX:", qrText);
-
+    // QR → SHA256 → 拡張 → モンスター生成
     const hash = await generateSHA256(qrText);
     const extendedHash = extendHashTo100Chars(hash);
     const monster = generateMonster(extendedHash);
-
     setCurrentScannedMonster(monster);
 
-    const monsterImage = document.getElementById('monster-image');
+    // 画像表示（発見済みかどうかチェック）
     if (monsterImageMap[monster.name]) {
         monsterImage.src = monsterImageMap[monster.name];
         monsterImage.style.display = "block";
@@ -3131,12 +3134,14 @@ console.log("📥 QR Text received from CameraX:", qrText);
         monsterImage.style.display = "none";
     }
 
+    // 新規発見なら記録と演出
     if (!localStorage.getItem(`discovered-${monster.name}`)) {
         localStorage.setItem(`discovered-${monster.name}`, true);
         updateSpecialButtonState(document.getElementById('special-btn'));
         showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
     }
 
+    // 結果を表示
     scanResultText.classList.remove('simple-text');
     scanResultText.classList.add('monster-box');
     scanResultText.innerHTML = `
@@ -3153,10 +3158,22 @@ console.log("📥 QR Text received from CameraX:", qrText);
         </div>
     `;
 
+    // 🔍 確認ログ
     console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
-console.log("startScanBtn:", startScanBtn);
-console.log("stopScanBtn:", stopScanBtn);
+    console.log("startScanBtn:", startScanBtn);
+    console.log("stopScanBtn:", stopScanBtn);
 
-    approveBtn.style.display = "inline-block";
-    rescanBtn.style.display = "inline-block";
+    // ✅ ボタン制御
+    if (startScanBtn) startScanBtn.style.display = "none";
+    if (stopScanBtn) stopScanBtn.style.display = "none";
+
+    if (window.isCodeCheckMode) {
+        document.getElementById('codecheck-confirm-btn').style.display = "inline-block";
+        document.getElementById('codecheck-quit-btn').style.display = "inline-block";
+        if (approveBtn) approveBtn.style.display = "none";
+    } else {
+        if (approveBtn) approveBtn.style.display = "inline-block";
+    }
+
+    if (rescanBtn) rescanBtn.style.display = "inline-block";
 };
