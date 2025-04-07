@@ -12,10 +12,8 @@ window.addEventListener('load', () => {
     }
 });
 
-import { generateSHA256, extendHashTo100Chars, getElementEmoji, getSkillEmoji, showDiscoveryPopup } from './utils.js';
-import { generateMonster } from './monster-generator.js';
-import { updateSpecialButtonState } from './special.js';
 
+import {getElementEmoji, getSkillEmoji } from './js/utils.js';
 import { 
     player1Monster, 
     player2Monster, 
