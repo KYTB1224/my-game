@@ -185,4 +185,9 @@ window.onScanResult = async function(result) {
     }, 2000);
 }
 
-export { onScanResult as handleScanResult };
+
+function handleScanResult(result) {
+    window.onScanResult(result);
+}
+export { handleScanResult };
+
