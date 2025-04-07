@@ -161,13 +161,11 @@ window.onScanResult = async function(result) {
 
 
   
-  export async function stopScanning() {
-    if (qrScanner) {
-      await qrScanner.stop();
-      qrScanner.destroy();
-      qrScanner = null;
-    }
-  }
+// Android連携においては JS 側でスキャナ停止不要なため空関数でOK
+export async function stopScanning() {
+    console.log("📡 stopScanning() はAndroidでは不要です");
+}
+
 
   export function showPopupMessage(message) {
     const popup = document.getElementById('discovery-popup');
