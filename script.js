@@ -335,12 +335,10 @@ rescanBtn.addEventListener("click", async () => {
 
 stopScanBtn.addEventListener('click', async () => {
     // ✅ Kotlin側でスキャンしてた場合は明示的な停止は不要
-    
-if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
-    AndroidInterface.closeCameraActivity();
-} else {
-    stopScanning(); // ブラウザ用
-}
+    if (window.AndroidInterface && AndroidInterface.cancelCameraScan) {
+        AndroidInterface.cancelCameraScan(); // Kotlin側のスキャンキャンセル（任意）
+    }
+
     await stopScanning(); // JS側も一応止めておく（安全）
     removeQrVideo();
 
@@ -595,11 +593,6 @@ const loadMonsterScreen = document.getElementById('load-monster-screen');
 loadMonsterBtn.addEventListener('click', () => {
     scanScreen.style.display = 'none';
     loadMonsterScreen.style.display = 'flex';
-if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
-    AndroidInterface.closeCameraActivity();
-} else {
-    stopScanning(); // ブラウザ用
-}
 
     // 🌟ここでconfirmボタンを初期化（必須）
     loadConfirmBtn.disabled = true;
@@ -2860,13 +2853,7 @@ function resetTemporaryGameState() {
     // ✅ スキャン関連停止
     if (typeof stopScanning === 'function') stopScanning();
     removeQrVideo();
-    
-if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
-    AndroidInterface.closeCameraActivity();
-} else {
-    stopScanning(); // ブラウザ用
-    removeQrVideo();
-}
+
     // ✅ モンスター・ログなどをリセット
     Main.resetMonsters();
     battleLogData = [];
