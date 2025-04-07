@@ -3108,12 +3108,12 @@ function removeAllTemporaryAnimations() {
     });
 }
 
-console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
-console.log("startScanBtn:", startScanBtn);
-console.log("stopScanBtn:", stopScanBtn);
 
 window.onScanResult = async function(qrText) {
     console.log("📥 QR Text received from CameraX:", qrText);
+console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
+console.log("startScanBtn:", startScanBtn);
+console.log("stopScanBtn:", stopScanBtn);
 
     const hash = await generateSHA256(qrText);
     const extendedHash = extendHashTo100Chars(hash);
