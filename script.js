@@ -309,33 +309,47 @@ rescanBtn.addEventListener("click", async () => {
 
     approveBtn.style.display = "none";
     rescanBtn.style.display = "none";
-    document.getElementById('codecheck-confirm-btn').style.display = "none"; // ✅ これを追加！
+    document.getElementById('codecheck-confirm-btn').style.display = "none";
 
     const monsterImage = document.getElementById('monster-image');
     monsterImage.src = "";
     monsterImage.style.display = "none";
     monsterImage.style.visibility = "visible";
 
-    await stopScanning(); // 明示的に待機
-    await scanQRCode();   // スキャナ起動
-    const video = document.getElementById('qr-video');
-    if (video) video.style.display = "block"; // ← このタイミングで表示！
+    // ✅ 分岐ここ！
+    if (window.AndroidInterface && AndroidInterface.startCameraScan) {
+        AndroidInterface.startCameraScan(); // ネイティブ側へスキャン依頼
+        await stopScanning(); // 一応、既存のスキャンを止めておく（JS側）
+    } else {
+        await stopScanning();
+        await scanQRCode(); // JSでの再スキャン起動
+        const video = document.getElementById('qr-video');
+        if (video) video.style.display = "block";
+    }
 });
 
 
 
 
-// 正しく修正されたstopScanBtnイベントリスナー
-stopScanBtn.addEventListener('click', async () => {
-    await stopScanning();
-    removeQrVideo();
-    scanResultText.textContent = "";
-    video.style.display = "none";
 
-    // 🌟 こちらの書き方に統一（元の色に戻ります）
+stopScanBtn.addEventListener('click', async () => {
+    // ✅ Kotlin側でスキャンしてた場合は明示的な停止は不要
+    if (window.AndroidInterface && AndroidInterface.cancelCameraScan) {
+        AndroidInterface.cancelCameraScan(); // Kotlin側のスキャンキャンセル（任意）
+    }
+
+    await stopScanning(); // JS側も一応止めておく（安全）
+    removeQrVideo();
+
+    scanResultText.textContent = "";
+
+    const video = document.getElementById('qr-video');
+    if (video) video.style.display = "none";
+
     updateButtonState(startScanBtn, true);
     updateButtonState(stopScanBtn, false);
 });
+
 
 
 let currentPlayer = 1;  // ←追加：現在スキャンしているプレイヤーを記録する変数
