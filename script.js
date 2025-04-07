@@ -3110,10 +3110,11 @@ function removeAllTemporaryAnimations() {
 
 
 window.onScanResult = async function(qrText) {
-    console.log("📥 QR Text received from CameraX:", qrText);
-console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
-console.log("startScanBtn:", startScanBtn);
-console.log("stopScanBtn:", stopScanBtn);
+
+    const startScanBtn = document.getElementById('start-scan');
+    const stopScanBtn = document.getElementById('stop-scan');
+
+console.log("📥 QR Text received from CameraX:", qrText);
 
     const hash = await generateSHA256(qrText);
     const extendedHash = extendHashTo100Chars(hash);
@@ -3151,6 +3152,10 @@ console.log("stopScanBtn:", stopScanBtn);
             ${getMonsterSkillDescription(monster)}
         </div>
     `;
+
+    console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
+console.log("startScanBtn:", startScanBtn);
+console.log("stopScanBtn:", stopScanBtn);
 
     approveBtn.style.display = "inline-block";
     rescanBtn.style.display = "inline-block";
