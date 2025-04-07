@@ -270,6 +270,7 @@ startScanBtn.addEventListener('click', async () => {
 
         updateButtonState(startScanBtn, false);
         updateButtonState(stopScanBtn, true);
+        updateButtonState(document.getElementById('load-monster-btn'), false); 
 
     } else {
         // ✅ JS版スキャナを使う
@@ -296,6 +297,7 @@ startScanBtn.addEventListener('click', async () => {
 
         updateButtonState(startScanBtn, false);
         updateButtonState(stopScanBtn, true);
+        updateButtonState(document.getElementById('load-monster-btn'), false); 
     }
 });
 
@@ -349,6 +351,7 @@ stopScanBtn.addEventListener('click', async () => {
 
     updateButtonState(startScanBtn, true);
     updateButtonState(stopScanBtn, false);
+    updateButtonState(document.getElementById('load-monster-btn'), true); 
 });
 
 
