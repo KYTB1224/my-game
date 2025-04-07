@@ -595,6 +595,11 @@ const loadMonsterScreen = document.getElementById('load-monster-screen');
 loadMonsterBtn.addEventListener('click', () => {
     scanScreen.style.display = 'none';
     loadMonsterScreen.style.display = 'flex';
+if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
+    AndroidInterface.closeCameraActivity();
+} else {
+    stopScanning(); // ブラウザ用
+}
 
     // 🌟ここでconfirmボタンを初期化（必須）
     loadConfirmBtn.disabled = true;
