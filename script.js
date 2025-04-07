@@ -14,6 +14,8 @@ window.addEventListener('load', () => {
 
 
 import {getElementEmoji, getSkillEmoji } from './js/utils.js';
+import { generateSHA256, extendHashTo100Chars } from './utils.js';
+
 import { 
     player1Monster, 
     player2Monster, 
