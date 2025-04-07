@@ -245,31 +245,59 @@ function updateButtonState(button, isEnabled) {
 
 
 startScanBtn.addEventListener('click', async () => {
-    removeQrVideo();
-    createQrVideo();
-    setCurrentScannedMonster(null);
+    // Androidネイティブ側が対応しているかチェック
+    if (window.AndroidInterface && AndroidInterface.startCameraScan) {
+        // ✅ Kotlin側にスキャンを任せる（CameraX起動）
+        AndroidInterface.startCameraScan();
 
-    scanResultText.classList.remove('monster-box');
-    scanResultText.classList.add('simple-text');
-    scanResultText.textContent = "Scanning...";
+        // UI初期化だけ先にしておく（共通処理）
+        removeQrVideo();
+        createQrVideo();
+        setCurrentScannedMonster(null);
 
-    approveBtn.style.display = "none";
-    rescanBtn.style.display = "none";
+        scanResultText.classList.remove('monster-box');
+        scanResultText.classList.add('simple-text');
+        scanResultText.textContent = "Scanning...";
 
+        approveBtn.style.display = "none";
+        rescanBtn.style.display = "none";
 
-    const monsterImage = document.getElementById('monster-image');
-    monsterImage.src = "";
-    monsterImage.style.display = "none";
-    monsterImage.style.visibility = "visible";
+        const monsterImage = document.getElementById('monster-image');
+        monsterImage.src = "";
+        monsterImage.style.display = "none";
+        monsterImage.style.visibility = "visible";
 
-    await stopScanning(); // 明示的に待機
-    await scanQRCode();   // スキャナ起動
-    const video = document.getElementById('qr-video');
-    if (video) video.style.display = "block"; // ← このタイミングで表示！
-    
-    updateButtonState(startScanBtn, false);
-    updateButtonState(stopScanBtn, true);
+        updateButtonState(startScanBtn, false);
+        updateButtonState(stopScanBtn, true);
+
+    } else {
+        // ✅ JS版スキャナを使う
+        removeQrVideo();
+        createQrVideo();
+        setCurrentScannedMonster(null);
+
+        scanResultText.classList.remove('monster-box');
+        scanResultText.classList.add('simple-text');
+        scanResultText.textContent = "Scanning...";
+
+        approveBtn.style.display = "none";
+        rescanBtn.style.display = "none";
+
+        const monsterImage = document.getElementById('monster-image');
+        monsterImage.src = "";
+        monsterImage.style.display = "none";
+        monsterImage.style.visibility = "visible";
+
+        await stopScanning(); // 明示的に待機
+        await scanQRCode();   // スキャナ起動
+        const video = document.getElementById('qr-video');
+        if (video) video.style.display = "block"; // ← このタイミングで表示！
+
+        updateButtonState(startScanBtn, false);
+        updateButtonState(stopScanBtn, true);
+    }
 });
+
 
 // 🌟修正後はこのコードで正常動作します（変更不要）
 rescanBtn.addEventListener("click", async () => {
