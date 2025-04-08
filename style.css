@@ -1069,6 +1069,21 @@ html {
     color: #ffffff;
     align-items: center;
 }
+
+  #bottom-bar {
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; /* 常にflex！ */
+    gap: 20px;
+    z-index: 10000;
+    white-space: nowrap;
+    font-size: 8px;
+    color: #ffffff;
+    align-items: center;
+}
+
 #copyright-notice,
 #copyright-link,
 #privacy-policy-link {
