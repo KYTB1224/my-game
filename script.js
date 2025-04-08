@@ -3125,6 +3125,7 @@ function removeAllTemporaryAnimations() {
 
 window.onScanResult = async function(qrText) {
     console.log("📥 QR Text received from CameraX:", qrText);
+    document.getElementById('exit-button').style.display = 'inline-block';
 
     // DOM要素を都度取得（null対策）
     const startScanBtn = document.getElementById('start-scan');
