@@ -1651,7 +1651,7 @@ setTimeout(() => {
         addToCollectionBtn.style.display = "inline-block";
         scanNextBattleBtn.style.display = "inline-block";
     }
-}, 1000); // ← 1000ミリ秒（＝1秒）遅延
+}, 2000); // ← 1000ミリ秒（＝1秒）遅延
 
 }
 
@@ -3141,7 +3141,10 @@ window.onScanResult = async function(qrText) {
     const extendedHash = extendHashTo100Chars(hash);
     const monster = generateMonster(extendedHash);
     setCurrentScannedMonster(monster);
-
+if (!window.isMuted) {
+    window.scanCompleteSound.currentTime = 0;
+    window.scanCompleteSound.play().catch(e => console.warn("Scan sound error:", e));
+}
     // 画像表示（発見済みかどうかチェック）
     if (monsterImageMap[monster.name]) {
         monsterImage.src = monsterImageMap[monster.name];
