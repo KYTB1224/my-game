@@ -2566,21 +2566,31 @@ function fadeOutDefeatedMonster(player) {
 
 
 window.addEventListener('DOMContentLoaded', () => {
+    const mask = document.getElementById('startup-mask');
 
-    // 起動画面のBGMを再生
-    const startupBgm = document.getElementById('startup-bgm');
-  
-    if (startupBgm) {
-      startupBgm.currentTime = 0;
-      startupBgm.play().catch(error => {
-        console.error('BGMが再生できませんでした:', error);
-      });
-    } else {
-      console.error('startup-bgmが見つかりません！HTMLのaudioタグを確認してください。');
+    if (mask) {
+        // フェードアウト
+        mask.style.opacity = '0';
+
+        // 完全に透明になった後に削除＋BGM再生
+        setTimeout(() => {
+            if (mask.parentNode) {
+                mask.parentNode.removeChild(mask);
+            }
+
+            // ✅ このタイミングでBGMを再生！
+            const startupBgm = document.getElementById('startup-bgm');
+            if (startupBgm && !window.isMuted) {
+                startupBgm.currentTime = 0;
+                startupBgm.play().catch(error => {
+                    console.warn('BGM再生失敗（許可待ちなど）:', error);
+                });
+            }
+
+        }, 800); // ← CSSの transition: 0.8s; に合わせてる
     }
-  
-  });
-  
+});
+
 
   // FastForward用のターンスキップ関数（最終修正版）
   function fastForwardTurns(turnsToSkip = 5) {
