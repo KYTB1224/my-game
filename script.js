@@ -299,6 +299,9 @@ startScanBtn.addEventListener('click', async () => {
         updateButtonState(stopScanBtn, true);
         updateButtonState(document.getElementById('load-monster-btn'), false); 
     }
+
+    document.getElementById('exit-button').style.display = 'none';
+
 });
 
 
@@ -352,6 +355,8 @@ stopScanBtn.addEventListener('click', async () => {
     updateButtonState(startScanBtn, true);
     updateButtonState(stopScanBtn, false);
     updateButtonState(document.getElementById('load-monster-btn'), true); 
+    document.getElementById('exit-button').style.display = 'inline-block';
+
 });
 
 
