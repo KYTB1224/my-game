@@ -286,7 +286,7 @@ specialBackBtn.addEventListener('click', () => {
     
     document.getElementById('privacy-policy-link').style.display = 'block';
     document.getElementById('copyright-notice').style.display = 'block';
-    document.getElementById('copyright-link').style.display = 'block;
+
     // 🌟 special BGMを停止
     specialBgmAudio.pause();
     specialBgmAudio.currentTime = 0;
