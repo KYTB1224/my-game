@@ -452,7 +452,8 @@ gameStartBtn.addEventListener('click', () => {
     const startupBgm = document.getElementById('startup-bgm');
     document.getElementById('privacy-policy-link').style.display = 'none';
     document.getElementById('copyright-notice').style.display = 'none';
-
+    document.getElementById('copyright-link').style.display = 'none';
+    
     startupBgm.pause();
     startupBgm.currentTime = 0;
 
@@ -497,6 +498,7 @@ codeCheckBtn.addEventListener('click', () => {
     
         document.getElementById('privacy-policy-link').style.display = 'none';
         document.getElementById('copyright-notice').style.display = 'none';
+        document.getElementById('copyright-link').style.display = 'none';
 
         const startupBgm = document.getElementById('startup-bgm');
         startupBgm.pause();
@@ -2439,6 +2441,7 @@ function loadGalleryPage(page) {
     
     document.getElementById('privacy-policy-link').style.display = 'none';
     document.getElementById('copyright-notice').style.display = 'none';
+    document.getElementById('copyright-link').style.display = 'none';
 
     currentGalleryPage = page;
 
@@ -2474,6 +2477,7 @@ document.getElementById('gallery-exit-btn').onclick = () => {
     document.getElementById('startup-screen').style.display = 'block';
     document.getElementById('privacy-policy-link').style.display = 'block';
     document.getElementById('copyright-notice').style.display = 'block';
+    document.getElementById('copyright-link').style.display = 'block';
 
     const startupBgm = document.getElementById('startup-bgm');
     startupBgm.currentTime = 0;
@@ -2912,6 +2916,7 @@ function resetTemporaryGameState() {
 
     document.getElementById('privacy-policy-link').style.display = 'block';
     document.getElementById('copyright-notice').style.display = 'block';
+    document.getElementById('copyright-link').style.display = 'block';
 
 
     const galleryModal = document.getElementById('gallery-modal');
