@@ -40,27 +40,31 @@ import { setScanningForPlayer } from './js/main.js';
 import { generateMonster } from './js/monster-generator.js';
 
 const preloadImages = [
-  // 背景
-  ...Array.from({ length: 8 }, (_, i) => `assets/back/${i + 1}.webp`),
-  "assets/back/special6.webp",
+    // 背景
+    ...Array.from({ length: 8 }, (_, i) => `assets/back/${i + 1}.webp`),
+    "assets/back/special6.webp",
+  
+    // モンスター画像（名前一覧から組み立てて展開）
+    ...[
+      "asian_dragon", "bael", "cerberus", "cockatrice", "dark_knight", "dark_pharaoh",
+      "death_plant", "demon", "dinosaur", "dragon", "drake", "fat_troll", "gargoyle",
+      "ghost", "goblin", "golem", "gryphon", "harpy", "jack-o'-lantern", "living_dead",
+      "lizardman", "mandrake", "minotaur", "mummy", "orc", "phantom", "phoenix",
+      "sea_serpent", "skeleton", "troll", "vampire", "werewolf", "yeti",
+      "nine-tailed_fox", "lucifer"
+    ].map(name => `assets/monsters/${name}.webp`),
+  
+    // ダメージスプライト
+    ...Array.from({ length: 15 }, (_, i) => `assets/effects/damage/frame_${i + 1}.png`),
+  
+    // スキルスプライト
+    ...Array.from({ length: 8 }, (_, i) => `assets/effects/skill/skill${i + 1}.png`),
+  
+    // UI画像
+    "assets/boxc.png", "assets/exit.png", "assets/regback.webp", "assets/scanback.webp",
+    "assets/specialback.webp", "assets/title.webp", "assets/sound/1.png", "assets/sound/2.png"
+  ];
 
-  // モンスター画像
-  "asian_dragon","bael","cerberus","cockatrice","dark_knight","dark_pharaoh",
-  "death_plant","demon","dinosaur","dragon","drake","fat_troll","gargoyle",
-  "ghost","goblin","golem","gryphon","harpy","jack-o'-lantern","living_dead",
-  "lizardman","mandrake","minotaur","mummy","orc","phantom","phoenix",
-  "sea_serpent","skeleton","troll","vampire","werewolf","yeti",
-  "nine-tailed_fox","lucifer"
-].map(name => `assets/monsters/${name}.webp`),
-
-  // エフェクト
-  ...Array.from({ length: 15 }, (_, i) => `assets/effects/damage/frame_${i + 1}.png`),
-  ...Array.from({ length: 8 }, (_, i) => `assets/effects/skill/skill${i + 1}.png`),
-
-  // UI
-  "assets/boxc.png","assets/exit.png","assets/regback.webp","assets/scanback.webp",
-  "assets/specialback.webp","assets/title.webp","assets/sound/1.png","assets/sound/2.png"
-];
 
 preloadImages.forEach(src => {
   const img = new Image();
