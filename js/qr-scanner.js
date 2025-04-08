@@ -175,6 +175,8 @@ newVideo.srcObject = stream;
             showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
         }
 
+        document.getElementById('exit-button').style.display = 'inline-block';
+
         scanResultText.classList.remove('simple-text');
         scanResultText.classList.add('monster-box');
         scanResultText.innerHTML = `
