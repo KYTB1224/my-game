@@ -1027,6 +1027,10 @@ html {
     opacity: 0.7;
 }
 
+#copyright-link:hover {
+    opacity: 0.7;
+}
+
 #startup-mask {
     position: fixed;
     top: 0;
@@ -1066,12 +1070,14 @@ html {
     align-items: center;
 }
 #copyright-notice,
+#copyright-link,
 #privacy-policy-link {
     display: none;
     white-space: nowrap;
     color: #ffffff;
 }
 
+#copyright-link,
 #privacy-policy-link {
     text-decoration: underline;
     cursor: pointer;
