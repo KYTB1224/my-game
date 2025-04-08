@@ -349,8 +349,8 @@ rescanBtn.addEventListener("click", async () => {
     
     document.getElementById('exit-button').style.display = 'none';
 
-    document.getElementById('load-monster-btn').disabled = false;
-    updateButtonState(document.getElementById('load-monster-btn'), true);
+　　updateButtonState(document.getElementById('load-monster-btn'), false);
+
     document.getElementById('start-scan').style.display = 'inline-block';
     updateButtonState(document.getElementById('start-scan'), false);
     document.getElementById('stop-scan').style.display = 'inline-block';
