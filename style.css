@@ -499,11 +499,6 @@ button:active {
     white-space: nowrap; /* ← 念のため改行を禁止 */
 }
 
-#special-btn {
-    transform: scale(0.85); /* 少しだけ小さく */
-    transform-origin: center;
-}
-
 /* ポップアップ数字の共通スタイル */
 .hp-popup {
     position: absolute;
@@ -943,6 +938,21 @@ html {
     padding: 10px 20px;
     cursor: pointer;
     margin: 10px;
+    transform: scale(0.85); /* 少しだけ小さく */
+    transform-origin: center;
+}
+
+.special-btn {
+    width: 280px;
+    padding: 12px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #1b2a41;
+    border: 2px solid #0f1c2e;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 #special-btn:disabled {
@@ -973,18 +983,6 @@ html {
     gap: 12px;
 }
 
-.special-btn {
-    width: 280px;
-    padding: 12px;
-    font-size: 15px;
-    color: #fff;
-    background-color: #1b2a41;
-    border: 2px solid #0f1c2e;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    transition: background-color 0.3s, transform 0.2s;
-}
 
 .special-btn:hover {
     background-color: #324a5f;
