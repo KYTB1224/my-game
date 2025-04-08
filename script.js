@@ -1629,8 +1629,10 @@ function handleBattleEnd() {
         if (!isMuted) winSound.play();
     }, 200);  // ← BGMが静かになった頃に鳴らすと確実
 }
+    
+nextTurnBtn.style.display = "none"; 
 
-setTimeout(() => {
+    setTimeout(() => {
     nextTurnBtn.style.display = "none";
     quitGameBtn.style.display = "inline-block";
 
