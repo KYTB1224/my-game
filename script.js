@@ -35,8 +35,9 @@ import { specialBgmAudio } from './js/special.js';
 import { setSpecialBattleOpponent } from './js/special.js';
 
 import { setScanningForPlayer } from './js/main.js';
-import { generateMonster } from './js/monster-generator.js';
 
+
+import { generateMonster } from './js/monster-generator.js';
 
 
 // グローバル領域の上部などに追加
