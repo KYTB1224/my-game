@@ -309,6 +309,13 @@ startScanBtn.addEventListener('click', async () => {
 rescanBtn.addEventListener("click", async () => {
     setCurrentScannedMonster(null);
 
+    document.getElementById('load-monster-btn').disabled = false;
+    updateButtonState(document.getElementById('load-monster-btn'), true);
+    document.getElementById('start-scan').style.display = 'inline-block';
+    updateButtonState(document.getElementById('start-scan'), false);
+    document.getElementById('stop-scan').style.display = 'inline-block';
+    updateButtonState(document.getElementById('stop-scan'), true);
+
     scanResultText.classList.remove('monster-box');
     scanResultText.classList.add('simple-text');
     scanResultText.textContent = "Rescanning...";
