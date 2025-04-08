@@ -59,7 +59,8 @@ function removeQrVideo() {
 specialBtn.addEventListener('click', () => {
     document.getElementById('privacy-policy-link').style.display = 'none';
     document.getElementById('copyright-notice').style.display = 'none';
-
+    document.getElementById('copyright-link').style.display = 'none';
+    
     removeQrVideo();
     startupScreen.style.display = 'none';
     specialScreen.style.display = 'flex';
