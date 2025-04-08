@@ -211,7 +211,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
             case "special_3":
             monsterData = {
                 name: "Nine-Tailed Fox",
-                element: "Logical",
+                element: "Intuitive",
                 maxHp: 850,
                 baseAttack: 140,
                 baseDefense: 380,
@@ -242,7 +242,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
                     monsterData = {
                         name: "Lucifer",
                         element: "Logical",
-                        maxHp: 1500,
+                        maxHp: 1400,
                         baseAttack: 200,
                         baseDefense: 180,
                         speed: 220,
@@ -257,7 +257,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Bael",
                 element: "Intuitive",
-                maxHp: 1700,
+                maxHp: 1600,
                 baseAttack: 230,
                 baseDefense: 200,
                 speed: 250,
