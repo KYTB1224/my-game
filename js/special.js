@@ -39,12 +39,12 @@ function updateSpecialStages() {
         if (localStorage.getItem(`discovered-${name}`)) discoveredCount++;
     });
 
-    document.getElementById('special-1-btn').disabled = discoveredCount < 1;
-    document.getElementById('special-2-btn').disabled = discoveredCount < 1;
-    document.getElementById('special-3-btn').disabled = discoveredCount < 1;
-    document.getElementById('special-4-btn').disabled = discoveredCount < 1;
-    document.getElementById('special-5-btn').disabled = discoveredCount < 1;
-    document.getElementById('special-6-btn').disabled = discoveredCount < 1;
+    document.getElementById('special-1-btn').disabled = discoveredCount < 5;
+    document.getElementById('special-2-btn').disabled = discoveredCount < 10;
+    document.getElementById('special-3-btn').disabled = discoveredCount < 15;
+    document.getElementById('special-4-btn').disabled = discoveredCount < 20;
+    document.getElementById('special-5-btn').disabled = discoveredCount < 25;
+    document.getElementById('special-6-btn').disabled = discoveredCount < 30;
 }
 
 
@@ -212,9 +212,9 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Nine-Tailed Fox",
                 element: "Intuitive",
-                maxHp: 850,
+                maxHp: 900,
                 baseAttack: 140,
-                baseDefense: 380,
+                baseDefense: 330,
                 speed: 170,
                 skill1: "Endurance",
                 skill2: "Heal",
@@ -258,7 +258,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
                 name: "Bael",
                 element: "Intuitive",
                 maxHp: 1600,
-                baseAttack: 230,
+                baseAttack: 240,
                 baseDefense: 200,
                 speed: 250,
                 skill1: "Vampire",
