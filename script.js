@@ -35,26 +35,9 @@ import { specialBgmAudio } from './js/special.js';
 import { setSpecialBattleOpponent } from './js/special.js';
 
 import { setScanningForPlayer } from './js/main.js';
-
-
-
-
-// 🌟テスト用：完全な構造でモンスター2体を登録（あとで削除OK）
 import { generateMonster } from './js/monster-generator.js';
 
-console.log("✅ TEST: Registering fully-functional test monsters...");
 
-// 任意の文字列を使って一意なモンスターを生成
-const dummy1 = generateMonster("a".repeat(100));
-const dummy2 = generateMonster("b".repeat(100));
-
-// 画像フィールドだけ追加（使ってるなら）
-dummy1.image = `${dummy1.name.toLowerCase().replace(/\s/g, "_")}.webp`;
-dummy2.image = `${dummy2.name.toLowerCase().replace(/\s/g, "_")}.webp`;
-
-// 保存
-localStorage.setItem('monster-slot-0', JSON.stringify(dummy1));
-localStorage.setItem('monster-slot-1', JSON.stringify(dummy2));
 
 // グローバル領域の上部などに追加
 window.isCodeCheckMode = false;
@@ -65,6 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
     document.getElementById('privacy-policy-link').style.display = 'block'; // 追加
     document.getElementById('copyright-notice').style.display = 'block';
+    document.getElementById('copyright-link').style.display = 'block';
     approveBtn.style.display = "none";
     rescanBtn.style.display = "none";
     document.getElementById('codecheck-confirm-btn').style.display = "none";
@@ -299,12 +283,24 @@ startScanBtn.addEventListener('click', async () => {
         updateButtonState(stopScanBtn, true);
         updateButtonState(document.getElementById('load-monster-btn'), false); 
     }
+
+    document.getElementById('exit-button').style.display = 'none';
+
 });
 
 
 // 🌟修正後はこのコードで正常動作します（変更不要）
 rescanBtn.addEventListener("click", async () => {
     setCurrentScannedMonster(null);
+    
+    document.getElementById('exit-button').style.display = 'none';
+
+    document.getElementById('load-monster-btn').disabled = false;
+    updateButtonState(document.getElementById('load-monster-btn'), true);
+    document.getElementById('start-scan').style.display = 'inline-block';
+    updateButtonState(document.getElementById('start-scan'), false);
+    document.getElementById('stop-scan').style.display = 'inline-block';
+    updateButtonState(document.getElementById('stop-scan'), true);
 
     scanResultText.classList.remove('monster-box');
     scanResultText.classList.add('simple-text');
@@ -352,6 +348,8 @@ stopScanBtn.addEventListener('click', async () => {
     updateButtonState(startScanBtn, true);
     updateButtonState(stopScanBtn, false);
     updateButtonState(document.getElementById('load-monster-btn'), true); 
+    document.getElementById('exit-button').style.display = 'inline-block';
+
 });
 
 
@@ -456,7 +454,8 @@ gameStartBtn.addEventListener('click', () => {
     const startupBgm = document.getElementById('startup-bgm');
     document.getElementById('privacy-policy-link').style.display = 'none';
     document.getElementById('copyright-notice').style.display = 'none';
-
+    document.getElementById('copyright-link').style.display = 'none';
+    
     startupBgm.pause();
     startupBgm.currentTime = 0;
 
@@ -501,6 +500,7 @@ codeCheckBtn.addEventListener('click', () => {
     
         document.getElementById('privacy-policy-link').style.display = 'none';
         document.getElementById('copyright-notice').style.display = 'none';
+        document.getElementById('copyright-link').style.display = 'none';
 
         const startupBgm = document.getElementById('startup-bgm');
         startupBgm.pause();
@@ -1617,8 +1617,10 @@ function handleBattleEnd() {
         if (!isMuted) winSound.play();
     }, 200);  // ← BGMが静かになった頃に鳴らすと確実
 }
+    
+nextTurnBtn.style.display = "none"; 
 
-    // 🎮 ボタン表示処理
+    setTimeout(() => {
     nextTurnBtn.style.display = "none";
     quitGameBtn.style.display = "inline-block";
 
@@ -1639,6 +1641,7 @@ function handleBattleEnd() {
         addToCollectionBtn.style.display = "inline-block";
         scanNextBattleBtn.style.display = "inline-block";
     }
+}, 2000); // ← 1000ミリ秒（＝1秒）遅延
 
 }
 
@@ -2440,6 +2443,7 @@ function loadGalleryPage(page) {
     
     document.getElementById('privacy-policy-link').style.display = 'none';
     document.getElementById('copyright-notice').style.display = 'none';
+    document.getElementById('copyright-link').style.display = 'none';
 
     currentGalleryPage = page;
 
@@ -2475,6 +2479,7 @@ document.getElementById('gallery-exit-btn').onclick = () => {
     document.getElementById('startup-screen').style.display = 'block';
     document.getElementById('privacy-policy-link').style.display = 'block';
     document.getElementById('copyright-notice').style.display = 'block';
+    document.getElementById('copyright-link').style.display = 'block';
 
     const startupBgm = document.getElementById('startup-bgm');
     startupBgm.currentTime = 0;
@@ -2913,6 +2918,7 @@ function resetTemporaryGameState() {
 
     document.getElementById('privacy-policy-link').style.display = 'block';
     document.getElementById('copyright-notice').style.display = 'block';
+    document.getElementById('copyright-link').style.display = 'block';
 
 
     const galleryModal = document.getElementById('gallery-modal');
@@ -3086,6 +3092,10 @@ document.getElementById('privacy-policy-link').addEventListener('click', () => {
     window.open('https://sites.google.com/view/qr-monster-battle-privacy/%E3%83%9B%E3%83%BC%E3%83%A0', '_blank');
 });
 
+document.getElementById('copyright-link').addEventListener('click', () => {
+    window.open('https://sites.google.com/view/qr-monster-battle-copyright/%E3%83%9B%E3%83%BC%E3%83%A0', '_blank');
+});
+
 function onRewardEarned() {
     // 🌟 ここで登録画面へ進める
     document.getElementById('battle-container').style.display = 'none';
@@ -3113,6 +3123,7 @@ function removeAllTemporaryAnimations() {
 
 window.onScanResult = async function(qrText) {
     console.log("📥 QR Text received from CameraX:", qrText);
+    document.getElementById('exit-button').style.display = 'inline-block';
 
     // DOM要素を都度取得（null対策）
     const startScanBtn = document.getElementById('start-scan');
@@ -3127,7 +3138,10 @@ window.onScanResult = async function(qrText) {
     const extendedHash = extendHashTo100Chars(hash);
     const monster = generateMonster(extendedHash);
     setCurrentScannedMonster(monster);
-
+if (!window.isMuted) {
+    window.scanCompleteSound.currentTime = 0;
+    window.scanCompleteSound.play().catch(e => console.warn("Scan sound error:", e));
+}
     // 画像表示（発見済みかどうかチェック）
     if (monsterImageMap[monster.name]) {
         monsterImage.src = monsterImageMap[monster.name];
