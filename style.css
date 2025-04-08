@@ -1077,7 +1077,7 @@ html {
     transform: translateX(-50%);
     display: flex; /* 常にflex！ */
     gap: 20px;
-    z-index: 2147483647; 
+    z-index: 10000; 
     white-space: nowrap;
     font-size: 8px;
     color: #ffffff;
