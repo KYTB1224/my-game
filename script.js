@@ -48,6 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
     document.getElementById('privacy-policy-link').style.display = 'block'; // 追加
     document.getElementById('copyright-notice').style.display = 'block';
+    document.getElementById('copyright-link').style.display = 'block';
     approveBtn.style.display = "none";
     rescanBtn.style.display = "none";
     document.getElementById('codecheck-confirm-btn').style.display = "none";
