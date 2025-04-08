@@ -292,6 +292,8 @@ startScanBtn.addEventListener('click', async () => {
 // 🌟修正後はこのコードで正常動作します（変更不要）
 rescanBtn.addEventListener("click", async () => {
     setCurrentScannedMonster(null);
+    
+    document.getElementById('exit-button').style.display = 'none';
 
     document.getElementById('load-monster-btn').disabled = false;
     updateButtonState(document.getElementById('load-monster-btn'), true);
