@@ -1630,7 +1630,7 @@ function handleBattleEnd() {
     }, 200);  // ← BGMが静かになった頃に鳴らすと確実
 }
 
-    // 🎮 ボタン表示処理
+setTimeout(() => {
     nextTurnBtn.style.display = "none";
     quitGameBtn.style.display = "inline-block";
 
@@ -1651,6 +1651,7 @@ function handleBattleEnd() {
         addToCollectionBtn.style.display = "inline-block";
         scanNextBattleBtn.style.display = "inline-block";
     }
+}, 1000); // ← 1000ミリ秒（＝1秒）遅延
 
 }
 
