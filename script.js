@@ -3188,6 +3188,7 @@ function removeAllTemporaryAnimations() {
 window.onScanResult = async function(qrText) {
     console.log("📥 QR Text received from CameraX:", qrText);
     document.getElementById('exit-button').style.display = 'inline-block';
+　　updateButtonState(document.getElementById('load-monster-btn'), true);
 
     // DOM要素を都度取得（null対策）
     const startScanBtn = document.getElementById('start-scan');
@@ -3243,7 +3244,7 @@ if (!window.isMuted) {
     console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
     console.log("startScanBtn:", startScanBtn);
     console.log("stopScanBtn:", stopScanBtn);
-
+　　
     // ✅ ボタン制御
     if (startScanBtn) startScanBtn.style.display = "none";
     if (stopScanBtn) stopScanBtn.style.display = "none";
