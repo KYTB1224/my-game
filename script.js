@@ -3090,6 +3090,10 @@ document.getElementById('privacy-policy-link').addEventListener('click', () => {
     window.open('https://sites.google.com/view/qr-monster-battle-privacy/%E3%83%9B%E3%83%BC%E3%83%A0', '_blank');
 });
 
+document.getElementById('copyright-link').addEventListener('click', () => {
+    window.open('https://sites.google.com/view/qr-monster-battle-copyright/%E3%83%9B%E3%83%BC%E3%83%A0', '_blank');
+});
+
 function onRewardEarned() {
     // 🌟 ここで登録画面へ進める
     document.getElementById('battle-container').style.display = 'none';
