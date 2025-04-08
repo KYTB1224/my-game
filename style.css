@@ -1077,15 +1077,15 @@ html {
     transform: translateX(-50%);
     display: flex; /* 常にflex！ */
     gap: 20px;
-    z-index: 10000;
+    z-index: 2147483647; 
     white-space: nowrap;
     font-size: 8px;
     color: #ffffff;
     align-items: center;
 }
 
-#copyright-notice,
 #copyright-link,
+#copyright-notice,
 #privacy-policy-link {
     display: none;
     white-space: nowrap;
