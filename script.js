@@ -308,7 +308,8 @@ startScanBtn.addEventListener('click', async () => {
         updateButtonState(startScanBtn, false);
         updateButtonState(stopScanBtn, true);
         updateButtonState(document.getElementById('load-monster-btn'), false); 
-
+        updateButtonState(document.getElementById('codecheck-quit-btn'), false);
+        
     } else {
         // ✅ JS版スキャナを使う
         removeQrVideo();
@@ -334,7 +335,8 @@ startScanBtn.addEventListener('click', async () => {
 
         updateButtonState(startScanBtn, false);
         updateButtonState(stopScanBtn, true);
-        updateButtonState(document.getElementById('load-monster-btn'), false); 
+        updateButtonState(document.getElementById('load-monster-btn'), false);
+        updateButtonState(document.getElementById('codecheck-quit-btn'), false);
     }
 
     document.getElementById('exit-button').style.display = 'none';
@@ -354,7 +356,7 @@ rescanBtn.addEventListener("click", async () => {
     updateButtonState(document.getElementById('start-scan'), false);
     document.getElementById('stop-scan').style.display = 'inline-block';
     updateButtonState(document.getElementById('stop-scan'), true);
-
+    updateButtonState(document.getElementById('codecheck-quit-btn'), false);
     scanResultText.classList.remove('monster-box');
     scanResultText.classList.add('simple-text');
     scanResultText.textContent = "Rescanning...";
@@ -401,6 +403,7 @@ stopScanBtn.addEventListener('click', async () => {
     updateButtonState(startScanBtn, true);
     updateButtonState(stopScanBtn, false);
     updateButtonState(document.getElementById('load-monster-btn'), true); 
+    updateButtonState(document.getElementById('codecheck-quit-btn'), true);
     document.getElementById('exit-button').style.display = 'inline-block';
 
 });
@@ -3342,7 +3345,7 @@ window.onScanResult = async function(qrText) {
     console.log("📥 QR Text received from CameraX:", qrText);
     document.getElementById('exit-button').style.display = 'inline-block';
 　　updateButtonState(document.getElementById('load-monster-btn'), true);
-
+    updateButtonState(document.getElementById('codecheck-quit-btn'), true);
     // DOM要素を都度取得（null対策）
     const startScanBtn = document.getElementById('start-scan');
     const stopScanBtn = document.getElementById('stop-scan');
