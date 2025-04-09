@@ -159,7 +159,6 @@ newVideo.srcObject = stream;
         const hash = await generateSHA256(result);
         const extendedHash = extendHashTo100Chars(hash);
         const monster = generateMonster(extendedHash);
-updateButtonState(document.getElementById('load-monster-btn'), true);
 
         setCurrentScannedMonster(monster);
 
