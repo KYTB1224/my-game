@@ -3337,7 +3337,6 @@ function removeAllTemporaryAnimations() {
 }
 
 window.onScanResult = async function(qrText) {
-    console.log("📥 QR Text received from CameraX:", qrText);
     document.getElementById('exit-button').style.display = 'inline-block';
 　　updateButtonState(document.getElementById('load-monster-btn'), true);
     updateButtonState(document.getElementById('codecheck-quit-btn'), true);
@@ -3391,8 +3390,6 @@ if (!window.isMuted) {
         </div>
     `;
 
-    // 🔍 確認ログ
-    console.log("✅ Androidスキャン成功 → ボタンを非表示にします");
     console.log("startScanBtn:", startScanBtn);
     console.log("stopScanBtn:", stopScanBtn);
 　　
