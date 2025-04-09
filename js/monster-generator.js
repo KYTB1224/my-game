@@ -11,8 +11,10 @@ const monsterNames = [
 
 const skillList = [
     "Lucky", "Counter", "Heal", "Revive", "Thorns", "Evasion",
-    "Endurance", "Growth", "Learning", "Critical", "Vampire", "Overload", "Petrify"
-];
+    "Endurance", "Growth", "Learning", "Critical", "Vampire", "Overload", "Petrify",
+    "Taunt", "Intimidate", "Supersonic" // 🌟 追加スキル
+  ];
+  
 
 const elements = ["Emotional", "Logical", "Intuitive", "Instinctive"];
 
@@ -29,8 +31,8 @@ export function generateMonster(extendedHash) {
     const defenseValue = (parseInt(extendedHash[50], 16) + 5) * 10;
     const speedValue = (parseInt(extendedHash[66], 16) + 5) * 10;
 
-    const skill1Index = parseInt(extendedHash[20], 16) % skillList.length;
-    const skill2Index = parseInt(extendedHash[45], 16) % skillList.length;
+    const skill1Index = parseInt(extendedHash.substring(20, 22), 16) % skillList.length;
+    const skill2Index = parseInt(extendedHash.substring(45, 47), 16) % skillList.length;
     let skill1 = skillList[skill1Index];
     let skill2 = skillList[skill2Index];
 
