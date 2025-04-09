@@ -1127,15 +1127,6 @@ function processBattlePhase() {
                             }
                             break;
                         
-
-            case "defenderLuckyEnduranceCheck":
-                {
-                    const { damage } = defenderLuckyEnduranceCheck(defender, defenderPlayer, attacker.currentDamage);
-                    attacker.currentDamage = damage;
-                    battlePhase = "applyDamageToDefender";
-                }
-                break;
-
             case "defenderLuckyEnduranceCheck":
                 {
                     const { logs, damage } = defenderLuckyEnduranceCheck(defender, defenderPlayer, attacker.currentDamage);
