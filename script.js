@@ -624,15 +624,14 @@ document.getElementById('codecheck-confirm-btn').addEventListener('click', () =>
 
 
 // Quit Check（完全リセットしてトップへ）
-document.getElementById('codecheck-quit-btn').addEventListener('click', () => {
-        if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
+document.getElementById('codecheck-quit-btn').addEventListener('click', async () => {
+    if (window.AndroidInterface && AndroidInterface.closeCameraActivity) {
         AndroidInterface.closeCameraActivity();
     } else {
         await stopScanning();
         removeQrVideo();
     }
     resetTemporaryGameState(); // ← これで全て戻る！
-    
 });
 
 
