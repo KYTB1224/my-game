@@ -36,7 +36,7 @@ import { setSpecialBattleOpponent } from './js/special.js';
 
 import { setScanningForPlayer } from './js/main.js';
 
-
+import { updateButtonState } from './js/utils.js';
 import { generateMonster } from './js/monster-generator.js';
 
 const preloadImages = [
@@ -279,13 +279,6 @@ quitGameBtn.style.display = "none";
 startScanBtn.disabled = false; 
 stopScanBtn.disabled = true;
 
-function updateButtonState(button, isEnabled) {
-    button.disabled = !isEnabled;
-    button.style.backgroundColor = isEnabled ? '#1b2a41' : 'grey';
-    button.style.borderColor = isEnabled ? '#66ccff' : '#888';
-    button.style.color = isEnabled ? '#fff' : '#ccc';
-    button.style.opacity = isEnabled ? '1' : '0.6';
-}
 
 
 
