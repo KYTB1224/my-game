@@ -213,7 +213,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
             monsterData = {
                 name: "Nine-Tailed Fox",
                 element: "Intuitive",
-                maxHp: 900,
+                maxHp: 300,
                 baseAttack: 140,
                 baseDefense: 330,
                 speed: 170,
