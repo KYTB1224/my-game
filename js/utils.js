@@ -37,7 +37,11 @@ export function getSkillEmoji(skill) {
         "Critical": "💥",
         "Vampire": "🦇",
         "Overload": "⚡",
-        "Petrify": "🪨"
+        "Petrify": "🪨",
+        "Taunt": "💢",
+        "Intimidate": "👁️",
+        "Supersonic": "💫"
+
     };
     return skillEmojis[skill] || "";
 }
