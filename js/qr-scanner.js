@@ -185,6 +185,7 @@ newVideo.srcObject = stream;
         document.getElementById('exit-button').style.display = 'inline-block';
         rescanBtn.style.display = "inline-block";
         updateButtonState(document.getElementById('load-monster-btn'), true);
+        updateButtonState(document.getElementById('codecheck-quit-btn'), true);
         
         scanResultText.classList.remove('simple-text');
         scanResultText.classList.add('monster-box');
