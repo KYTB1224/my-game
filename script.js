@@ -1365,8 +1365,8 @@ function defenseTurnStart(defender, defenderPlayer) {
     if (tauntCount > 0) {
         const activationTurns = tauntCount === 2 ? [2, 4, 6, 8] : [2, 4];
         if (activationTurns.includes(defender.defenseCount)) {
-            const atkIncrease = Math.round(attackerSkillTarget.attack * 0.03);
-            const defDecrease = Math.round(attackerSkillTarget.defense * 0.10);
+            const atkIncrease = Math.round(attackerSkillTarget.attack * 0.05);
+            const defDecrease = Math.round(attackerSkillTarget.defense * 0.15);
 
             attackerSkillTarget.attack += atkIncrease;
             attackerSkillTarget.defense = Math.max(0, attackerSkillTarget.defense - defDecrease);
@@ -1384,8 +1384,8 @@ function defenseTurnStart(defender, defenderPlayer) {
     if (intimidateCount > 0) {
         const activationTurns = intimidateCount === 2 ? [2, 4, 6, 8] : [2, 4];
         if (activationTurns.includes(defender.defenseCount)) {
-            const atkDecrease = Math.round(attackerSkillTarget.attack * 0.10);
-            const defIncrease = Math.round(attackerSkillTarget.defense * 0.03);
+            const atkDecrease = Math.round(attackerSkillTarget.attack * 0.15);
+            const defIncrease = Math.round(attackerSkillTarget.defense * 0.05);
 
             attackerSkillTarget.attack = Math.max(0, attackerSkillTarget.attack - atkDecrease);
             attackerSkillTarget.defense += defIncrease;
@@ -1663,7 +1663,7 @@ function defenderHealCheck(defender, defenderPlayer) {
     const healCount = defender.skills.filter(skill => skill === "Heal").length;
     if (healCount === 0) return logs;
 
-    const possibleHeals = healCount === 2 ? [20, 40, 60] : [10, 20, 30];
+    const possibleHeals = healCount === 2 ? [40, 50, 60] : [10, 20, 30];
     const healAmount = possibleHeals[Math.floor(Math.random() * possibleHeals.length)];
 
     // ★ここが重要！HPをここで直接回復
