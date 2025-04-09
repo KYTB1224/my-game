@@ -171,32 +171,38 @@ window.skillSound = new Audio('assets/sound/skill-sound.mp3');
 window.scanCompleteSound = new Audio('assets/sound/scan-complete.mp3');
 
 const skillDescriptions = {
-    "Lucky": "🍀 Occasionally grants beneficial effects in battle.",
-    "Double Lucky": "🍀🍀 Frequently grants beneficial effects in battle.",
-    "Counter": "🔄 Sometimes counterattacks when damaged.",
-    "Double Counter": "🔄🔄 Frequently counterattacks when damaged.",
-    "Heal": "❤️ Restores a small amount of HP after each turn.",
-    "Double Heal": "❤️❤️ Restores a large amount of HP each turn.",
-    "Revive": "✨ Occasionally revives when defeated (1 HP).",
-    "Double Revive": "✨✨ Frequently revives when defeated (1 HP).",
-    "Thorns": "🌵 Reflects small damage back when attacked.",
-    "Double Thorns": "🌵🌵 Reflects significant damage when attacked.",
-    "Evasion": "👟 Occasionally evades enemy attacks completely.",
-    "Double Evasion": "👟👟 Frequently evades enemy attacks completely.",
-    "Endurance": "🛡️ Slightly reduces damage taken at low HP.",
-    "Double Endurance": "🛡️🛡️ Greatly reduces damage taken at low HP.",
-    "Growth": "📈 ATK gradually increases (up to 3 activations).",
-    "Double Growth": "📈📈 ATK gradually rises faster later (max 6).",
-    "Learning": "📚 DEF gradually increases (up to 3 activations).",
-    "Double Learning": "📚📚 DEF gradually rises faster later (max 6).",
-    "Critical": "💥 Occasionally deals double damage when attacking.",
-    "Double Critical": "💥💥 Often deals double damage when attacking.",
-    "Vampire": "🦇 Absorbs small HP & slightly boosts ATK on attack.",
-    "Double Vampire": "🦇🦇 Absorbs more HP & moderately boosts ATK.",
-    "Overload": "⚡ Gradually boosts ATK but takes self-damage.",
-    "Double Overload": "⚡⚡ Greatly boosts ATK, but takes high self-damage.",
-    "Petrify": "🪨 Occasionally boosts ATK or halves damage taken.",
-    "Double Petrify": "🪨🪨 Often boosts ATK or halves damage taken."
+"Lucky": "🍀 Occasionally grants helpful effects.",
+"Double Lucky": "🍀🍀 Frequently grants helpful effects.",
+"Counter": "🔄 Sometimes counterattacks when damaged.",
+"Double Counter": "🔄🔄 Frequently counterattacks when damaged.",
+"Heal": "❤️ Restores a little HP after each turn.",
+"Double Heal": "❤️❤️ Restores more HP after each turn.",
+"Revive": "✨ Occasionally revives when defeated (1 HP).",
+"Double Revive": "✨✨ Frequently revives when defeated (1 HP).",
+"Thorns": "🌵 Reflects some damage when attacked.",
+"Double Thorns": "🌵🌵 Reflects more damage when attacked.",
+"Evasion": "👟 Occasionally evades enemy attacks.",
+"Double Evasion": "👟👟 Frequently evades enemy attacks.",
+"Endurance": "🛡️ Slightly reduces damage at low HP.",
+"Double Endurance": "🛡️🛡️ Greatly reduces damage at low HP.",
+"Growth": "📈 ATK gradually increases (up to 3).",
+"Double Growth": "📈📈 ATK increases faster (up to 6).",
+"Learning": "📚 DEF gradually increases (up to 3).",
+"Double Learning": "📚📚 DEF increases faster (up to 6).",
+"Critical": "💥 Occasionally deals double damage.",
+"Double Critical": "💥💥 Often deals double damage.",
+"Vampire": "🦇 Absorbs HP and slightly boosts ATK on attack.",
+"Double Vampire": "🦇🦇 Absorbs more HP and boosts ATK on attack.",
+"Overload": "⚡ Raises ATK gradually, but takes damage.",
+"Double Overload": "⚡⚡ Greatly raises ATK, but takes heavy damage.",
+"Petrify": "🪨 Sometimes boosts ATK or halves damage taken.",
+"Double Petrify": "🪨🪨 Often boosts ATK or halves damage taken.",
+"Taunt": "💢 Raises enemy ATK and lowers DEF slightly (up to 2).",
+"Double Taunt": "💢💢 Raises enemy ATK and lowers DEF often (up to 4).",
+"Intimidate": "👁️ Lowers enemy ATK and raises DEF slightly (up to 2).",
+"Double Intimidate": "👁️👁️ Lowers enemy ATK and raises DEF often (up to 4).",
+"Supersonic": "💫 May confuse and damage the attacker.",
+"Double Supersonic": "💫💫 Often confuses and damages the attacker."
 };
 
 const monsterImageMap = {
@@ -1077,7 +1083,7 @@ function processBattlePhase() {
 
             case "attackerLuckyCriticalCheck":
                 {
-                    const baseDamage = Math.round(((attacker.attack + Math.sqrt(attacker.attack)) / defender.defense) * 100) + 45;
+                    const baseDamage = Math.round(((attacker.attack + Math.sqrt(attacker.attack)+ Math.sqrt(attacker.attack)) / defender.defense) * 100) + 35;
                     const randomMultiplier = [0.85, 0.9, 0.95, 1.0][Math.floor(Math.random() * 4)];
                     let damage = Math.round(baseDamage * randomMultiplier * attacker.currentElementMultiplier);
 
@@ -1089,12 +1095,51 @@ function processBattlePhase() {
                 }
                 break;
 
-            case "defenderEvasionCheck":
+                case "defenderEvasionCheck":
+                    {
+                        const { logs, damage, isEvaded } = defenderEvasionCheck(defender, defenderPlayer, attacker, attackerPlayer, attacker.currentDamage);
+                        attacker.currentDamage = damage;
+                        phaseLogs = logs;
+                
+                        if (isEvaded) {
+                            battlePhase = "endOfTurn";
+                        } else if (defender.skills.includes("Supersonic")) {
+                            battlePhase = "supersonicCheck";
+                        } else {
+                            battlePhase = "defenderLuckyEnduranceCheck";
+                        }
+                    }
+                    break;
+                
+                    case "supersonicCheck":
+                        {
+                            const { logs, attackerDied, activated } = performSupersonicCheck(attacker, defender, attackerPlayer, defenderPlayer);
+                            phaseLogs = logs;
+                    
+                            if (activated) {
+                                battlePhase = attackerDied ? "attackerReviveCheckAfterSupersonic" : "endOfTurn";
+                            } else {
+                                // Supersonicが発動しなかった → 通常処理へ戻る！
+                                battlePhase = "defenderLuckyEnduranceCheck";
+                            }
+                        }
+                        break;
+                    
+                    
+                    case "attackerReviveCheckAfterSupersonic":
+                        {
+                                const { logs, revived } = reviveCheck(attacker, attackerPlayer);
+                                phaseLogs = logs;
+                                battlePhase = "endOfTurn";  // 成否に関係なくここに進む
+                            }
+                            break;
+                        
+
+            case "defenderLuckyEnduranceCheck":
                 {
-                    const { logs, damage, isEvaded } = defenderEvasionCheck(defender, defenderPlayer, attacker, attackerPlayer, attacker.currentDamage);
+                    const { damage } = defenderLuckyEnduranceCheck(defender, defenderPlayer, attacker.currentDamage);
                     attacker.currentDamage = damage;
-                    phaseLogs = logs;
-                    battlePhase = isEvaded ? "endOfTurn" : "defenderLuckyEnduranceCheck";
+                    battlePhase = "applyDamageToDefender";
                 }
                 break;
 
@@ -1277,7 +1322,7 @@ function attackTurnStart(attacker, attackerPlayer) {
         attacker.attack += increaseAmount;
 
         logs.push({ 
-            log: `📈 ${attackerPlayer} ${attacker.name}'s Growth activated! Attack +${increaseAmount} → ${attacker.attack}`,
+            log: `📈 ${attackerPlayer} ${attacker.name}'s Growth! ATK +${increaseAmount} → ${attacker.attack}`,
             skillAnimation: attackerPlayer === 'P1' ? 'p1' : 'p2',
             ...(attackerPlayer === "P1" ? { p1Attack: attacker.attack } : { p2Attack: attacker.attack })
         });
@@ -1319,10 +1364,55 @@ function defenseTurnStart(defender, defenderPlayer) {
         defender.defense += increaseAmount;
 
         logs.push({ 
-            log: `📚 ${defenderPlayer} ${defender.name}'s Learning activated! Defense +${increaseAmount} → ${defender.defense}`,
+            log: `📚 ${defenderPlayer} ${defender.name}'s Learning! DEF +${increaseAmount} → ${defender.defense}`,
             skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2'
         });
     }
+
+
+    // Taunt & Intimidate 判定処理
+    const attackerSkillTarget = attacker; // ← 攻撃側を対象にする
+    const tauntCount = defender.skills.filter(s => s === "Taunt").length;
+    const intimidateCount = defender.skills.filter(s => s === "Intimidate").length;
+
+    if (tauntCount > 0) {
+        const activationTurns = tauntCount === 2 ? [2, 4, 6, 8] : [2, 4];
+        if (activationTurns.includes(defender.defenseCount)) {
+            const atkIncrease = Math.round(attackerSkillTarget.attack * 0.03);
+            const defDecrease = Math.round(attackerSkillTarget.defense * 0.10);
+
+            attackerSkillTarget.attack += atkIncrease;
+            attackerSkillTarget.defense = Math.max(0, attackerSkillTarget.defense - defDecrease);
+
+            logs.push({
+                log: `💢 ${defenderPlayer} ${defender.name}'s Taunt！${attackerPlayer} ${attacker.name}'s ATK+${atkIncrease}, DEF-${defDecrease}.`,
+                skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2',
+                ...(attackerPlayer === 'P1'
+                    ? { p1Attack: attackerSkillTarget.attack, p1Defense: attackerSkillTarget.defense }
+                    : { p2Attack: attackerSkillTarget.attack, p2Defense: attackerSkillTarget.defense })
+            });
+        }
+    }
+
+    if (intimidateCount > 0) {
+        const activationTurns = intimidateCount === 2 ? [2, 4, 6, 8] : [2, 4];
+        if (activationTurns.includes(defender.defenseCount)) {
+            const atkDecrease = Math.round(attackerSkillTarget.attack * 0.10);
+            const defIncrease = Math.round(attackerSkillTarget.defense * 0.03);
+
+            attackerSkillTarget.attack = Math.max(0, attackerSkillTarget.attack - atkDecrease);
+            attackerSkillTarget.defense += defIncrease;
+
+            logs.push({
+                log: `👁️ ${defenderPlayer} ${defender.name}'s Intimidate！${attackerPlayer} ${attacker.name}'s ATK-${atkDecrease}, DEF+${defIncrease}.`,
+                skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2',
+                ...(attackerPlayer === 'P1'
+                    ? { p1Attack: attackerSkillTarget.attack, p1Defense: attackerSkillTarget.defense }
+                    : { p2Attack: attackerSkillTarget.attack, p2Defense: attackerSkillTarget.defense })
+            });
+        }
+    }
+
 
     return logs;
 }
@@ -1350,7 +1440,7 @@ function beforeAttackOverload(attacker, attackerPlayer) {
         attacker.hp = Math.max(attacker.hp - damage, 0);
 
         logs.push({
-            log: `⚡ ${attackerPlayer} ${attacker.name}'s Overload activated! Attack: ${attacker.attack}, took ${damage} damage.`,
+            log: `⚡ ${attackerPlayer} ${attacker.name}'s Overload! ATK: ${attacker.attack}, took ${damage} damage.`,
             ...(attackerPlayer === "P1" ? { p1HpChange: -damage, p1Attack: attacker.attack } : { p2HpChange: -damage, p2Attack: attacker.attack }),
             skillAnimation: attackerPlayer === 'P1' ? 'p1' : 'p2'
         });
@@ -1375,7 +1465,7 @@ function reviveCheck(monster, playerLabel) {
 
     let chances;
     if (reviveCount === 2) {
-        chances = [100, 90, 50, 20];
+        chances = [100, 100, 30, 10];
     } else if (reviveCount === 1) {
         chances = [100, 30, 10];
     } else {
@@ -1388,7 +1478,7 @@ function reviveCheck(monster, playerLabel) {
         monster.hp = 1;
         monster.reviveActivation++;
         logs.push({ 
-            log: `✨ ${playerLabel} ${monster.name}'s Revive activated! Revived with 1 HP.`,
+            log: `✨ ${playerLabel} ${monster.name}'s Revive! Revived with 1 HP.`,
             skillAnimation: playerLabel === 'P1' ? 'p1' : 'p2'
         });
         
@@ -1435,7 +1525,7 @@ function attackerLuckyCriticalCheck(attacker, attackerPlayer, damage) {
 
     if (!effectActivated && petrifyCount && Math.random() * 100 < (petrifyCount === 2 ? 35 : 20)) {
         damage = Math.round(damage * 1.2);
-        logs.push({ log: `🪨 ${attackerPlayer} ${attacker.name}'s Petrify! Damage ×1.1`,skillAnimation: attackerPlayer === 'P1' ? 'p1' : 'p2'});
+        logs.push({ log: `🪨 ${attackerPlayer} ${attacker.name}'s Petrify! Damage ×1.2`,skillAnimation: attackerPlayer === 'P1' ? 'p1' : 'p2'});
         effectActivated = true;
     }
 
@@ -1462,6 +1552,41 @@ function defenderEvasionCheck(defender, defenderPlayer, attacker, attackerPlayer
     }
     return { logs: [], damage, isEvaded: false };
 }
+
+function performSupersonicCheck(attacker, defender, attackerPlayer, defenderPlayer) {
+    const logs = [];
+
+    const supersonicCount = defender.skills.filter(s => s === "Supersonic").length;
+    const chance = supersonicCount === 2 ? 20 : 10;
+
+    if (Math.random() * 100 < chance) {
+        const damage = Math.round(((attacker.attack + Math.sqrt(attacker.attack) + Math.sqrt(attacker.attack)) / attacker.defense) * 100) + 35;
+        attacker.hp = Math.max(0, attacker.hp - damage);
+
+        logs.push({
+            log: `💫 ${defenderPlayer} ${defender.name}'s Supersonic! ${attackerPlayer} ${attacker.name} is confused and takes ${damage} damage!`,
+            ...(attackerPlayer === "P1"
+                ? { p1HpChange: -damage }
+                : { p2HpChange: -damage }),
+            skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2'
+        });
+
+        return {
+            logs,
+            attackerDied: attacker.hp <= 0,
+            activated: true  // ✅ 成功したら true を返す！
+        };
+    }
+
+    // ❌ 発動しなかったときはこちら！
+    return {
+        logs,
+        attackerDied: false,
+        activated: false
+    };
+}
+
+
 
 function defenderLuckyEnduranceCheck(defender, defenderPlayer, damage) {
     const logs = [];
@@ -1533,7 +1658,7 @@ function attackerVampireCheck(attacker, attackerPlayer, damageDealt) {
     attacker.attack += attackIncrease; // ←必ずここで攻撃力更新する
 
     logs.push({
-        log: `🦇 ${attackerPlayer} ${attacker.name}'s Vampire activated! HP +${actualHeal}, Attack +${attackIncrease}.`,
+        log: `🦇 ${attackerPlayer} ${attacker.name}'s Vampire! HP +${actualHeal}, ATK +${attackIncrease}.`,
         ...(attackerPlayer === "P1" ? { p1HpChange: actualHeal, p1Attack: attacker.attack } : { p2HpChange: actualHeal, p2Attack: attacker.attack }),
         skillAnimation: attackerPlayer === 'P1' ? 'p1' : 'p2'
     });
@@ -1559,7 +1684,7 @@ function defenderHealCheck(defender, defenderPlayer) {
     defender.hp += actualHeal;
 
     logs.push({
-        log: `❤️ ${defenderPlayer} ${defender.name}'s Heal activated! HP +${actualHeal}.`,
+        log: `❤️ ${defenderPlayer} ${defender.name}'s Heal! HP +${actualHeal}.`,
         ...(defenderPlayer === "P1" ? { p1HpChange: actualHeal } : { p2HpChange: actualHeal }),
         skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2'
     });
@@ -1589,10 +1714,11 @@ function defenderCounterCheck(attacker, defender, attackerPlayer, defenderPlayer
         attacker.hp = Math.max(attacker.hp - counterDamage, 0);
 
         logs.push({
-            log: `🔄 ${defenderPlayer}'s Counter activated! ${attackerPlayer} ${attacker.name} takes ${counterDamage} damage.`,
+            log: `🔄 ${defenderPlayer} ${defender.name}'s Counter! ${attackerPlayer} ${attacker.name} takes ${counterDamage} damage.`,
             ...(attackerPlayer === "P1" ? { p1HpChange: -counterDamage } : { p2HpChange: -counterDamage }),
             skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2'
         });
+        
 
         if (attacker.hp <= 0) {
             attackerDied = true;
@@ -1608,18 +1734,18 @@ function defenderThornsCheck(defender, attacker, defenderPlayer, attackerPlayer)
     const thornsCount = defender.skills.filter(skill => skill === "Thorns").length;
     if (thornsCount === 0) return logs;
 
-    const possibleDamages = thornsCount === 2 ? [20, 40, 60] : [10, 20, 30];
+    const possibleDamages = thornsCount === 2 ? [50, 60, 70] : [20, 30, 40];
     const thornsDamage = possibleDamages[Math.floor(Math.random() * possibleDamages.length)];
 
     // ★ここが重要！HPをここで直接減算
     attacker.hp = Math.max(attacker.hp - thornsDamage, 0);
 
     logs.push({
-        log: `🌵 ${defenderPlayer}'s Thorns activated! ${attackerPlayer} ${attacker.name} takes ${thornsDamage} damage.`,
+        log: `🌵 ${defenderPlayer} ${defender.name}'s Thorns! ${attackerPlayer} ${attacker.name} takes ${thornsDamage} damage.`,
         ...(attackerPlayer === "P1" ? { p1HpChange: -thornsDamage } : { p2HpChange: -thornsDamage }),
         skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2'
     });
-
+    
     return logs;
 }
 
@@ -2648,7 +2774,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 case "attackerLuckyCriticalCheck":
                     {
-                        const baseDamage = Math.round(((attacker.attack + Math.sqrt(attacker.attack)) / defender.defense) * 100) + 35;
+                        const baseDamage = Math.round(((attacker.attack + Math.sqrt(attacker.attack)+ Math.sqrt(attacker.attack)) / defender.defense) * 100) + 35;
                         const randomMultiplier = [0.85, 0.9, 0.95, 1.0][Math.floor(Math.random() * 4)];
                         let damage = Math.round(baseDamage * randomMultiplier * attacker.currentElementMultiplier);
 
@@ -2659,13 +2785,42 @@ window.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
 
-                case "defenderEvasionCheck":
-                    {
-                        const { damage, isEvaded } = defenderEvasionCheck(defender, defenderPlayer, attacker, attackerPlayer, attacker.currentDamage);
-                        attacker.currentDamage = damage;
-                        battlePhase = isEvaded ? "endOfTurn" : "defenderLuckyEnduranceCheck";
-                    }
-                    break;
+                    case "defenderEvasionCheck":
+                        {
+                            const { damage, isEvaded } = defenderEvasionCheck(defender, defenderPlayer, attacker, attackerPlayer, attacker.currentDamage);
+                            attacker.currentDamage = damage;
+                    
+                            if (isEvaded) {
+                                battlePhase = "endOfTurn";
+                            } else if (defender.skills.includes("Supersonic")) {
+                                battlePhase = "supersonicCheck";
+                            } else {
+                                battlePhase = "defenderLuckyEnduranceCheck";
+                            }
+                        }
+                        break;
+                    
+                        case "supersonicCheck":
+                            {
+                                const { attackerDied, activated } = performSupersonicCheck(attacker, defender, attackerPlayer, defenderPlayer, true); // FF時はtrueを渡す
+                        
+                                if (activated) {
+                                    battlePhase = attackerDied ? "attackerReviveCheckAfterSupersonic" : "endOfTurn";
+                                } else {
+                                    battlePhase = "defenderLuckyEnduranceCheck"; // ← 通常の流れに戻す！
+                                }
+                            }
+                            break;
+                        
+                       
+                        
+                        case "attackerReviveCheckAfterSupersonic":
+                            {
+                                    const { logs, revived } = reviveCheck(attacker, attackerPlayer);
+                                    phaseLogs = logs;
+                                    battlePhase = "endOfTurn";  // 成否に関係なくここに進む
+                                }
+                                break;
 
                 case "defenderLuckyEnduranceCheck":
                     {
