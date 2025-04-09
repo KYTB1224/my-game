@@ -218,8 +218,8 @@ export function setSpecialBattleOpponent(specialBattleName) {
                 baseDefense: 330,
                 speed: 170,
                 skill1: "Endurance",
-                skill2: "Heal",
-                skills: ["Heal", "Endurance"],
+                skill2: "Intimidate",
+                skills: ["Endurance","Intimidate" ],
                 imagePath: "assets/monsters/nine-tailed_fox.webp"
             };
             break;        
@@ -230,7 +230,7 @@ export function setSpecialBattleOpponent(specialBattleName) {
                     element: "Instinctive",
                     maxHp: 1300,
                     baseAttack: 260,
-                    baseDefense: 180,
+                    baseDefense: 150,
                     speed: 200,
                     skill1: "Critical",
                     skill2: "Thorns",
@@ -248,8 +248,8 @@ export function setSpecialBattleOpponent(specialBattleName) {
                         baseDefense: 180,
                         speed: 220,
                         skill1: "Vampire",
-                        skill2: "Revive",
-                        skills: ["Vampire", "Revive"],
+                        skill2: "Taunt",
+                        skills: ["Vampire", "Taunt"],
                         imagePath: "assets/monsters/lucifer.webp"
                     };
                     break;
