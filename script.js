@@ -1790,9 +1790,10 @@ function handleBattleEnd() {
     
 nextTurnBtn.style.display = "none"; 
 
-    setTimeout(() => {
+  
     nextTurnBtn.style.display = "none";
     quitGameBtn.style.display = "inline-block";
+    quitGameBtn.disabled = true;
 
     const addToCollectionBtn = document.getElementById('add-to-collection-btn');
 
@@ -1802,15 +1803,22 @@ nextTurnBtn.style.display = "none";
         if (winner === 'P1') {
             addToCollectionBtn.style.display = "inline-block";
         } else {
-            addToCollectionBtn.style.display = "none";
+            addToCollectionBtn.style.display = "none";s
         }
 
         localStorage.removeItem('isSpecialBattle');
 
     } else {
-        addToCollectionBtn.style.display = "inline-block";
+        addToCollectionBtn.style.display = "inline-block"; 
         scanNextBattleBtn.style.display = "inline-block";
+        scanNextBattleBtn.disabled = true;
     }
+
+
+    setTimeout(() => {
+        scanNextBattleBtn.disabled = false;
+        quitGameBtn.disabled = false;
+
 }, 2000); // ← 1000ミリ秒（＝1秒）遅延
 
 }
