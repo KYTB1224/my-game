@@ -183,7 +183,9 @@ newVideo.srcObject = stream;
         }
 
         document.getElementById('exit-button').style.display = 'inline-block';
-
+        rescanBtn.style.display = "inline-block";
+        updateButtonState(document.getElementById('load-monster-btn'), true);
+        
         scanResultText.classList.remove('simple-text');
         scanResultText.classList.add('monster-box');
         scanResultText.innerHTML = `
@@ -212,7 +214,6 @@ newVideo.srcObject = stream;
         }
         
         rescanBtn.style.display = "inline-block";
-　　　　updateButtonState(document.getElementById('load-monster-btn'), true);
         
     });
 
