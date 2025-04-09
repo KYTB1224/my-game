@@ -38,7 +38,7 @@ export function getSkillEmoji(skill) {
         "Vampire": "🦇",
         "Overload": "⚡",
         "Petrify": "🪨",
-        "Taunt": "💢",
+        "Taunt": "👎",
         "Intimidate": "👁️",
         "Supersonic": "💫"
 
