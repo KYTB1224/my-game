@@ -197,10 +197,10 @@ const skillDescriptions = {
 "Double Overload": "⚡⚡ Greatly raises ATK, but takes heavy damage.",
 "Petrify": "🪨 Sometimes boosts ATK or halves damage taken.",
 "Double Petrify": "🪨🪨 Often boosts ATK or halves damage taken.",
-"Taunt": "💢 Raises enemy ATK and lowers DEF slightly (up to 2).",
-"Double Taunt": "💢💢 Raises enemy ATK and lowers DEF often (up to 4).",
-"Intimidate": "👁️ Lowers enemy ATK and raises DEF slightly (up to 2).",
-"Double Intimidate": "👁️👁️ Lowers enemy ATK and raises DEF often (up to 4).",
+"Taunt": "💢 Raises enemy ATK and lowers DEF (up to 2).",
+"Double Taunt": "💢💢 Raises enemy ATK and lowers DEF (up to 4).",
+"Intimidate": "👁️ Lowers enemy ATK and raises DEF (up to 2).",
+"Double Intimidate": "👁️👁️ Lowers enemy ATK and raises DEF (up to 4).",
 "Supersonic": "💫 May confuse and damage the attacker.",
 "Double Supersonic": "💫💫 Often confuses and damages the attacker."
 };
