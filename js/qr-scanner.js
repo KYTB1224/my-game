@@ -211,6 +211,7 @@ newVideo.srcObject = stream;
         }
         
         rescanBtn.style.display = "inline-block";
+　　　　updateButtonState(document.getElementById('load-monster-btn'), true);
         
     });
 
