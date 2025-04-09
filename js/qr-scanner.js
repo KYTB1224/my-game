@@ -2,6 +2,7 @@ import { generateSHA256, extendHashTo100Chars, getElementEmoji, getSkillEmoji, s
 import { generateMonster } from './monster-generator.js';
 import { setCurrentScannedMonster } from './main.js';
 import { updateSpecialButtonState } from './special.js';
+import { updateButtonState } from './utils.js';
 import QrScanner from './qr-scanner.min.js';
 QrScanner.WORKER_PATH = './js/qr-scanner-worker.min.js';
 
