@@ -63,3 +63,12 @@ export function showDiscoveryPopup(monsterName) {
         }, 500);
     }, 2000);
 }
+
+
+export function updateButtonState(button, isEnabled) {
+    button.disabled = !isEnabled;
+    button.style.backgroundColor = isEnabled ? '#1b2a41' : 'grey';
+    button.style.borderColor = isEnabled ? '#66ccff' : '#888';
+    button.style.color = isEnabled ? '#fff' : '#ccc';
+    button.style.opacity = isEnabled ? '1' : '0.6';
+}
