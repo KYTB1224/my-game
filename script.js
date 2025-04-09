@@ -1748,7 +1748,6 @@ function handleBattleEnd() {
     let winner = null;
 
     if (currentTurn <= 0) {
-        // 🌟 ターン切れでの勝敗を判定（TimeUp）
         const p1Hp = player1Monster.hp;
         const p2Hp = player2Monster.hp;
 
@@ -1763,67 +1762,63 @@ function handleBattleEnd() {
         }
 
     } else if (player1Monster.hp <= 0 && player2Monster.hp <= 0) {
-        // 引き分け（両方0）
         finalLog = `🤝 The battle ended in a draw!`;
 
     } else if (player1Monster.hp <= 0) {
-        // Player 2 勝利
         finalLog = `🏆 Player 2's ${player2Monster.name} wins!`;
         winner = 'P2';
 
     } else if (player2Monster.hp <= 0) {
-        // Player 1 勝利
         finalLog = `🏆 Player 1's ${player1Monster.name} wins!`;
         winner = 'P1';
     }
 
-    // 🎯 結果ログを即表示（typewriterなし）
     battleLogElement.textContent = finalLog;
-
     fadeOutAudio(document.getElementById('battle-bgm'));
 
-    // 🎵 勝利音
     if (finalLog.includes("wins")) {
-    setTimeout(() => {
-        const winSound = document.getElementById('win-sound');
-        winSound.currentTime = 0;
-        if (!isMuted) winSound.play();
-    }, 200);  // ← BGMが静かになった頃に鳴らすと確実
-}
-    
-nextTurnBtn.style.display = "none"; 
+        setTimeout(() => {
+            const winSound = document.getElementById('win-sound');
+            winSound.currentTime = 0;
+            if (!isMuted) winSound.play();
+        }, 200);
+    }
 
-  
     nextTurnBtn.style.display = "none";
-    quitGameBtn.style.display = "inline-block";
-    quitGameBtn.disabled = true;
 
     const addToCollectionBtn = document.getElementById('add-to-collection-btn');
 
     if (specialBattle) {
         scanNextBattleBtn.style.display = "none";
 
+        quitGameBtn.style.display = "inline-block";
+        quitGameBtn.disabled = true;
+
         if (winner === 'P1') {
             addToCollectionBtn.style.display = "inline-block";
         } else {
-            addToCollectionBtn.style.display = "none";s
+            addToCollectionBtn.style.display = "none";
         }
+
+        setTimeout(() => {
+            quitGameBtn.disabled = false;
+        }, 2000);
 
         localStorage.removeItem('isSpecialBattle');
 
     } else {
-        addToCollectionBtn.style.display = "inline-block"; 
+        addToCollectionBtn.style.display = "inline-block";
         scanNextBattleBtn.style.display = "inline-block";
         scanNextBattleBtn.disabled = true;
+
+        quitGameBtn.style.display = "inline-block";
+        quitGameBtn.disabled = true;
+
+        setTimeout(() => {
+            scanNextBattleBtn.disabled = false;
+            quitGameBtn.disabled = false;
+        }, 2000);
     }
-
-
-    setTimeout(() => {
-        scanNextBattleBtn.disabled = false;
-        quitGameBtn.disabled = false;
-
-}, 2000); // ← 1000ミリ秒（＝1秒）遅延
-
 }
 
 
