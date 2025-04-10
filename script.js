@@ -1559,7 +1559,7 @@ function performSupersonicCheck(attacker, defender, attackerPlayer, defenderPlay
     const chance = supersonicCount === 2 ? 20 : 10;
 
     if (Math.random() * 100 < chance) {
-        const damage = Math.round(((attacker.attack + Math.sqrt(attacker.attack) + Math.sqrt(attacker.attack)) / attacker.defense) * 100) + 35;
+        const damage = Math.round(((attacker.attack + Math.sqrt(attacker.attack) + Math.sqrt(attacker.attack)) / attacker.defense) * 50) + 35;
         attacker.hp = Math.max(0, attacker.hp - damage);
 
         logs.push({
