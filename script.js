@@ -351,13 +351,13 @@ startScanBtn.addEventListener('click', async () => {
 
 // 🌟修正後はこのコードで正常動作します（変更不要）
 rescanBtn.addEventListener("click", async () => {
-const popup = document.getElementById('discovery-popup');
-popup.style.opacity = '0';
-popup.style.display = 'none';
-if (window.discoveryPopupTimeout) {
-    clearTimeout(window.discoveryPopupTimeout);
-    window.discoveryPopupTimeout = null;
-}
+    const popup = document.getElementById('discovery-popup');
+    popup.style.opacity = '0';
+    popup.style.display = 'none';
+    if (window.discoveryPopupTimeout) {
+        clearTimeout(window.discoveryPopupTimeout);
+        window.discoveryPopupTimeout = null;
+    }
     setCurrentScannedMonster(null);
     
     document.getElementById('exit-button').style.display = 'none';
