@@ -52,20 +52,22 @@ export function showDiscoveryPopup(monsterName) {
     const popup = document.getElementById('discovery-popup');
     popup.textContent = `🎉 New Monster Discovered: ${monsterName}!`;
 
-    // 🔁 タイマーも見た目も完全リセット！
+    // 既存のタイマーを完全キャンセル
     if (window.discoveryPopupTimeout) {
         clearTimeout(window.discoveryPopupTimeout);
         window.discoveryPopupTimeout = null;
     }
 
-    // ❗️ すぐ非表示処理が発火しないよう、安全にリセット
-    popup.style.transition = 'none';
-    popup.style.opacity = '1';
+    // 強制的に再表示（リセット含め）
     popup.style.display = 'block';
-    void popup.offsetWidth; // 強制リフロー
-    popup.style.transition = ''; // transitionを再有効に
+    popup.style.opacity = '1';
 
-    // ✅ 新たな非表示タイマーをセット
+    // トランジションを中断して再スタート（←ここが重要！）
+    popup.style.transition = 'none';  // 一旦無効
+    void popup.offsetWidth;           // リフロー強制（CSS再評価させる）
+    popup.style.transition = '';      // 再有効（←必要なら）
+
+    // 新たな非表示処理をセット（A→B完全切替）
     window.discoveryPopupTimeout = setTimeout(() => {
         popup.style.opacity = '0';
         setTimeout(() => {
@@ -73,6 +75,7 @@ export function showDiscoveryPopup(monsterName) {
         }, 500);
     }, 2000);
 }
+
 
 export function updateButtonState(button, isEnabled) {
     button.disabled = !isEnabled;
