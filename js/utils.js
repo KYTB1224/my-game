@@ -46,7 +46,6 @@ export function getSkillEmoji(skill) {
     return skillEmojis[skill] || "";
 }
 
-
 export function showDiscoveryPopup(monsterName) {
     const popup = document.getElementById('discovery-popup');
     popup.textContent = `🎉 New Monster Discovered: ${monsterName}!`;
@@ -56,7 +55,12 @@ export function showDiscoveryPopup(monsterName) {
         popup.style.opacity = '1';
     });
 
-    setTimeout(() => {
+    // 🔁 前のタイマーが残ってたらキャンセル！
+    if (window.discoveryPopupTimeout) {
+        clearTimeout(window.discoveryPopupTimeout);
+    }
+
+    window.discoveryPopupTimeout = setTimeout(() => {
         popup.style.opacity = '0';
         setTimeout(() => {
             popup.style.display = 'none';
