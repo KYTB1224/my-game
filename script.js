@@ -99,6 +99,11 @@ window.codeCheckRegisteredMonster = null;
 window.discoveryPopupTimeout = null;
 
 window.addEventListener('DOMContentLoaded', () => {
+        const imagePaths = Object.values(monsterImageMap);
+    imagePaths.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
     document.getElementById('privacy-policy-link').style.display = 'block'; // 追加
     document.getElementById('copyright-notice').style.display = 'block';
