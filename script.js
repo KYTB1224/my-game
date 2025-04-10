@@ -96,7 +96,7 @@ preloadAudio.forEach(src => {
 // グローバル領域の上部などに追加
 window.isCodeCheckMode = false;
 window.codeCheckRegisteredMonster = null;
-
+window.discoveryPopupTimeout = null;
 
 window.addEventListener('DOMContentLoaded', () => {
     updateSpecialButtonState(specialBtn); // 🌟 起動時にSpecialボタンの状態を更新
@@ -346,9 +346,13 @@ startScanBtn.addEventListener('click', async () => {
 
 // 🌟修正後はこのコードで正常動作します（変更不要）
 rescanBtn.addEventListener("click", async () => {
-    const popup = document.getElementById('discovery-popup');
-    popup.style.opacity = '0';
-    popup.style.display = 'none';
+const popup = document.getElementById('discovery-popup');
+popup.style.opacity = '0';
+popup.style.display = 'none';
+if (window.discoveryPopupTimeout) {
+    clearTimeout(window.discoveryPopupTimeout);
+    window.discoveryPopupTimeout = null;
+}
     setCurrentScannedMonster(null);
     
     document.getElementById('exit-button').style.display = 'none';
