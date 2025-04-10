@@ -3336,11 +3336,15 @@ function removeAllTemporaryAnimations() {
     });
 }
 
+
 window.onScanResult = async function(qrText) {
+    if (window.scanLocked) return; // 🔒 すでに処理中なら無視
+    window.scanLocked = true;
+
     document.getElementById('exit-button').style.display = 'inline-block';
-　　updateButtonState(document.getElementById('load-monster-btn'), true);
+    updateButtonState(document.getElementById('load-monster-btn'), true);
     updateButtonState(document.getElementById('codecheck-quit-btn'), true);
-    // DOM要素を都度取得（null対策）
+
     const startScanBtn = document.getElementById('start-scan');
     const stopScanBtn = document.getElementById('stop-scan');
     const approveBtn = document.getElementById('approve-btn');
@@ -3348,39 +3352,35 @@ window.onScanResult = async function(qrText) {
     const monsterImage = document.getElementById('monster-image');
     const scanResultText = document.getElementById('scan-result');
 
-    // QR → SHA256 → 拡張 → モンスター生成
     const hash = await generateSHA256(qrText);
     const extendedHash = extendHashTo100Chars(hash);
     const monster = generateMonster(extendedHash);
     setCurrentScannedMonster(monster);
-if (!window.isMuted) {
-    window.scanCompleteSound.currentTime = 0;
-    window.scanCompleteSound.play().catch(e => console.warn("Scan sound error:", e));
-}
-    // 画像表示（発見済みかどうかチェック）
-const imagePath = monsterImageMap[monster.name];
 
-if (imagePath) {
-    monsterImage.style.display = "none"; // 一旦非表示
-    monsterImage.onload = () => {
-        monsterImage.style.display = "block"; // 読み込み完了後に表示
-        monsterImage.classList.add('pop-animation');
-    };
-    monsterImage.src = imagePath; // 読み込み開始
-} else {
-    monsterImage.src = "";
-    monsterImage.style.display = "none";
-}
+    if (!window.isMuted) {
+        window.scanCompleteSound.currentTime = 0;
+        window.scanCompleteSound.play().catch(e => console.warn("Scan sound error:", e));
+    }
 
+    const imagePath = monsterImageMap[monster.name];
+    if (imagePath) {
+        monsterImage.style.display = "none";
+        monsterImage.onload = () => {
+            monsterImage.style.display = "block";
+            monsterImage.classList.add('pop-animation');
+        };
+        monsterImage.src = imagePath;
+    } else {
+        monsterImage.src = "";
+        monsterImage.style.display = "none";
+    }
 
-    // 新規発見なら記録と演出
     if (!localStorage.getItem(`discovered-${monster.name}`)) {
         localStorage.setItem(`discovered-${monster.name}`, true);
         updateSpecialButtonState(document.getElementById('special-btn'));
         showPopupMessage(`🎉 New Monster Discovered: ${monster.name}!`);
     }
 
-    // 結果を表示
     scanResultText.classList.remove('simple-text');
     scanResultText.classList.add('monster-box');
     scanResultText.innerHTML = `
@@ -3399,8 +3399,7 @@ if (imagePath) {
 
     console.log("startScanBtn:", startScanBtn);
     console.log("stopScanBtn:", stopScanBtn);
-　　
-    // ✅ ボタン制御
+
     if (startScanBtn) startScanBtn.style.display = "none";
     if (stopScanBtn) stopScanBtn.style.display = "none";
 
@@ -3413,4 +3412,9 @@ if (imagePath) {
     }
 
     if (rescanBtn) rescanBtn.style.display = "inline-block";
+
+    // 🔓 最後にロック解除！
+    setTimeout(() => {
+        window.scanLocked = false;
+    }, 500); // 読み取り直後すぐ次が入らないように少し待つ
 };
