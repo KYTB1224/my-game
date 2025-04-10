@@ -3358,13 +3358,20 @@ if (!window.isMuted) {
     window.scanCompleteSound.play().catch(e => console.warn("Scan sound error:", e));
 }
     // 画像表示（発見済みかどうかチェック）
-    if (monsterImageMap[monster.name]) {
-        monsterImage.src = monsterImageMap[monster.name];
-        monsterImage.style.display = "block";
+const imagePath = monsterImageMap[monster.name];
+
+if (imagePath) {
+    monsterImage.style.display = "none"; // 一旦非表示
+    monsterImage.onload = () => {
+        monsterImage.style.display = "block"; // 読み込み完了後に表示
         monsterImage.classList.add('pop-animation');
-    } else {
-        monsterImage.style.display = "none";
-    }
+    };
+    monsterImage.src = imagePath; // 読み込み開始
+} else {
+    monsterImage.src = "";
+    monsterImage.style.display = "none";
+}
+
 
     // 新規発見なら記録と演出
     if (!localStorage.getItem(`discovered-${monster.name}`)) {
