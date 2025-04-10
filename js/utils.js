@@ -1,3 +1,5 @@
+window.discoveryPopupTimeout = null;
+
 export async function generateSHA256(text) {
     const encoder = new TextEncoder();
     const data = encoder.encode(text);
@@ -49,17 +51,17 @@ export function getSkillEmoji(skill) {
 export function showDiscoveryPopup(monsterName) {
     const popup = document.getElementById('discovery-popup');
     popup.textContent = `🎉 New Monster Discovered: ${monsterName}!`;
-    popup.style.display = 'block';
 
-    requestAnimationFrame(() => {
-        popup.style.opacity = '1';
-    });
-
-    // 🔁 前のタイマーが残ってたらキャンセル！
+    // 🔁 前の表示を即キャンセルして上書き
     if (window.discoveryPopupTimeout) {
         clearTimeout(window.discoveryPopupTimeout);
     }
 
+    // ✅ すぐ表示（安定感重視）
+    popup.style.display = 'block';
+    popup.style.opacity = '1';
+
+    // 🔁 自動で非表示に戻す処理
     window.discoveryPopupTimeout = setTimeout(() => {
         popup.style.opacity = '0';
         setTimeout(() => {
