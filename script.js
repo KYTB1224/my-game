@@ -1675,7 +1675,7 @@ function defenderHealCheck(defender, defenderPlayer) {
     const healCount = defender.skills.filter(skill => skill === "Heal").length;
     if (healCount === 0) return logs;
 
-    const possibleHeals = healCount === 2 ? [40, 50, 60] : [10, 20, 30];
+    const possibleHeals = healCount === 2 ? [40, 50, 60] : [20, 30, 40];
     const healAmount = possibleHeals[Math.floor(Math.random() * possibleHeals.length)];
 
     // ★ここが重要！HPをここで直接回復
@@ -1733,7 +1733,7 @@ function defenderThornsCheck(defender, attacker, defenderPlayer, attackerPlayer)
     const thornsCount = defender.skills.filter(skill => skill === "Thorns").length;
     if (thornsCount === 0) return logs;
 
-    const possibleDamages = thornsCount === 2 ? [50, 60, 70] : [20, 30, 40];
+    const possibleDamages = thornsCount === 2 ? [40, 50, 60] : [20, 30, 40];
     const thornsDamage = possibleDamages[Math.floor(Math.random() * possibleDamages.length)];
 
     // ★ここが重要！HPをここで直接減算
