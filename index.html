@@ -444,6 +444,51 @@
       }
     }, 5000); // 最悪5秒後には強制解除
   </script>
+    
+<script>
+const preloadList = [
+  "assets/monsters/asian_dragon.webp",
+  "assets/monsters/bael.webp",
+  "assets/monsters/cerberus.webp",
+  "assets/monsters/cockatrice.webp",
+  "assets/monsters/dark_knight.webp",
+  "assets/monsters/dark_pharaoh.webp",
+  "assets/monsters/death_plant.webp",
+  "assets/monsters/demon.webp",
+  "assets/monsters/dinosaur.webp",
+  "assets/monsters/dragon.webp",
+  "assets/monsters/drake.webp",
+  "assets/monsters/fat_troll.webp",
+  "assets/monsters/gargoyle.webp",
+  "assets/monsters/ghost.webp",
+  "assets/monsters/goblin.webp",
+  "assets/monsters/golem.webp",
+  "assets/monsters/gryphon.webp",
+  "assets/monsters/harpy.webp",
+  "assets/monsters/jack-o'-lantern.webp",
+  "assets/monsters/living_dead.webp",
+  "assets/monsters/lizardman.webp",
+  "assets/monsters/mandrake.webp",
+  "assets/monsters/minotaur.webp",
+  "assets/monsters/mummy.webp",
+  "assets/monsters/orc.webp",
+  "assets/monsters/phantom.webp",
+  "assets/monsters/phoenix.webp",
+  "assets/monsters/sea_serpent.webp",
+  "assets/monsters/skeleton.webp",
+  "assets/monsters/troll.webp",
+  "assets/monsters/vampire.webp",
+  "assets/monsters/werewolf.webp",
+  "assets/monsters/yeti.webp",
+  "assets/monsters/nine-tailed_fox.webp",
+  "assets/monsters/lucifer.webp"
+];
+
+preloadList.forEach((src) => {
+  const img = new Image();
+  img.src = src;
+});
+</script>
 
 </body>
 </html>
