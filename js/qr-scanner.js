@@ -261,5 +261,5 @@ newVideo.srcObject = stream;
         setTimeout(() => {
             popup.style.display = 'none';
         }, 500);
-    }, 2000);
+    }, 1500);
 }
