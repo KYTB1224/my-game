@@ -1047,14 +1047,38 @@ function processBattlePhase() {
         switch (battlePhase) {
             case "attackTurnStart":
                 phaseLogs = attackTurnStart(attacker, attackerPlayer);
-                battlePhase = "defenseTurnStart";
+                battlePhase = "defenseLearningPhase";  // 🔄 最初にLearning処理へ分岐
                 break;
-
-            case "defenseTurnStart":
-                phaseLogs = defenseTurnStart(defender, defenderPlayer);
+    
+            case "defenseLearningPhase":
+                phaseLogs = defenseLearningPhase(defender, defenderPlayer);
+                if (phaseLogs.length > 0) {
+                    // スキルが発動したら、1つのログ表示後にNext
+                    battlePhase = "defenseTauntPhase";
+                    break;
+                }
+                // 発動しないなら次へ
+                battlePhase = "defenseTauntPhase";
+                break;
+    
+            case "defenseTauntPhase":
+                phaseLogs = defenseTauntPhase(defender, defenderPlayer, attacker, attackerPlayer);
+                if (phaseLogs.length > 0) {
+                    battlePhase = "defenseIntimidatePhase";
+                    break;
+                }
+                battlePhase = "defenseIntimidatePhase";
+                break;
+    
+            case "defenseIntimidatePhase":
+                phaseLogs = defenseIntimidatePhase(defender, defenderPlayer, attacker, attackerPlayer);
+                if (phaseLogs.length > 0) {
+                    battlePhase = "beforeAttackOverload";
+                    break;
+                }
                 battlePhase = "beforeAttackOverload";
                 break;
-
+    
             case "beforeAttackOverload":
                 {
                     const { logs, attackerDied } = beforeAttackOverload(attacker, attackerPlayer);
@@ -1331,18 +1355,15 @@ function attackTurnStart(attacker, attackerPlayer) {
 }
 
 
-
-
-// 防御ターン開始時スキル処理
-// 防御ターン開始時スキル処理（修正版）
-function defenseTurnStart(defender, defenderPlayer) {
+// Learningスキル処理
+function defenseLearningPhase(defender, defenderPlayer) {
     const logs = [];
     defender.defenseCount = (defender.defenseCount || 0) + 1;
 
     const learningCount = defender.skills.filter(s => s === "Learning").length;
 
-    const activationTurnsSingle = [4, 5, 6]; // 1つ持ちの場合のターン
-    const activationTurnsDouble = [4, 5, 6, 7, 8, 9]; // 2つ持ちの場合のターン
+    const activationTurnsSingle = [4, 5, 6];
+    const activationTurnsDouble = [4, 5, 6, 7, 8, 9];
 
     const activationTurns = learningCount === 2 ? activationTurnsDouble : activationTurnsSingle;
 
@@ -1353,68 +1374,80 @@ function defenseTurnStart(defender, defenderPlayer) {
         let k;
 
         if (learningCount === 1) {
-            k = 0.3; 
+            k = 0.3;
         } else {
             k = defender.learningActivation <= 3 ? 0.3 : 0.8;
         }
 
         const increaseAmount = Math.round((k * BASE * BASE) / defender.defense);
-
         defender.defense += increaseAmount;
 
-        logs.push({ 
+        logs.push({
             log: `📚 ${defenderPlayer} ${defender.name}'s Learning! DEF +${increaseAmount} → ${defender.defense}`,
-            skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2'
+            skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2',
+            ...(defenderPlayer === 'P1' ? { p1Defense: defender.defense } : { p2Defense: defender.defense })
         });
     }
 
+    return logs;
+}
 
-    // Taunt & Intimidate 判定処理
-    const attackerSkillTarget = attacker; // ← 攻撃側を対象にする
+// Tauntスキル処理
+function defenseTauntPhase(defender, defenderPlayer, attacker, attackerPlayer) {
+    const logs = [];
     const tauntCount = defender.skills.filter(s => s === "Taunt").length;
-    const intimidateCount = defender.skills.filter(s => s === "Intimidate").length;
 
     if (tauntCount > 0) {
         const activationTurns = tauntCount === 2 ? [2, 4, 6, 8] : [2, 4];
-        if (activationTurns.includes(defender.defenseCount)) {
-            const atkIncrease = Math.round(attackerSkillTarget.attack * 0.05);
-            const defDecrease = Math.round(attackerSkillTarget.defense * 0.15);
 
-            attackerSkillTarget.attack += atkIncrease;
-            attackerSkillTarget.defense = Math.max(0, attackerSkillTarget.defense - defDecrease);
+        if (activationTurns.includes(defender.defenseCount)) {
+            const atkIncrease = Math.round(attacker.attack * 0.05);
+            const defDecrease = Math.round(attacker.defense * 0.15);
+
+            attacker.attack += atkIncrease;
+            attacker.defense = Math.max(0, attacker.defense - defDecrease);
 
             logs.push({
                 log: `💢 ${defenderPlayer} ${defender.name}'s Taunt！${attackerPlayer} ${attacker.name}'s ATK+${atkIncrease}, DEF-${defDecrease}.`,
                 skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2',
                 ...(attackerPlayer === 'P1'
-                    ? { p1Attack: attackerSkillTarget.attack, p1Defense: attackerSkillTarget.defense }
-                    : { p2Attack: attackerSkillTarget.attack, p2Defense: attackerSkillTarget.defense })
+                    ? { p1Attack: attacker.attack, p1Defense: attacker.defense }
+                    : { p2Attack: attacker.attack, p2Defense: attacker.defense })
             });
         }
     }
 
+    return logs;
+}
+
+// Intimidateスキル処理
+function defenseIntimidatePhase(defender, defenderPlayer, attacker, attackerPlayer) {
+    const logs = [];
+    const intimidateCount = defender.skills.filter(s => s === "Intimidate").length;
+
     if (intimidateCount > 0) {
         const activationTurns = intimidateCount === 2 ? [2, 4, 6, 8] : [2, 4];
-        if (activationTurns.includes(defender.defenseCount)) {
-            const atkDecrease = Math.round(attackerSkillTarget.attack * 0.15);
-            const defIncrease = Math.round(attackerSkillTarget.defense * 0.05);
 
-            attackerSkillTarget.attack = Math.max(0, attackerSkillTarget.attack - atkDecrease);
-            attackerSkillTarget.defense += defIncrease;
+        if (activationTurns.includes(defender.defenseCount)) {
+            const atkDecrease = Math.round(attacker.attack * 0.15);
+            const defIncrease = Math.round(attacker.defense * 0.05);
+
+            attacker.attack = Math.max(0, attacker.attack - atkDecrease);
+            attacker.defense += defIncrease;
 
             logs.push({
                 log: `👁️ ${defenderPlayer} ${defender.name}'s Intimidate！${attackerPlayer} ${attacker.name}'s ATK-${atkDecrease}, DEF+${defIncrease}.`,
                 skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2',
                 ...(attackerPlayer === 'P1'
-                    ? { p1Attack: attackerSkillTarget.attack, p1Defense: attackerSkillTarget.defense }
-                    : { p2Attack: attackerSkillTarget.attack, p2Defense: attackerSkillTarget.defense })
+                    ? { p1Attack: attacker.attack, p1Defense: attacker.defense }
+                    : { p2Attack: attacker.attack, p2Defense: attacker.defense })
             });
         }
     }
 
-
     return logs;
 }
+
 
 
 function beforeAttackOverload(attacker, attackerPlayer) {
