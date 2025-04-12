@@ -1401,14 +1401,14 @@ function defenseTauntPhase(defender, defenderPlayer, attacker, attackerPlayer) {
         const activationTurns = tauntCount === 2 ? [2, 4, 6, 8] : [2, 4];
 
         if (activationTurns.includes(defender.defenseCount)) {
-            const atkIncrease = Math.round(attacker.attack * 0.05);
+            const atkIncrease = Math.round(attacker.attack * 0.03);
             const defDecrease = Math.round(attacker.defense * 0.15);
 
             attacker.attack += atkIncrease;
             attacker.defense = Math.max(0, attacker.defense - defDecrease);
 
             logs.push({
-                log: `💢 ${defenderPlayer} ${defender.name}'s Taunt！${attackerPlayer} ${attacker.name}'s ATK+${atkIncrease}, DEF-${defDecrease}.`,
+                log: `👎 ${defenderPlayer} ${defender.name}'s Taunt！${attackerPlayer} ${attacker.name}'s ATK+${atkIncrease}, DEF-${defDecrease}.`,
                 skillAnimation: defenderPlayer === 'P1' ? 'p1' : 'p2',
                 ...(attackerPlayer === 'P1'
                     ? { p1Attack: attacker.attack, p1Defense: attacker.defense }
@@ -1430,7 +1430,7 @@ function defenseIntimidatePhase(defender, defenderPlayer, attacker, attackerPlay
 
         if (activationTurns.includes(defender.defenseCount)) {
             const atkDecrease = Math.round(attacker.attack * 0.15);
-            const defIncrease = Math.round(attacker.defense * 0.05);
+            const defIncrease = Math.round(attacker.defense * 0.03);
 
             attacker.attack = Math.max(0, attacker.attack - atkDecrease);
             attacker.defense += defIncrease;
