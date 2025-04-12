@@ -2770,27 +2770,39 @@ window.addEventListener('DOMContentLoaded', () => {
             switch (battlePhase) {
                 case "attackTurnStart":
                     attackTurnStart(attacker, attackerPlayer);
-                    battlePhase = "defenseTurnStart";
+                    battlePhase = "defenseLearningPhase"; // ← 分岐開始
                     break;
-
-                case "defenseTurnStart":
-                    defenseTurnStart(defender, defenderPlayer);
+        
+                case "defenseLearningPhase":
+                    defender.defenseCount = (defender.defenseCount || 0) + 1; // ✅ 一度だけ加算
+                    defenseLearningPhase(defender, defenderPlayer); // ログ無視で即実行
+                    battlePhase = "defenseTauntPhase";
+                    break;
+        
+                case "defenseTauntPhase":
+                    defenseTauntPhase(defender, defenderPlayer, attacker, attackerPlayer);
+                    battlePhase = "defenseIntimidatePhase";
+                    break;
+        
+                case "defenseIntimidatePhase":
+                    defenseIntimidatePhase(defender, defenderPlayer, attacker, attackerPlayer);
                     battlePhase = "beforeAttackOverload";
                     break;
-
+        
                 case "beforeAttackOverload":
                     {
                         const { attackerDied } = beforeAttackOverload(attacker, attackerPlayer);
                         battlePhase = attackerDied ? "attackerReviveCheck" : "checkAttackMiss";
                     }
                     break;
-
+        
                 case "attackerReviveCheck":
                     {
                         const { revived } = reviveCheck(attacker, attackerPlayer);
                         battlePhase = revived ? "checkAttackMiss" : "endOfTurn";
                     }
                     break;
+        
 
                 case "checkAttackMiss":
                     {
