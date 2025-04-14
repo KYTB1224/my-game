@@ -437,13 +437,27 @@
 <link rel="prefetch" as="audio" href="assets/sound/win-sound.mp3">
 
 <script>
-    setTimeout(() => {
-      const mask = document.getElementById('startup-mask');
-      if (mask) {
-        mask.style.opacity = '0';
-        setTimeout(() => mask.remove(), 800);
-      }
-    }, 5000); // 最悪5秒後には強制解除
+let maskRemoved = false;
+
+function removeMask() {
+  if (maskRemoved) return;
+  const mask = document.getElementById('startup-mask');
+  if (mask) {
+    mask.style.opacity = '0';
+    setTimeout(() => mask.remove(), 800);
+    maskRemoved = true;
+  }
+}
+
+// ロードが終わったら手動で呼び出す（例: 画像読み込み完了時など）
+window.addEventListener('load', () => {
+  removeMask();
+});
+
+// 最悪でも5秒後に強制解除
+setTimeout(() => {
+  removeMask();
+}, 10000);
   </script>
 
 </body>
