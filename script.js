@@ -1745,7 +1745,7 @@ function defenderCounterCheck(attacker, defender, attackerPlayer, defenderPlayer
     let attackerDied = false;
 
     if (Math.random() * 100 < counterChance) {
-        const counterDamage = Math.round(damageDealt / 1.5);
+        const counterDamage = Math.round(damageDealt / 1.2);
 
         // ★ここが重要！HPをここで直接減算
         attacker.hp = Math.max(attacker.hp - counterDamage, 0);
