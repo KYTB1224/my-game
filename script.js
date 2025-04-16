@@ -38,6 +38,8 @@ import { setScanningForPlayer } from './js/main.js';
 
 import { updateButtonState } from './js/utils.js';
 import { generateMonster } from './js/monster-generator.js';
+import { preloadEffectImages } from './js/attackEffect.js';
+
 
 const preloadImages = [
     // 背景
@@ -99,6 +101,9 @@ window.codeCheckRegisteredMonster = null;
 window.discoveryPopupTimeout = null;
 
 window.addEventListener('DOMContentLoaded', () => {
+    preloadEffectImages();
+
+    
         const imagePaths = Object.values(monsterImageMap);
     imagePaths.forEach(src => {
         const img = new Image();
