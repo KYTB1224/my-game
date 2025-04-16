@@ -1,4 +1,18 @@
 // attackEffect.js（最新版）
+// アニメーション用画像を事前にプリロードする関数（★追加★）
+export function preloadEffectImages() {
+    // 攻撃エフェクト（15枚）
+    for (let i = 1; i <= 15; i++) {
+        const img = new Image();
+        img.src = `assets/effects/damage/frame_${i}.png`;
+    }
+
+    // スキルエフェクト（8枚）
+    for (let i = 1; i <= 8; i++) {
+        const img = new Image();
+        img.src = `assets/effects/skill/skill${i}.png`;
+    }
+}
 
 // 攻撃エフェクトの再生関数（既存維持）
 export function playAttackSpriteAnimation(player, callback) {
